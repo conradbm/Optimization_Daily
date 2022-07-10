@@ -113,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Maximum Network Flows in R"]},{"type":"character","attributes":{},"value":["In this post we will walk through how to make a maximum flow decision using network flows and linear programming.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-09"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Maximum Network Flows in R"]},{"type":"character","attributes":{},"value":["In this post we will walk through how to make a maximum flow decision using network flows and linear programming.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-09"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float","df_print"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["paged"]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1518,6 +1518,35 @@ class="uri">https://github.com/conradbm</a>
 </div>
 
 <div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#oil-flow-maximization">Oil Flow Maximization</a></li>
+<li><a href="#problem-formation">Problem Formation</a>
+<ul>
+<li><a href="#network-structure">Network Structure</a></li>
+<li><a href="#network-visual">Network Visual</a></li>
+<li><a href="#big-m">Big M</a></li>
+</ul></li>
+<li><a href="#linear-programming-lp">Linear Programming (LP)</a>
+<ul>
+<li><a href="#lp-structure">LP Structure</a>
+<ul>
+<li><a href="#constraints">Constraints</a></li>
+<li><a href="#objective">Objective</a></li>
+</ul></li>
+<li><a href="#solve-the-lp">Solve the LP</a></li>
+<li><a href="#visualize-maximum-flow-solution">Visualize Maximum Flow
+Solution</a>
+<ul>
+<li><a href="#cleaning-up-the-visual">Cleaning Up The Visual</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</nav>
+</div>
 <h1 id="oil-flow-maximization">Oil Flow Maximization</h1>
 <p>One classic problem in <code>Network Flows</code> and
 <code>Optimization</code> is called the <code>Max-Flow Problem</code>.
@@ -1547,16 +1576,8 @@ pipeline.</p>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>nodes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"green"</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"grey"</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='st'>"red"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span><span class='va'>edges</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>2</span><span class='op'>)</span>, to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>4</span><span class='op'>)</span>, capacity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"grey"</span><span class='op'>)</span></span>
-<span><span class='va'>nodes</span></span></code></pre>
-</div>
-<pre><code>  id color
-1  0 green
-2  1  grey
-3  2  grey
-4  3  grey
-5  4   red</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>edges</span></span></code></pre>
+<span></span>
+<span><span class='va'>edges</span></span></code></pre>
 </div>
 <pre><code>  from to capacity color
 1    0  1        2  grey
@@ -1825,14 +1846,14 @@ flow to <code>destination 4</code> as we possibly can.</p>
 <span>           width <span class='op'>=</span> <span class='st'>"100%"</span>,</span>
 <span>           main <span class='op'>=</span> <span class='st'>"Maximum Oil Flow | (flow, capacity)"</span><span class='op'>)</span></span></code></pre>
 </div>
-<div id="htmlwidget-bd22d0b9007215f37321" style="width:100%;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bd22d0b9007215f37321">{"x":{"nodes":{"id":[0,1,2,3,4],"color":["green","grey","grey","grey","red"],"label":["Location  0","Location  1","Location  2","Location  3","Location  4"],"font.size":[10,10,10,10,10],"type":["black","black","black","black","black"],"shape":["circle","circle","circle","circle","circle"],"font":[12,12,12,12,12]},"edges":{"from":[0,0,1,1,3,2,4],"to":[1,2,2,3,4,4,0],"capacity":[2,3,3,4,1,2,1000000],"color":["black","black","grey","black","red","red","purple"],"id":[0,1,2,3,4,5,6],"flow":[1,2,0,1,1,2,3],"label":["(1,2)","(2,3)","(0,3)","(1,4)","(1,1)","(2,2)","(3,1e+06)"],"length":[250,250,250,250,250,250,250],"width":[2,4,0,2,2,4,6],"arrows":["to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":"100%","height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":{"text":"Maximum Oil Flow | (flow, capacity)","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-aecf55cb764caf4073bf" style="width:100%;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-aecf55cb764caf4073bf">{"x":{"nodes":{"id":[0,1,2,3,4],"color":["green","grey","grey","grey","red"],"label":["Location  0","Location  1","Location  2","Location  3","Location  4"],"font.size":[10,10,10,10,10],"type":["black","black","black","black","black"],"shape":["circle","circle","circle","circle","circle"],"font":[12,12,12,12,12]},"edges":{"from":[0,0,1,1,3,2,4],"to":[1,2,2,3,4,4,0],"capacity":[2,3,3,4,1,2,1000000],"color":["black","black","grey","black","red","red","purple"],"id":[0,1,2,3,4,5,6],"flow":[1,2,0,1,1,2,3],"label":["(1,2)","(2,3)","(0,3)","(1,4)","(1,1)","(2,2)","(3,1e+06)"],"length":[250,250,250,250,250,250,250],"width":[2,4,0,2,2,4,6],"arrows":["to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":"100%","height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":{"text":"Maximum Oil Flow | (flow, capacity)","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
 </div>
 <h1 id="references">References</h1>
 <p>Example taken from the following sources:</p>
 <p><cite>Winston., Wayne. Operations Research, Applications and
 Algorithms 4th Edition.</cite></p>
-<div class="sourceCode" id="cb11"><pre
+<div class="sourceCode" id="cb10"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

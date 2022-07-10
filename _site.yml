@@ -9,4 +9,8 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - icon: fab fa-github
+      href: https://github.com/conradbm
+    - icon: fas fa-chart-pie
+      href: https://conradbm.shinyapps.io/ptl_analytics
 output: distill::distill_article

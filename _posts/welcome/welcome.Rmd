@@ -1,6 +1,6 @@
 ---
 title: "Welcome to Optimization Daily"
-description: |
+description: 
   Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay.
 author:
   - name: Blake Conrad
