@@ -1,8 +1,7 @@
 ---
 title: "Welcome to Optimization Daily"
 description: |
-  Welcome to our new blog, Optimization Daily. We hope you enjoy 
-  reading what we have to say!
+  Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay.
 author:
   - name: Blake Conrad
     url: https://github.com/conradbm

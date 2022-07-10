@@ -19,15 +19,11 @@ library(visNetwork)
  
 # Vehicle Replacement Using Shortest Path 
 
-A common problem we often face in the world is to find the shortest path between two points. Whether it is on the road, or how to obtain an object in in our intellectual trajectory, we are always seeking to optimize. I was once told that:
+A common problem we often face in the world is to find the shortest path between two points. Whether it is on the road, or how to obtain an object in in our intellectual trajectory, we are always seeking to optimize. 
 
-<blockquote>
-Everything in life is an optimization problem, it's just a tautology. Once we accept that, we can move on to working on the ones that are solvable. This is a point of maturity in the optimization student's studies.
-</blockquote>
+In network flows one common problem is to find the `s-t shortest path`. The problem formulation is as follows.
 
-In network flows this is often referred to finding the `s-t shortest path`. The problem formulation is as follows.
-
-Given some net of nodes, and two particular nodes `s` and `t` that are not the same, find the shortest distance through the edges connecting them. The mathematical forumulation is below.
+Given some net of nodes, and two particular nodes `s` and `t` that are not the same, find the shortest distance through the edges connecting them. The mathematical formulation is below.
 $$ N \in \{n_1, n_2, .., n_D\} $$
 $$ E = \{N \times N\} = \{e_{ij} \in \Re^+ | \:\:\forall i,j \in N \} $$
 $$ s,t \in N : s\neq t$$
@@ -146,6 +142,7 @@ Now that we have our cost matrix, the last ingredient is to solve the problem. T
 
 
 ### Visualizing the network
+
 ```{r viz_network}
 
 g <- igraph::graph_from_data_frame(d = edges,
@@ -153,7 +150,7 @@ g <- igraph::graph_from_data_frame(d = edges,
                                    vertices = nodes)
 # Make it a little cleaner
 plot(g,
-     main = "Annual Transition Vehicle Purchase Cost",
+     main = "Cost of Annual Vehicle Trade-in",
      edge.arrow.size=.5,
      vertex.color=V(g)$Color,
      edge.color=E(g)$color,
@@ -190,6 +187,8 @@ The optimal selection is the following sequence:
 - Finally, buy a car on `Year 4`, keep for two years and sell on `Year 6`.
 
 Do these numbers add up? Let's check. 7000 + 12000 + 12000 == 31000 is `r 7000 + 12000 + 12000 == 31000`.
+
+So our least cost strategy can be no less than `$31000` over the next 6 years. With the current cost structure, means to keep the car for a year or two, then pitch it because the trade-off between maintenance accumulation and depreciation start to mutually deter from a least cost decision.
 
 ```{r sp_analysis}
 
@@ -236,5 +235,9 @@ E(g)$label = edges$cost %>% as.character
 visIgraph(igraph = g)
 ```
 
+# References
 
+Example taken from the following sources:
+
+<cite>Winston., Wayne. Operations Research, Applications and Algorithms 4th Edition.</cite>
 

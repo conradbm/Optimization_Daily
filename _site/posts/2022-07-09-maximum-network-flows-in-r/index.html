@@ -88,9 +88,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-<title>Optimization Daily: Welcome to Optimization Daily</title>
+<title>Optimization Daily: Maximum Network Flows in R</title>
 
-<meta property="description" itemprop="description" content="Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay."/>
+<meta property="description" itemprop="description" content="In this post we will walk through how to make a maximum flow decision using network flows and linear programming."/>
 
 
 <!--  https://schema.org/Article -->
@@ -99,27 +99,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta name="article:author" content="Blake Conrad"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="Optimization Daily: Welcome to Optimization Daily"/>
+<meta property="og:title" content="Optimization Daily: Maximum Network Flows in R"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay."/>
+<meta property="og:description" content="In this post we will walk through how to make a maximum flow decision using network flows and linear programming."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Optimization Daily"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="Optimization Daily: Welcome to Optimization Daily"/>
-<meta property="twitter:description" content="Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay."/>
+<meta property="twitter:title" content="Optimization Daily: Maximum Network Flows in R"/>
+<meta property="twitter:description" content="In this post we will walk through how to make a maximum flow decision using network flows and linear programming."/>
 
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Welcome to Optimization Daily"]},{"type":"character","attributes":{},"value":["Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]},{"type":"character","attributes":{},"value":["PTL Analytics"]},{"type":"character","attributes":{},"value":["https://conradbm.shinyapps.io/ptl_analytics"]}]}]},{"type":"character","attributes":{},"value":["07-09-2022"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Maximum Network Flows in R"]},{"type":"character","attributes":{},"value":["In this post we will walk through how to make a maximum flow decision using network flows and linear programming."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-09"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["welcome_files/anchor-4.2.2/anchor.min.js","welcome_files/bowser-1.9.3/bowser.min.js","welcome_files/distill-2.2.21/template.v2.js","welcome_files/header-attrs-2.11/header-attrs.js","welcome_files/jquery-3.6.0/jquery-3.6.0.js","welcome_files/jquery-3.6.0/jquery-3.6.0.min.js","welcome_files/jquery-3.6.0/jquery-3.6.0.min.map","welcome_files/popper-2.6.0/popper.min.js","welcome_files/tippy-6.2.7/tippy-bundle.umd.min.js","welcome_files/tippy-6.2.7/tippy-light-border.css","welcome_files/tippy-6.2.7/tippy.css","welcome_files/tippy-6.2.7/tippy.umd.min.js","welcome_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["maximum-network-flows-in-r_files/anchor-4.2.2/anchor.min.js","maximum-network-flows-in-r_files/bowser-1.9.3/bowser.min.js","maximum-network-flows-in-r_files/distill-2.2.21/template.v2.js","maximum-network-flows-in-r_files/figure-html5/initial_graph-1.png","maximum-network-flows-in-r_files/figure-html5/updated_graph-1.png","maximum-network-flows-in-r_files/figure-html5/visual_graph_flow-1.png","maximum-network-flows-in-r_files/header-attrs-2.11/header-attrs.js","maximum-network-flows-in-r_files/htmlwidgets-1.5.4/htmlwidgets.js","maximum-network-flows-in-r_files/jquery-3.6.0/jquery-3.6.0.js","maximum-network-flows-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js","maximum-network-flows-in-r_files/jquery-3.6.0/jquery-3.6.0.min.map","maximum-network-flows-in-r_files/popper-2.6.0/popper.min.js","maximum-network-flows-in-r_files/tippy-6.2.7/tippy-bundle.umd.min.js","maximum-network-flows-in-r_files/tippy-6.2.7/tippy-light-border.css","maximum-network-flows-in-r_files/tippy-6.2.7/tippy.css","maximum-network-flows-in-r_files/tippy-6.2.7/tippy.umd.min.js","maximum-network-flows-in-r_files/vis-9.1.0/add_css.txt","maximum-network-flows-in-r_files/vis-9.1.0/img/network/acceptDeleteIcon.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/addNodeIcon.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/backIcon.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/connectIcon.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/cross.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/cross2.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/deleteIcon.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/downArrow.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/editIcon.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/leftArrow.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/minus.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/plus.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/rightArrow.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/upArrow.png","maximum-network-flows-in-r_files/vis-9.1.0/img/network/zoomExtends.png","maximum-network-flows-in-r_files/vis-9.1.0/vis-network.min.css","maximum-network-flows-in-r_files/vis-9.1.0/vis-network.min.js","maximum-network-flows-in-r_files/visNetwork-binding-2.1.0/visNetwork.js","maximum-network-flows-in-r_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2076,6 +2076,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!--/radix_placeholder_distill-->
   <script src="../../site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="../../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+  <link href="../../site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet" />
+  <script src="../../site_libs/vis-9.1.0/vis-network.min.js"></script>
+  <script src="../../site_libs/visNetwork-binding-2.1.0/visNetwork.js"></script>
   <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -2096,7 +2100,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Welcome to Optimization Daily","description":"Welcome to Optimization Daily! Grab a coffee, take a read, and enjoy your stay.","authors":[{"author":"Blake Conrad","authorURL":"https://github.com/conradbm","affiliation":"PTL Analytics","affiliationURL":"https://conradbm.shinyapps.io/ptl_analytics","orcidID":""}],"publishedDate":"2022-07-09T00:00:00.000-04:00","citationText":"Conrad, 2022"}
+{"title":"Maximum Network Flows in R","description":"In this post we will walk through how to make a maximum flow decision using network flows and linear programming.","authors":[{"author":"Blake Conrad","authorURL":"https://github.com/conradbm","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-07-09T00:00:00.000-04:00","citationText":"Conrad, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2119,24 +2123,336 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Welcome to Optimization Daily</h1>
+<h1>Maximum Network Flows in R</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>Welcome to Optimization Daily! Grab a coffee, take a read, and
-enjoy your stay.</p></p>
+<p><p>In this post we will walk through how to make a maximum flow
+decision using network flows and linear programming.</p></p>
 </div>
 
 <div class="d-byline">
   Blake Conrad <a href="https://github.com/conradbm"
-class="uri">https://github.com/conradbm</a> (PTL Analytics)<a
-href="https://conradbm.shinyapps.io/ptl_analytics"
-class="uri">https://conradbm.shinyapps.io/ptl_analytics</a>
+class="uri">https://github.com/conradbm</a> 
   
-<br/>07-09-2022
+<br/>2022-07-09
 </div>
 
 <div class="d-article">
-<div class="sourceCode" id="cb1"><pre
+<h1 id="oil-flow-maximization">Oil Flow Maximization</h1>
+<p>One classic problem in <code>Network Flows</code> and
+<code>Optimization</code> is called the <code>Max-Flow Problem</code>.
+This takes any two nodes in a network, <code>s</code> and <code>t</code>
+and attempts to send as much of a resource (or multiple) from
+<code>s</code> to <code>t</code>. This is called a <code>flow</code>,
+and the flow which maximizes the total bandwidth of the network is
+called the <code>maximum flow</code>.</p>
+<p>First, the problem starts with an objective: to
+<code>maximize flow</code>. These are denoted as,</p>
+<p><span class="math display">\[x_{ij} = flow \: on \: node_i \: to \:
+node_j \:(or \: on \: arc \: (i,j))\]</span></p>
+<p>Second, the problem has a set of constraints, these are called the
+<code>arc capacities</code>. These are denoted as,</p>
+<p><span class="math display">\[u_{ij} = maximum \:amount \:of \:
+feasible \: flow \: on \: node_i \: to \: node_j \:(or \: on \: arc \:
+(i,j))\]</span> Last, the network graph is supplied as a set of
+connections under the traditional network structure:</p>
+<p><span class="math display">\[ G = (N,E) \]</span></p>
+<h1 id="problem-formation">Problem Formation</h1>
+<p>For our problem, the feasible flow is going to be in units of
+millions of barrels of oil per hour that will pass through an arc of
+pipeline.</p>
+<h2 id="network-structure">Network Structure</h2>
+<p>The source for our network is indicated in green and sink in red.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>nodes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"green"</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"grey"</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='st'>"red"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>edges</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>2</span><span class='op'>)</span>, to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>4</span><span class='op'>)</span>, capacity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"grey"</span><span class='op'>)</span></span>
+<span><span class='va'>nodes</span></span></code></pre>
+</div>
+<pre><code>  id color
+1  0 green
+2  1  grey
+3  2  grey
+4  3  grey
+5  4   red</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>edges</span></span></code></pre>
+</div>
+<pre><code>  from to capacity color
+1    0  1        2  grey
+2    0  2        3  grey
+3    1  2        3  grey
+4    1  3        4  grey
+5    3  4        1  grey
+6    2  4        2  grey</code></pre>
+</div>
+<h2 id="network-visual">Network Visual</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html'>graph_from_data_frame</a></span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>edges</span>,</span>
+<span>                                   directed <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span>                                   vertices <span class='op'>=</span> <span class='va'>nodes</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>g</span>, edge.label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>capacity</span>, </span>
+<span>     main <span class='op'>=</span> <span class='st'>"Oil Pipeline Capacities"</span>, </span>
+<span>     vertex.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/V.html'>V</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>color</span>,</span>
+<span>     edge.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>color</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="maximum-network-flows-in-r_files/figure-html5/initial_graph-1.png" width="624" /></p>
+</div>
+<h2 id="big-m">Big M</h2>
+<p>In order to model this problem, we need to put a very large capacity
+from the <code>source node</code> to the <code>sink node</code>, these
+are <code>s</code> and <code>t</code> mentioned above. We have given
+them node names <code>0</code> and <code>4</code> respectively in the
+dataframe for <code>nodes</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>BIG_M</span> <span class='op'>&lt;-</span> <span class='fl'>1000000</span></span>
+<span></span>
+<span><span class='va'>edges</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>edges</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span>,</span>
+<span>                                 to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, </span>
+<span>                                 capacity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>BIG_M</span><span class='op'>)</span>, </span>
+<span>                                 color <span class='op'>=</span> <span class='st'>"purple"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Never hurts to add an id</span></span>
+<span><span class='va'>edges</span><span class='op'>$</span><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>)</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html'>graph_from_data_frame</a></span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>edges</span>,</span>
+<span>                                   directed <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span>                                   vertices <span class='op'>=</span> <span class='va'>nodes</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>g</span>,</span>
+<span>     edge.label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>capacity</span>, </span>
+<span>     main <span class='op'>=</span> <span class='st'>"Oil Pipeline Capacities"</span>, </span>
+<span>     vertex.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/V.html'>V</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>color</span>,</span>
+<span>     edge.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>color</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="maximum-network-flows-in-r_files/figure-html5/updated_graph-1.png" width="624" /></p>
+</div>
+<h1 id="linear-programming-lp">Linear Programming (LP)</h1>
+<h2 id="lp-structure">LP Structure</h2>
+<p>The next step is to set up the optimization. Let’s do that now. There
+are 3 key ingredients.</p>
+<ul>
+<li><p>Objective</p></li>
+<li><p>Constraints</p></li>
+<li><p>Directions</p></li>
+</ul>
+<h3 id="constraints">Constraints</h3>
+<p>We want to build the constraint matrix, which has 2 parts.</p>
+<ul>
+<li><p>Arc Capacity Constraints</p></li>
+<li><p>Node Flow Constraints</p></li>
+</ul>
+<p>The <code>Arc Capacity Constraints</code> are the first we
+address.</p>
+<p>The <code>Amat</code>, or A matrix, is the arc matrix which contains
+the upper bounds. Since linear programming relies on the resource
+matrix, we need one row for each arc, our dimensions for variable flow
+selection are the number of arcs also. So this means we need an
+<code>identity matrix</code> for the rows of arcs and columns of
+arcs.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Amat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>Amat_dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"&lt;="</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>Amat</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>Amat_rhs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>Amat</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='va'>Amat</span><span class='op'>[</span><span class='va'>i</span>,<span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>1</span></span>
+<span>  <span class='va'>Amat_rhs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>Amat_rhs</span>, <span class='va'>edges</span><span class='op'>$</span><span class='va'>capacity</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>Amat</span></span></code></pre>
+</div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    0    0    0    0    0    0
+[2,]    0    1    0    0    0    0    0
+[3,]    0    0    1    0    0    0    0
+[4,]    0    0    0    1    0    0    0
+[5,]    0    0    0    0    1    0    0
+[6,]    0    0    0    0    0    1    0
+[7,]    0    0    0    0    0    0    1</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Amat_rhs</span></span></code></pre>
+</div>
+<pre><code>[1] 2e+00 3e+00 3e+00 4e+00 1e+00 2e+00 1e+06</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Amat_dir</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;&lt;=&quot; &quot;&lt;=&quot; &quot;&lt;=&quot; &quot;&lt;=&quot; &quot;&lt;=&quot; &quot;&lt;=&quot; &quot;&lt;=&quot;</code></pre>
+</div>
+<p>The <code>Node Flow Constraints</code> are the next to take care
+of.</p>
+<p>For each node, we need to match it’s <code>from</code> node and
+<code>to</code> node with the appropriate inflow and outflow. If it
+matches an <code>inflow</code> arc, this is increase, so <code>1</code>
+is in the arc column. If it matches an <code>outflow</code> arch, this
+is decrease, so <code>-1</code> is in the arc column. Otherwise
+<code>0</code> remains as the placeholder. The sign here is
+<code>==</code> because they must match (i.e., supply = demand). If we
+require excess at certain points we can set this demand to be higher
+than zero, but we will not do that here.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Bmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>nodes</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>Bmat_dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"=="</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>Bmat</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>Bmat_rhs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>Bmat</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>Bmat</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='va'>node_id</span> <span class='op'>&lt;-</span> <span class='va'>nodes</span><span class='op'>[</span><span class='va'>i</span>, <span class='st'>"id"</span><span class='op'>]</span></span>
+<span>  <span class='kw'>for</span><span class='op'>(</span><span class='va'>j</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>Bmat</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>    <span class='va'>edge_from</span> <span class='op'>&lt;-</span> <span class='va'>edges</span><span class='op'>[</span><span class='va'>j</span>,<span class='st'>"from"</span><span class='op'>]</span></span>
+<span>    <span class='va'>edge_to</span> <span class='op'>&lt;-</span> <span class='va'>edges</span><span class='op'>[</span><span class='va'>j</span>, <span class='st'>"to"</span><span class='op'>]</span></span>
+<span>    <span class='va'>edge_id</span> <span class='op'>&lt;-</span> <span class='va'>edges</span><span class='op'>[</span><span class='va'>j</span>, <span class='st'>"id"</span><span class='op'>]</span></span>
+<span>    </span>
+<span>    <span class='kw'>if</span><span class='op'>(</span><span class='va'>node_id</span> <span class='op'>==</span> <span class='va'>edge_from</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>      <span class='va'>Bmat</span><span class='op'>[</span><span class='va'>i</span>,<span class='va'>j</span><span class='op'>]</span> <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1</span></span>
+<span>    <span class='op'>}</span></span>
+<span>    <span class='kw'>else</span> <span class='kw'>if</span><span class='op'>(</span><span class='va'>node_id</span> <span class='op'>==</span> <span class='va'>edge_to</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>      <span class='va'>Bmat</span><span class='op'>[</span><span class='va'>i</span>,<span class='va'>j</span><span class='op'>]</span> <span class='op'>=</span> <span class='fl'>1</span></span>
+<span>    <span class='op'>}</span></span>
+<span>    <span class='kw'>else</span><span class='op'>{</span></span>
+<span>      <span class='va'>Bmat</span><span class='op'>[</span><span class='va'>i</span>,<span class='va'>j</span><span class='op'>]</span> <span class='op'>=</span> <span class='fl'>0</span></span>
+<span>    <span class='op'>}</span></span>
+<span>  <span class='op'>}</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>Bmat</span></span></code></pre>
+</div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]   -1   -1    0    0    0    0    1
+[2,]    1    0   -1   -1    0    0    0
+[3,]    0    1    1    0    0   -1    0
+[4,]    0    0    0    1   -1    0    0
+[5,]    0    0    0    0    1    1   -1</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Bmat_dir</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;==&quot; &quot;==&quot; &quot;==&quot; &quot;==&quot; &quot;==&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Bmat_rhs</span></span></code></pre>
+</div>
+<pre><code>[1] 0 0 0 0 0</code></pre>
+</div>
+<h3 id="objective">Objective</h3>
+<p>Next, the objective is going to be <code>0</code> for all values,
+except our final flow. This we want to maximize.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>f.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>)</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fl'>1</span><span class='op'>)</span></span>
+<span><span class='va'>f.obj</span></span></code></pre>
+</div>
+<pre><code>[1] 0 0 0 0 0 0 1</code></pre>
+</div>
+<h2 id="solve-the-lp">Solve the LP</h2>
+<p>Now we unite everything together and drop it into the solver.
+Remember, we are trying to maximize flow. So specify
+<code>max</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>f.cons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>Amat</span>, <span class='va'>Bmat</span><span class='op'>)</span></span>
+<span><span class='va'>f.rhs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>Amat_rhs</span>, <span class='va'>Bmat_rhs</span><span class='op'>)</span></span>
+<span><span class='va'>f.dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>Amat_dir</span>, <span class='va'>Bmat_dir</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lpSolve/man/lp.html'>lp</a></span><span class='op'>(</span>direction <span class='op'>=</span> <span class='st'>"max"</span>,  </span>
+<span>              objective.in <span class='op'>=</span> <span class='va'>f.obj</span>, </span>
+<span>              const.mat <span class='op'>=</span> <span class='va'>f.cons</span>, </span>
+<span>              const.dir <span class='op'>=</span> <span class='va'>f.dir</span>, </span>
+<span>              const.rhs <span class='op'>=</span> <span class='va'>f.rhs</span><span class='op'>)</span></span>
+<span><span class='va'>results</span><span class='op'>$</span><span class='va'>solution</span></span></code></pre>
+</div>
+<pre><code>[1] 1 2 0 1 1 2 3</code></pre>
+</div>
+<h2 id="visualize-maximum-flow-solution">Visualize Maximum Flow
+Solution</h2>
+<p>Since the <code>results$solution</code> contain the maximum flow we
+can push through the pipes as a system, we can add this into our flow
+component of the <code>edges</code> dataframe.</p>
+<p>The visual indicates that <code>2/3</code> of the capacity was
+shipped to <code>node 2</code>, and <code>1/2</code> to
+<code>node 1</code>. After this the next best transfer was from
+<code>node 2</code> to <code>node 4</code> maxed out at
+<code>2/2</code>. This is indicated in red. The arcs that have flow are
+indicated in black, and no flow is indicated by grey. The maximum flow
+arc is just an <code>artificial arc</code> that indicates the maximum
+flow, this is indicated in purple.</p>
+<p>Lastly from the <code>node 1</code> to <code>node 3</code>
+<code>1/4</code> of the capacity was sent. Then from <code>node 3</code>
+to <code>node 4</code> was maxed out at <code>1/1</code>.</p>
+<p>Posterior analysis to this model output tells us that sending
+<code>2 million tons of oil</code> from the <code>source</code> to
+<code>destination 2</code> and <code>1 million tons of oil</code> from
+the <code>source</code> to <code>destination 1</code> will push as much
+flow to <code>destination 4</code> as we possibly can.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Set the flow</span></span>
+<span><span class='va'>edges</span><span class='op'>$</span><span class='va'>flow</span> <span class='op'>&lt;-</span> <span class='va'>results</span><span class='op'>$</span><span class='va'>solution</span></span>
+<span></span>
+<span><span class='co'># If the arc is flowing oil, change to black</span></span>
+<span><span class='va'>edges</span><span class='op'>$</span><span class='va'>color</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>$</span><span class='va'>flow</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"black"</span></span>
+<span></span>
+<span><span class='co'># If the arc is at capacity change it to red</span></span>
+<span><span class='va'>edges</span><span class='op'>$</span><span class='va'>color</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>$</span><span class='va'>flow</span> <span class='op'>==</span> <span class='va'>edges</span><span class='op'>$</span><span class='va'>capacity</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"red"</span></span>
+<span></span>
+<span><span class='co'># Last flow is purple</span></span>
+<span><span class='va'>edges</span><span class='op'>$</span><span class='va'>color</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>edges</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"purple"</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html'>graph_from_data_frame</a></span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>edges</span>,</span>
+<span>                                   directed <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span>                                   vertices <span class='op'>=</span> <span class='va'>nodes</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Make it look a little more appealing</span></span>
+<span><span class='va'>L</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span></span>
+<span><span class='va'>CURVE</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0.15</span>, <span class='fl'>0.3</span>, <span class='fl'>0.45</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.15</span>, <span class='op'>-</span><span class='fl'>0.3</span>, <span class='fl'>0</span>, <span class='fl'>0.15</span>, <span class='fl'>0</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>5</span></span>
+<span></span>
+<span><span class='co'># Plot</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>g</span>,</span>
+<span>     layout <span class='op'>=</span> <span class='va'>L</span>,</span>
+<span>     edge.curved <span class='op'>=</span> <span class='va'>CURVE</span>,</span>
+<span>     edge.label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"("</span>,<span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>flow</span>, </span>
+<span>                        <span class='st'>","</span>, </span>
+<span>                        <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>capacity</span>, <span class='st'>")"</span>, </span>
+<span>                        sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span>, </span>
+<span>     main <span class='op'>=</span> <span class='st'>"Oil Pipeline Flow | (flow, capacity)"</span>, </span>
+<span>     vertex.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/V.html'>V</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>color</span>,</span>
+<span>     vertex.size <span class='op'>=</span> <span class='fl'>25</span>,</span>
+<span>     vertex.label.cex <span class='op'>=</span> <span class='fl'>1.6</span>,</span>
+<span>     edge.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>color</span>,</span>
+<span>     edge.width <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/E.html'>E</a></span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span><span class='op'>$</span><span class='va'>flow</span><span class='op'>*</span><span class='fl'>2</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="maximum-network-flows-in-r_files/figure-html5/visual_graph_flow-1.png" width="624" /></p>
+</div>
+<h3 id="cleaning-up-the-visual">Cleaning Up The Visual</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>visNet_nodes</span> <span class='op'>&lt;-</span> <span class='va'>nodes</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>                <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Location "</span>, <span class='va'>id</span><span class='op'>)</span>,</span>
+<span>                              font.size <span class='op'>=</span><span class='fl'>10</span>,</span>
+<span>                              type <span class='op'>=</span> <span class='st'>"black"</span>,</span>
+<span>                              shape <span class='op'>=</span> <span class='st'>"circle"</span>,</span>
+<span>                              font <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visNet_edges</span> <span class='op'>&lt;-</span> <span class='va'>edges</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>                <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"("</span>,<span class='va'>flow</span>,<span class='st'>","</span>,<span class='va'>capacity</span>,<span class='st'>")"</span>,sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span>,</span>
+<span>                              length <span class='op'>=</span> <span class='fl'>250</span>,</span>
+<span>                              width <span class='op'>=</span> <span class='va'>flow</span><span class='op'>*</span><span class='fl'>2</span>,</span>
+<span>                              arrows <span class='op'>=</span> <span class='st'>"to"</span><span class='op'>)</span> </span>
+<span>  </span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/visNetwork/man/visNetwork.html'>visNetwork</a></span><span class='op'>(</span><span class='va'>visNet_nodes</span>, </span>
+<span>           <span class='va'>visNet_edges</span>,</span>
+<span>           width <span class='op'>=</span> <span class='st'>"100%"</span>,</span>
+<span>           main <span class='op'>=</span> <span class='st'>"Maximum Oil Flow | (flow, capacity)"</span><span class='op'>)</span></span></code></pre>
+</div>
+<div id="htmlwidget-bd22d0b9007215f37321" style="width:100%;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bd22d0b9007215f37321">{"x":{"nodes":{"id":[0,1,2,3,4],"color":["green","grey","grey","grey","red"],"label":["Location  0","Location  1","Location  2","Location  3","Location  4"],"font.size":[10,10,10,10,10],"type":["black","black","black","black","black"],"shape":["circle","circle","circle","circle","circle"],"font":[12,12,12,12,12]},"edges":{"from":[0,0,1,1,3,2,4],"to":[1,2,2,3,4,4,0],"capacity":[2,3,3,4,1,2,1000000],"color":["black","black","grey","black","red","red","purple"],"id":[0,1,2,3,4,5,6],"flow":[1,2,0,1,1,2,3],"label":["(1,2)","(2,3)","(0,3)","(1,4)","(1,1)","(2,2)","(3,1e+06)"],"length":[250,250,250,250,250,250,250],"width":[2,4,0,2,2,4,6],"arrows":["to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":"100%","height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":{"text":"Maximum Oil Flow | (flow, capacity)","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+</div>
+<h1 id="references">References</h1>
+<p>Example taken from the following sources:</p>
+<p><cite>Winston., Wayne. Operations Research, Applications and
+Algorithms 4th Edition.</cite></p>
+<div class="sourceCode" id="cb11"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
@@ -2145,6 +2461,15 @@ class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"><
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
