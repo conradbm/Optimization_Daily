@@ -53,7 +53,7 @@ tv <-  timevis(data = TIME_VIS_DATAFRAME,
                width = "100%", height = "300px", elementId = "blake-timevis")
 tv
 ```
-![The Photo, Boom!](images/me_edited.jpg){width=50% height=50%}
+![The Photo, Boom!](images/me_edited.jpg){width=50% height=350px}
 
 ## Experience
 
@@ -63,7 +63,7 @@ My primary experience is as Operations Research Analyst (ORSA), but I have about
 
 Over my career I have accumulated an M.S. in Operations Research. This is where my deep love for optimization was solidified. Taking every optimization course possible, from linear programming, non-linear programming, integer programming, network flows, stochastic processes, multi-attribute decision making, supply chain optimization, and more. This is a beautiful field, and I hope to explore and share as much as I can here on this blog!
 
-I am currently an M.E. Industrial Engineering student with about a year remaining. I receive a Graduate Certificate in Systems Engineering this fall, which I am very excited about. Industrial & Systems Engineering are very closely related to Operations Research and have provided an interesting vantage for how to set up problems to reflect factors one cares most about. In addition, to really frame the problem, requirements, and full life cycle of a system. One powerful element to this type of thinking is to know where embedding optimizers 1) make the most sense and 2) provide the most impact. Too cool!
+I am currently an M.E. Industrial Engineering student with about a year remaining. I receive a Graduate Certificate in Systems Engineering this fall, which I am very excited about. Industrial & Systems Engineering are very closely related to Operations Research. They have provided an interesting vantage for how to set up problems to reflect factors one cares most about. In addition, to really frame a problem with requirements and an enterprise view of the full life cycle of a system (i.e., "cradle to grave"). One powerful element to this type of thinking in-step with optimization is to know where embedding optimizers 1) make the most sense and 2) provides the most impact. Too cool!
 
 # Blog Goals
 
