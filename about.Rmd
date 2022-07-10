@@ -1,9 +1,99 @@
 ---
-title: "About this blog"
+title: "About Optimization Daily"
 description: |
-  Some additional details about the blog
+  This blog is all about optimization!
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+```{r, echo=F, include=F}
+library(timevis)
 ```
+
+# About the Author
+
+## Overview
+Hi, I'm Blake. I am a lover of optimization. I enjoy learning, data research, and teaching others. This blog is a manifestation of these three elements.
+
+```{r resume, echo=F, show=F}
+TIME_VIS_DATAFRAME <- data.frame(
+  id      = 1:8,
+  content = c("DoD SMART Scholar"  , 
+              "B.S. in Computer Science",
+              "Army | Operations Research Analyst",
+              "KPMG | Data Scientist", 
+              "M.S. in Operations Research",
+              "Army | Operations Research Analyst",
+              "Graduate Certificate in Systems Engineering",
+              "M.E. in Industrial Engineering"),
+  start   = c("2015-05-01", 
+              "2012-08-01", 
+              "2017-06-01",
+              "2019-06-01",
+              "2017-05-01", 
+              "2020-12-23",
+              "2020-08-01",
+              "2020-08-01"),
+  end     = c("2017-05-01",
+              "2017-05-01", 
+              "2019-06-01",
+              "2020-12-23",
+              "2020-05-01", 
+              Sys.Date() %>% as.character(),
+              "2022-08-01", 
+              "2023-08-01"),
+  group = c(1,1,2,2,1,2,1,1)
+)
+tv <-  timevis(data = TIME_VIS_DATAFRAME, 
+               groups = data.frame(id = 1:2, content = c("Education", "Professional")), 
+               fit = T,
+               width = "100%", height = "300px", elementId = "blake-timevis")
+tv
+```
+![The Photo, Boom!](images/me_edited.jpg){width=50% height=50%}
+
+## Experience
+
+I've been working in software and analytics my entire career (about 6 years now). I graduated with a B.S. in Computer Science with a minor in Mathematics. This is where my love for optimization began, but in disguise. I took several data science classes, data mining being one of them, and was completely amazed with the model formulations for `K-means Clustering`, posterior updating with `EM Clustering`, and how most problems are intractable without heuristic solutions. I never had a full appreciation for the breadth or depth of the field. In fact, it still grows daily.
+
+My primary experience is as Operations Research Analyst (ORSA), but I have about 2 years experience as Data Scientist also. I currently serve as an ORSA. This gave me the ability to see how to make optimization real. The range of problems and solutions that optimization can solve are incredible, and real world experience working with the military and industry has shed light on this.
+
+Over my career I have accumulated an M.S. in Operations Research. This is where my deep love for optimization was solidified. Taking every optimization course possible, from linear programming, non-linear programming, integer programming, network flows, stochastic processes, multi-attribute decision making, supply chain optimization, and more. This is a beautiful field, and I hope to explore and share as much as I can here on this blog!
+
+I am currently an M.E. Industrial Engineering student with about a year remaining. I receive a Graduate Certificate in Systems Engineering this fall, which I am very excited about. Industrial & Systems Engineering are very closely related to Operations Research and have provided an interesting vantage for how to set up problems to reflect factors one cares most about. In addition, to really frame the problem, requirements, and full life cycle of a system. One powerful element to this type of thinking is to know where embedding optimizers 1) make the most sense and 2) provide the most impact. Too cool!
+
+# Blog Goals
+
+## Overview
+This blog is the product of a concept I recently heard about infamously classified as <em>learning out load</em>. So in hopes to share concepts I've learned from the amazing field of optimization, I will be regularly assembling varying degrees of optimization problems here. The principle aim of this blog is to communicate how to formulate and implement optimization problems in R.
+
+## Concept Map
+
+Optimization Daily is a place for lovers of optimization.
+Some general categories this blog hopes to speak to include: 
+
+- Convex Optimization, 
+- Non-linear Programming,  
+- Linear Programming, 
+- Integer Programming, and 
+- Network Flows Optimization. 
+
+Other intersecting fields are of interest, including: 
+
+- Simulations, 
+- Systems Thinking, and 
+- System Dynamics.
+
+The explosion of data and data science methods will direct blog interests in some of the following areas also: 
+
+- Statistical Optimization, 
+- Machine Learning,
+- Deep Learning,
+- Decision Science Optimization Applications, 
+- Business Application to Optimization, and 
+- Social Applications to Optimization. 
+
+

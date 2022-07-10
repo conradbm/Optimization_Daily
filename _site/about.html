@@ -88,29 +88,29 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>Optimization Daily: About this blog</title>
+  <title>Optimization Daily: About Optimization Daily</title>
 
-  <meta property="description" itemprop="description" content="Some additional details about the blog"/>
+  <meta property="description" itemprop="description" content="This blog is all about optimization!"/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Optimization Daily: About this blog"/>
+  <meta property="og:title" content="Optimization Daily: About Optimization Daily"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Some additional details about the blog"/>
+  <meta property="og:description" content="This blog is all about optimization!"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Optimization Daily"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Optimization Daily: About this blog"/>
-  <meta property="twitter:description" content="Some additional details about the blog"/>
+  <meta property="twitter:title" content="Optimization Daily: About Optimization Daily"/>
+  <meta property="twitter:description" content="This blog is all about optimization!"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["About this blog"]},{"type":"character","attributes":{},"value":["Some additional details about the blog"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["About Optimization Daily"]},{"type":"character","attributes":{},"value":["This blog is all about optimization!\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2068,6 +2068,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   <!--/radix_placeholder_distill-->
   <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+  <link href="site_libs/visjs-7.4.9/vis-timeline-graph2d.min.css" rel="stylesheet" />
+  <script src="site_libs/visjs-7.4.9/vis-timeline-graph2d.min.js"></script>
+  <link href="site_libs/timeline-0.4/timevis.css" rel="stylesheet" />
+  <script src="site_libs/timevis-binding-2.0.0/timevis.js"></script>
+  <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2087,7 +2107,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"About this blog","description":"Some additional details about the blog","authors":[]}
+{"title":"About Optimization Daily","description":"This blog is all about optimization!","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2101,6 +2121,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="nav-right">
 <a href="index.html">Home</a>
 <a href="about.html">About</a>
+<a href="https://github.com/conradbm">
+<i class="fab fa-github" aria-hidden="true"></i>
+</a>
+<a href="https://conradbm.shinyapps.io/ptl_analytics">
+<i class="fas fa-chart-pie" aria-hidden="true"></i>
+</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2113,24 +2139,114 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>About Optimization Daily</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<br>
-<p>
-  Optimization Daily is a place for lovers of optimization.
-  Some general categories this blog hopes to speak to include: Convex Optimization, Non-linear Programming,  Linear Programming, Integer Programming, and Network Flows Optimization. 
-</p>
-<p>
-  We hope to touch on specific fields of intersection including: Simulations, Systems Thinking, and System Dynamics.
-</p>
-<p>
-  Some other specific fields of interest are: Statistical Optimization, Machine Learning & Deep Learning, Data Science, Decision Science Optimization Applications, Business Application to Optimization, and Social Applications to Optimization. 
-</p>
-<p>
-  As Stephen Boyd once said, <q>Everything is in life is an optimization problem.</q> We hope you enjoy everything optimization!
-</p>
+<p><p>This blog is all about optimization!</p></p>
 </div>
 
 
 <div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#about-the-author">About the Author</a>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#experience">Experience</a></li>
+</ul></li>
+<li><a href="#blog-goals">Blog Goals</a>
+<ul>
+<li><a href="#blog-overview">Blog Overview</a></li>
+<li><a href="#concept-map">Concept Map</a></li>
+</ul></li>
+</ul>
+</nav>
+</div>
+<h1 id="about-the-author">About the Author</h1>
+<h2 id="overview">Overview</h2>
+<p>Hi, I’m Blake. I am a lover of optimization. I enjoy learning, data
+research, and teaching others. This blog is a manifestation of these
+three elements.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div id="blake-timevis" class="timevis html-widget" style="width:100%;height:300px;">
+<div class="btn-group zoom-menu">
+<button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
+<button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
+</div>
+</div>
+<script type="application/json" data-for="blake-timevis">{"x":{"items":[{"id":"1","content":"DoD SMART Scholar","start":"2015-05-01","end":"2017-05-01","group":"1"},{"id":"2","content":"B.S. in Computer Science","start":"2012-08-01","end":"2017-05-01","group":"1"},{"id":"3","content":"Army | Operations Research Analyst","start":"2017-06-01","end":"2019-06-01","group":"2"},{"id":"4","content":"KPMG | Data Scientist","start":"2019-06-01","end":"2020-12-23","group":"2"},{"id":"5","content":"M.S. in Operations Research","start":"2017-05-01","end":"2020-05-01","group":"1"},{"id":"6","content":"Army | Operations Research Analyst","start":"2020-12-23","end":"2022-07-10","group":"2"},{"id":"7","content":"Graduate Certificate in Systems Engineering","start":"2020-08-01","end":"2022-08-01","group":"1"},{"id":"8","content":"M.E. in Industrial Engineering","start":"2020-08-01","end":"2023-08-01","group":"1"}],"groups":[{"id":"1","content":"Education"},{"id":"2","content":"Professional"}],"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":"300px","timezone":null,"api":[]},"evals":[],"jsHooks":[]}</script>
+</div>
+<figure>
+<img src="images/me_edited.jpg" style="width:50.0%;height:50.0%"
+alt="The Photo, Boom!" />
+<figcaption aria-hidden="true">The Photo, Boom!</figcaption>
+</figure>
+<h2 id="experience">Experience</h2>
+<p>I’ve been working in software and analytics my entire career (about 6
+years now). I graduated with a B.S. in Computer Science with a minor in
+Mathematics. This is where my love for optimization began, but in
+disguise. I took several data science classes, data mining being one of
+them, and was completely amazed with the model formulations for
+<code>K-means Clustering</code>, posterior updating with
+<code>EM Clustering</code>, and how most problems are intractable
+without heuristic solutions. I never had a full appreciation for the
+breadth or depth of the field. In fact, it still grows daily.</p>
+<p>My primary experience is as Operations Research Analyst (ORSA), but I
+have about 2 years experience as Data Scientist also. I currently serve
+as an ORSA. This gave me the ability to see how to make optimization
+real. The range of problems and solutions that optimization can solve
+are incredible, and real world experience working with the military and
+industry has shed light on this.</p>
+<p>Over my career I have accumulated an M.S. in Operations Research.
+This is where my deep love for optimization was solidified. Taking every
+optimization course possible, from linear programming, non-linear
+programming, integer programming, network flows, stochastic processes,
+multi-attribute decision making, supply chain optimization, and more.
+This is a beautiful field, and I hope to explore and share as much as I
+can here on this blog!</p>
+<p>I am currently an M.E. Industrial Engineering student with about a
+year remaining. I receive a Graduate Certificate in Systems Engineering
+this fall, which I am very excited about. Industrial &amp; Systems
+Engineering are very closely related to Operations Research and have
+provided an interesting vantage for how to set up problems to reflect
+factors one cares most about. In addition, to really frame the problem,
+requirements, and full life cycle of a system. One powerful element to
+this type of thinking is to know where embedding optimizers 1) make the
+most sense and 2) provide the most impact. Too cool!</p>
+<h1 id="blog-goals">Blog Goals</h1>
+<h2 id="blog-overview">Blog Overview</h2>
+<p>This blog is the product of a concept I recently heard about
+infamously classified as <em>learning out load</em>. So in hopes to
+share concepts I’ve learned from the amazing field of optimization, I
+will be regularly assembling varying degrees of optimization problems
+here. The principle aim of this blog is to communicate how to formulate
+and implement optimization problems in R.</p>
+<h2 id="concept-map">Concept Map</h2>
+<p>Optimization Daily is a place for lovers of optimization. Some
+general categories this blog hopes to speak to include:</p>
+<ul>
+<li>Convex Optimization,</li>
+<li>Non-linear Programming,<br />
+</li>
+<li>Linear Programming,</li>
+<li>Integer Programming, and</li>
+<li>Network Flows Optimization.</li>
+</ul>
+<p>Other intersecting fields are of interest, including:</p>
+<ul>
+<li>Simulations,</li>
+<li>Systems Thinking, and</li>
+<li>System Dynamics.</li>
+</ul>
+<p>The explosion of data and data science methods will direct blog
+interests in some of the following areas also:</p>
+<ul>
+<li>Statistical Optimization,</li>
+<li>Machine Learning,</li>
+<li>Deep Learning,</li>
+<li>Decision Science Optimization Applications,</li>
+<li>Business Application to Optimization, and</li>
+<li>Social Applications to Optimization.</li>
+</ul>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->

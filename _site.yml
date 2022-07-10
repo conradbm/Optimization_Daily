@@ -13,4 +13,9 @@ navbar:
       href: https://github.com/conradbm
     - icon: fas fa-chart-pie
       href: https://conradbm.shinyapps.io/ptl_analytics
+collections:
+  posts:
+    categories: true
+    categories_metadata: true
+    authors_metadata: true
 output: distill::distill_article
