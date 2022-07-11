@@ -44,7 +44,7 @@ TIME_VIS_DATAFRAME <- data.frame(
               "2020-05-01", 
               Sys.Date() %>% as.character(),
               "2022-08-01", 
-              "2023-08-01"),
+              "2023-12-01"),
   group = c(1,1,2,2,1,2,1,1)
 )
 tv <-  timevis(data = TIME_VIS_DATAFRAME, 
@@ -53,7 +53,7 @@ tv <-  timevis(data = TIME_VIS_DATAFRAME,
                width = "100%", height = "300px", elementId = "blake-timevis")
 tv
 ```
-![The Photo, Boom!](images/me_edited.jpg){width=50% height=400px}
+<!-- ![The Photo, Boom!](images/me_edited.jpg){width=200px height=400px} -->
 
 ## Experience
 

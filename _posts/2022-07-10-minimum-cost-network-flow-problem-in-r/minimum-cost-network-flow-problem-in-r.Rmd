@@ -1,0 +1,382 @@
+---
+title: "Minimum Cost Network Flow Problem in R"
+description: |
+  In this post we will walk through how to make least cost maximum flow decisions using R.
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-10
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+library(lpSolve)
+library(igraph)
+library(visNetwork)
+library(dplyr)
+```
+
+# Traffic Minimum Cost Network Flow
+
+One common extension to `Maximum Flow` problems is to do it as cheaply as possible. In this article we will extend the maximum flow example we wrote on in the [last post](https://optimization-daily.netlify.app/posts/2022-07-09-maximum-network-flows-in-r/) and include a minimum cost component. The generic problem formation is below:
+
+*Objective*
+$$
+Minimize. \sum_{(i,j)\in A}{c_{ij}x_{ij}}   
+$$
+$$
+s.t.
+$$
+*Node Flow Constraints*
+$$
+\sum_{j}{x_{ij}} - \sum_{i}{x_{ji}} = b_i \: \forall i \in N
+$$
+*Arc Flow Constraints*
+$$
+l_{ij} \le x_{ij} \le u_{ij} \: \forall (i,j) \in A
+$$
+
+## The Problem
+
+Road networks are everywhere in our society. In any given intersection there is a flow of cars, intersections with stop lights, and connections between each. Every road has a feasible limit it can support. In fact, this is often the cause of most congestion. Our goal is to minimize the total time required for all cars to travel from node 1 to node 6 in a fictitious road network. 
+
+## The Data
+```{r data_setup}
+nodes <- data.frame(id = c(1:6), color = c("green", rep("grey", 4), "red"))
+edges <- data.frame(from = c(1, 1, 2, 2, 5, 4, 4, 3, 3), 
+                    to = c(2, 3, 5, 4, 6, 5, 6, 5, 4),
+                    lower_bound = 0,
+                    upper_bound = c(800, 600, 100, 600, 600, 600, 400, 400, 300),
+                    time = c(10, 50, 70, 30, 30, 30, 60, 60, 10), # in minutes
+                    flow = 0, #TBD
+                    color = "grey") %>% dplyr::arrange(from, to)
+nodes
+edges
+```
+
+### Network Visualization
+
+We can see the upper bounds plotted on the edges of this transportation network below. The width indicates more capacity for flow. Examine the trade-off between time and space for travel between arc (1,2).
+
+```{r visual_1}
+g <- igraph::graph_from_data_frame(d = edges,
+                                   directed = TRUE,
+                                   vertices = nodes)
+
+# Capacity plot
+plot(g, 
+     main = "Vehicle Transportion Network Capacities", 
+     edge.label = E(g)$upper_bound, 
+     edge.width = E(g)$upper_bound/150,
+     vertex.color = V(g)$color,
+     edge.color = E(g)$color)
+
+# Time plot
+plot(g, 
+     main = "Vehicle Transportion Network Travel Time", 
+     edge.label = E(g)$time, 
+     edge.width = E(g)$time/10,
+     vertex.color = V(g)$color,
+     edge.color = E(g)$color)
+```
+
+## Model Data
+
+### Average In-Flow
+
+First we assume the average number of cars that flow through this network. This is often recovered from past databases that record the flows through the network.
+
+```{r avg_flow}
+AVERAGE_FLOW <- 900 # per hour
+AVERAGE_FLOW
+```
+### Demand
+
+Next we set up the demand that will be flowing through the network. This is indicated as the vector `b` in our model formation above. This means the initial node has a supply of 900 vehicles, while the final node has a demand of 900 nodes. The objective is to flow as many vehicles through the network, in the shortest amount of time.
+
+```{r demand}
+demand <- c(AVERAGE_FLOW, rep(0, nrow(nodes)-2), -AVERAGE_FLOW)
+demand
+```
+
+# Linear Programming (LP)
+
+## LP Structure
+
+The next step is to set up the optimization. Let's do that now. There are 3 key ingredients.
+
+- Objective
+
+- Constraints
+
+- Directions
+
+### Arc Constraints
+
+We want to build the constraint matrix, which has 2 parts.
+
+- Arc Capacity Constraints
+
+- Node Flow Constraints
+
+The `Arc Capacity Constraints` are the first we address.
+
+The `Amat`, or A matrix, is the arc matrix which contains the upper bounds. Since linear programming relies on the resource matrix, we need one row for each arc, our dimensions for variable flow selection are the number of arcs also. So this means we need an `identity matrix` for the rows of arcs and columns of arcs.
+
+
+```{r constraints_1}
+create_upper_arc_constraints <- function(edges){
+  Amat <- matrix(0, nrow = nrow(edges), ncol = nrow(edges))
+  Amat_dir <- rep("<=", nrow(Amat))
+  Amat_rhs <- c()
+
+  for(i in 1:ncol(Amat)){
+    Amat[i,i] <- 1
+    Amat_rhs <- c(Amat_rhs, edges$upper_bound[i])
+  }
+  
+  list(Amat_upper = Amat,
+       Amat_upper_dir = Amat_dir,
+       Amat_upper_rhs = Amat_rhs)
+}
+
+# This could be higher than zero, but for standard LP this is the default configuration, so not needed.
+# create_lower_arc_constraints <- function(edges){
+#   Amat <- matrix(0, nrow = nrow(edges), ncol = nrow(edges))
+#   Amat_dir <- rep(">=", nrow(Amat))
+#   Amat_rhs <- c()
+# 
+#   for(i in 1:ncol(Amat)){
+#     Amat[i,i] <- 1
+#     Amat_rhs <- c(Amat_rhs, edges$lower_bound[i])
+#   }
+#   
+#   list(Amat_lower = Amat,
+#        Amat_lower_dir = Amat_dir,
+#        Amat_lower_rhs = Amat_rhs)
+# }
+
+upper_results <- create_upper_arc_constraints(edges)
+# lower_results <- create_lower_arc_constraints(edges)
+# 
+# Amat <- rbind(upper_results$Amat_upper, lower_results$Amat_lower)
+# Amat_dir <- c(upper_results$Amat_upper_dir, lower_results$Amat_lower_dir)
+# Amat_rhs <- c(upper_results$Amat_upper_rhs, lower_results$Amat_lower_rhs)
+
+Amat <- upper_results$Amat_upper
+Amat_dir <- upper_results$Amat_upper_dir
+Amat_rhs <- upper_results$Amat_upper_rhs
+
+Amat
+Amat_dir
+Amat_rhs
+```
+
+The `Node Flow Constraints` are the next to take care of.
+
+The `Bmat`, or B matrix, is a matrix which contains the `node balance equations` codified by flows.
+
+For each node, we need to match it's `from` node and `to` node with the appropriate inflow and outflow. If it matches an `inflow` arc, this is increase, so `1` is in the arc column. If it matches an `outflow` arch, this is decrease, so `-1` is in the arc column. Otherwise `0` remains as the placeholder. The sign here is `==` because they must match (i.e., supply = demand). If we require excess at certain points we can set this demand to be higher than zero, but we will not do that here.
+
+
+```{r constraints_2}
+
+
+create_node_constraints <- function(nodes, edges){
+    Bmat <- matrix(0, nrow = nrow(nodes), ncol = nrow(edges))
+    Bmat_dir <- rep("==", nrow(Bmat))
+    Bmat_rhs <- rep(0, nrow(Bmat))
+    
+    for(i in 1:nrow(Bmat)){
+      node_id <- nodes[i, "id"]
+      for(j in 1:ncol(Bmat)){
+        edge_from <- edges[j,"from"]
+        edge_to <- edges[j, "to"]
+        
+        if(node_id == edge_from){
+          # print(paste("Outbound for ", node_id, "From: ",edge_from, "to: ", edge_to))
+          Bmat[i,j] = 1
+        }
+        else if(node_id == edge_to){
+          # print(paste("Inbound for ", node_id, "From: ",edge_from, "to: ", edge_to))
+          Bmat[i,j] = -1
+        }
+        else{
+          Bmat[i,j] = 0
+        }
+      }
+      Bmat_rhs[i] <- demand[i]
+    }
+    
+    list(Bmat = Bmat,
+         Bmat_dir = Bmat_dir,
+         Bmat_rhs = Bmat_rhs
+    )
+}
+
+results <- create_node_constraints(nodes, edges)
+Bmat <- results$Bmat
+Bmat_dir <- results$Bmat_dir
+Bmat_rhs <- results$Bmat_rhs
+
+Bmat
+Bmat_dir
+Bmat_rhs
+```
+
+### Putting It All Together
+
+Next, the objective is going to be the time. This is the cost we have to pay for assigning flow to an arc. Let's take a look at everything all together.
+
+```{r objective}
+f.obj <- edges %>% dplyr::pull(time)
+f.cons <- rbind(Amat, Bmat)
+f.rhs <- c(Amat_rhs, Bmat_rhs)
+f.dir <- c(Amat_dir, Bmat_dir)
+
+f.obj
+f.cons
+f.rhs
+f.dir
+```
+
+## Solve the LP
+
+Now we unite everything together and drop it into the solver. Remember, we are trying to minimize cost in our objective, the constraints will maximize the flow. So specify `min`.
+
+```{r solve_lp}
+results <- lp(direction = "min",  
+              objective.in = f.obj, 
+              const.mat = f.cons, 
+              const.dir = f.dir, 
+              const.rhs = f.rhs)
+
+edges$flow <- results$solution
+edges
+```
+## Visualize Solution
+
+Now that we have our flow we can do some visualizing and analysis. There are two key graphics to examine; the `flow vs. capacity` and the `flow vs. time`. First, the `flow vs. capacity` will give us insights into stress on the network. This is because of their implicit advantage they supply to the optimizer, maximum flows, so naturally, these get flooded with traffic. Second, the `flow vs. time` will give us insights into shortest distance paths (i.e., assuming time is proportional to distance, which is not always the case). This is because paths with shorter times will enable more to flow through in any given time delta. Between these two visuals, a good assessment of the model output is feasible.
+
+
+```{r flow_vs_capacity_vis}
+# Set the flow
+edges$flow <- results$solution
+
+# If the arc is flowing oil, change to black
+edges$color[which(edges$flow > 0)] <- "black"
+
+# If the arc is at capacity change it to red
+edges$color[which(edges$flow == edges$upper_bound)] <- "red"
+
+g <- igraph::graph_from_data_frame(d = edges,
+                                   directed = TRUE,
+                                   vertices = nodes)
+
+# Plot the flow and capacity
+plot(g,
+     edge.label = paste("(",E(g)$flow, 
+                        ",",
+                         E(g)$upper_bound, 
+                         ")", 
+                        sep=""), 
+     main = "Traffic Flow | (flow, capacity)", 
+     vertex.color = V(g)$color,
+     vertex.size = 25,
+     vertex.label.cex = 1.6,
+     edge.color = E(g)$color,
+     edge.width = E(g)$flow/200)
+
+# Plot the time
+plot(g,
+     edge.label = paste("(",E(g)$flow, 
+                        ",",
+                         E(g)$time, 
+                         ")", 
+                        sep=""), 
+     main = "Traffic Flow | (flow, time)", 
+     vertex.color = V(g)$color,
+     vertex.size = 25,
+     vertex.label.cex = 1.6,
+     edge.color = E(g)$color,
+     edge.width = E(g)$flow/200)
+
+```
+
+
+### Cleaning Up The Visual
+
+```{r netvis_graph}
+nodes
+visNet_nodes <- nodes %>% 
+                dplyr::mutate(label = paste("Location ", id),
+                              font.size =10,
+                              type = "black",
+                              shape = "circle",
+                              font = 12)
+
+visNet_edges <- edges %>% 
+                dplyr::mutate(label = paste("(",flow,",",upper_bound,")",sep=""),
+                              length = 250,
+                              width = flow/100,
+                              arrows = "to") 
+  
+visNetwork(visNet_nodes, 
+           visNet_edges,
+           width = "100%",
+           main = "Least Time Maximum Vehicle Flow | (flow, capacity)")
+```
+
+
+### Flow vs. Capacity vs. Time
+
+Two of the most **popular roadways** are `2 -> 4` and `5 -> 6`. These supply the least amount of time and the most amount of capacity.
+Without a doubt, the model has exploited these as much as possible. The only trick is, just how the flow gets there. We see up front that `1` ships
+off a `200 to 700` flow split from the `900` supply with the heavier allocation toward `2`. Why? 
+
+1. `2` is connected to a **popular roadway**, meaning much more potential to flow (and quickly).
+
+2. In order to get to `4`, going through `3` will cost much more time (60 oppose to 40). 
+
+3. `3` has two outlets, but one is one of the worst routes on the network due to it's 60 minute trek, so it doesn't even get any flow allocated.
+
+### Shortest Path
+
+The shortest path shows one very interesting insight to this model; sending a maximum flow through the network is not all about time. The shortest path (least time) is the sequence `1 -> 2 -> 4 -> 6`. However, from the above, we see that this isn't the most stressed path. Why? We aren't *only* interested in short times for the vehicles flowing through the network. We are also interested in getting them all through it! We assumed there was a 900 average vehicle flow, and having a macro-level view of this system, sending them all down the shortest path would not solve it (that is, we would not send as much as possible, only as cheaply as possible; we could have pushed more). In order to get the most cars sent through the network, in the shortest amount of time we also must take advantage of the **popular roadways** that the model is straining (or add incentive to the **not so popular roadways** with greater capacity or shorter commute times).
+
+```{r shortest_path_setup}
+shortest.paths <- igraph::shortest_paths(graph = g, from = 1, to = 6)
+s_path <- shortest.paths$vpath[[1]]
+s_path
+shortest_commute_time <- E(g, path = s_path)$time %>% sum
+shortest_commute_time
+
+
+```
+
+### Shortest Path Visualization
+
+```{r shortest_path_vis}
+
+E(g)$color <- "black"
+E(g, path = s_path)$color <- "blue"
+
+plot(g,
+     edge.label = paste("(",E(g)$flow, 
+                        ",",
+                         E(g)$time, 
+                         ")", 
+                        sep=""), 
+     main = "Shortest Path | (flow, capacity)", 
+     vertex.color = V(g)$color,
+     vertex.size = 25,
+     vertex.label.cex = 1.6,
+     edge.color = E(g)$color,
+     edge.width = E(g)$flow/200)
+```
+
