@@ -1,5 +1,8 @@
 ---
 title: "Maximum Network Flows in R"
+categories:
+  - network flows
+  - linear programming
 description: |
   In this post we will walk through how to make a maximum flow decision using network flows and linear programming.
 author:

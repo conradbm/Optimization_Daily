@@ -1,5 +1,8 @@
 ---
 title: "Shortest Path Optimization in R"
+categories:
+  - network flows
+  - linear programming
 description: |
   In this post we will walk through how to make least cost decisions using network flows shortest path algorithm.
 author:
