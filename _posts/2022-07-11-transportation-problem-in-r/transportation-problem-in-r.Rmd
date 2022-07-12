@@ -2,6 +2,9 @@
 title: "Transportation Problem in R"
 description: |
   A short description of the post.
+categories:
+  - network flows
+  - linear programming
 author:
   - name: Blake Conrad
     url: https://github.com/conradbm
@@ -118,7 +121,7 @@ powerplant_nodes <- DiagrammeR::create_node_df(nodes = POWER_PLANTS,
                                   label = POWER_PLANT_LABELS,
                                   style = "filled",
                                   type = "upper",
-                                  color = rep("blue", length(POWER_PLANTS)),
+                                  color = rep("green", length(POWER_PLANTS)),
                                   shape = rep("circle", length(POWER_PLANTS)),
                                   data = supply,
                                   n = length(POWER_PLANTS)
@@ -199,6 +202,13 @@ g = DiagrammeR::create_graph(nodes_df = nodes,
 
 # Render the graph
 DiagrammeR::render_graph(g, title = "Power Plants Electricity Transportation to Cities")
+```
+
+Another way to visualize this is by converting it to an igraph, which looks pretty horrible.
+
+```{r}
+ig <- DiagrammeR::to_igraph(g)
+plot(ig, vertex.size=30)
 ```
 
 
@@ -344,6 +354,28 @@ g = DiagrammeR::create_graph(nodes_df = nodes,
 # Draw the graph
 DiagrammeR::render_graph(g, title = "Power Plants Electricity Transportation to Cities")
 ```
+
+```{r}
+# ig <- DiagrammeR::to_igraph(g)
+
+nodes
+visNet_nodes <- nodes %>% 
+                dplyr::mutate(shape = "circle",
+                              font = 12,
+                              size = data,)
+edges
+visNet_edges <- edges %>% 
+                dplyr::mutate(label = paste("(",flow,",",data,")",sep=""),
+                              length = 250,
+                              width = flow/5,
+                              arrows = "to") 
+  
+visNetwork(visNet_nodes, 
+           visNet_edges,
+           width = "100%",
+           main = "Power Distribution | (flow, cost)")
+```
+
 
 # An Easier Way
 
