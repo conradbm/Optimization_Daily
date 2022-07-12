@@ -1,0 +1,367 @@
+---
+title: "Transportation Problem in R"
+description: |
+  A short description of the post.
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-12
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+library(lpSolve)
+library(igraph)
+library(visNetwork)
+library(dplyr)
+library(DiagrammeR)
+library(ggplot2)
+```
+
+# Metropolitan Power Plant Supply
+
+## The Problem
+
+### Description
+
+One of the most common daily tasks is that of transportation. From our bed to the dining room table, or from home to work and back, all of these examples have limited **supply** some pre-determined **demand** and an implicit **cost** in order to carry it out. The question is, what is the best way to do it? It would be silly to travel to go home before you pick up dinner, then go back out again to do it; we seek to **minimize our cost** when transporting goods. This can be time, money, risk, or anything else that matters. 
+
+In our example we will consider a power plant that needs to supply electricity (or any resource for that matter) to a city. All of the costs incurred to transport the electricity are known, these will be in USD. Supply `from` each power plant is known. Demand `to` each city is also known. The problem is 
+
+### Mathematical Formulation
+
+The classical linear programming formulation goes as follows:
+
+*Objective*
+
+$$
+Minimize. \sum_{i,j}{x_{ij}c_{ij}}
+$$
+
+$$
+s.t.
+$$
+
+*Supply Constraints*
+
+$$
+\sum_{j}{x_{ij}} \le s_i \: \forall i \in S
+$$
+
+*Demand Constraints*
+
+$$
+\sum_{i}{x_{ij}} \ge d_j \: \forall j \in D
+$$
+
+*Non-negativity Constraints*
+
+$$
+x_{ij} \ge 0 \: \forall (i,j)\in A
+$$
+
+### Data
+
+First we need to get our data. This will come in the form of an `adjacency matrix` which we will readily convert into an arc matrix for reasons that will become clear soon (building constraints for the LP).
+
+```{r adj_matrix}
+#Number of plants and cities
+NUM_POWER_PLANTS = 3
+NUM_CITIES = 4
+
+# Adjacency matrix
+adj.matrix = matrix(c(8, 6, 10, 9, 9, 12, 13, 7, 14, 9, 16, 5), 
+                    nrow = NUM_POWER_PLANTS, 
+                    ncol = NUM_CITIES)
+adj.matrix
+```
+
+Next we need to take a look at our supply and demand.
+
+```{r supply_demand}
+
+# Supply and demand vectors
+supply <- c(35, 50, 40)
+demand <- c(45, 20, 30, 30)
+supply
+demand
+```
+
+Next define the Power Plants and Cities. 
+
+```{r names}
+
+# Supply node id lookup
+POWER_PLANTS = 1:3
+POWER_PLANT_LABELS <- sprintf("Plant %s", 1:3)
+
+# Demand node id lookup
+CITIES = 1:4
+CITIES_LABELS <- sprintf("City %s", 1:4)
+
+POWER_PLANT_LABELS
+CITIES_LABELS
+```
+
+
+For the nodes we will supply them with some metatdata into the `DiagrammeR` package for slick plotting capability.
+
+```{r nodes}
+
+# Create the powerplant nodes
+powerplant_nodes <- DiagrammeR::create_node_df(nodes = POWER_PLANTS,
+                                  label = POWER_PLANT_LABELS,
+                                  style = "filled",
+                                  type = "upper",
+                                  color = rep("blue", length(POWER_PLANTS)),
+                                  shape = rep("circle", length(POWER_PLANTS)),
+                                  data = supply,
+                                  n = length(POWER_PLANTS)
+                                  )
+
+# Create the city nodes
+city_nodes <- DiagrammeR::create_node_df(nodes = CITIES,
+                                  label = CITIES_LABELS,
+                                  style = "filled",
+                                  type = "lower",
+                                  color = rep("red", length(CITIES)),
+                                  shape = rep("square", length(CITIES)),
+                                  data = demand,
+                                  n = length(CITIES)
+                                  )
+
+# Create the DiagrammeR dataframe
+nodes <- DiagrammeR::combine_ndfs(powerplant_nodes, city_nodes)
+nodes
+```
+
+One way to convert the `adjacency matrix` into a friendlier edge format is to simply `gather` it with some basic naming of the rows and columns.
+Once we have the `tidy_edges` we can acquire the `node_id` for each by doing a little joining with the `nodes` table formed above. This will supply the `id's` required for the `DiagrammeR` package.
+
+```{r edges}
+
+# Create the "from" "to" representation, from the raw matrix form
+tmp <- adj.matrix %>% as.data.frame
+names(tmp) <- CITIES_LABELS
+tmp$from <- POWER_PLANT_LABELS
+tidy_edges <- tmp %>% 
+                tidyr::gather(., key = "to", value = "data", -c(from)) %>%
+                dplyr::mutate(color = "black", rel = "requires")
+
+# Go find the from_id
+from_id = tidy_edges %>% 
+            dplyr::inner_join(nodes, by = c("from"="label")) %>% 
+            dplyr::transmute(from_id = id) %>%
+            dplyr::pull(from_id)
+
+# Go find the to_id
+to_id = tidy_edges %>% 
+            dplyr::inner_join(nodes, by = c("to"="label")) %>% 
+            dplyr::transmute(to_id = id) %>% 
+            dplyr::pull(to_id)
+
+
+# Get the from_id
+tidy_edges$from_id = from_id
+
+# Get the to_id
+tidy_edges$to_id = to_id
+
+edges <- DiagrammeR::create_edge_df(from = from_id,
+                                    to = to_id,
+                                    rel = tidy_edges$rel,
+                                    color = tidy_edges$color,
+                                    data = tidy_edges$data,
+                                    label = tidy_edges$data)
+
+
+# Always a good idea to short your edges logically
+edges <- edges %>% 
+            dplyr::arrange(-desc(from), -desc(to)) %>% 
+            dplyr::mutate(id = row_number())
+edges
+```
+
+
+### A Quick Visual
+
+```{r create_vis}
+# Create the graph
+g = DiagrammeR::create_graph(nodes_df = nodes,
+                             edges_df = edges, 
+                             directed = T, 
+                             graph_name = "transportation")
+
+# Render the graph
+DiagrammeR::render_graph(g, title = "Power Plants Electricity Transportation to Cities")
+```
+
+
+# LP Model Formulation
+
+## Objective
+
+First things first, we know the costs on each arc already, because they are supplied from our `adjacency matrix` initially. So we can just go recover those.
+
+```{r objective}
+# Get objective value
+f.obj = edges %>% dplyr::pull(data)
+f.obj
+```
+
+## Constraints, Direction, and RHS
+
+First some convenient numbering systems will be helpful to preserve knowledge of the nodes and which id is which.
+
+```{r node_ids}
+# Align ids up for matrix building
+POWER_PLANT_NODE_IDS <- POWER_PLANTS
+CITY_NODE_IDS <- POWER_PLANTS[length(POWER_PLANTS)] + CITIES
+
+POWER_PLANT_NODE_IDS
+CITY_NODE_IDS
+```
+
+
+Next we need to build the supply constraints. So for each unique powerplant arc, then sum of it's outbound arcs must be less than the supply constraint, for all supply.
+
+```{r supply_constraints}
+
+# One constraint row for each supply node
+Smat = matrix(0, nrow = length(POWER_PLANTS), ncol = nrow(edges))
+Smat_rhs = supply
+Smat_dir = rep("<=", length(supply))
+
+for(i in 1:nrow(Smat)){
+  for(j in 1:ncol(Smat)){
+    from = edges$from[j]
+    to = edges$to[j]
+    
+    if(from == POWER_PLANT_NODE_IDS[i]){
+      Smat[i, j] = 1
+    }
+  }
+}
+
+Smat
+Smat_rhs
+Smat_dir
+```
+
+With the same logic we need to construct the demand matrix.
+
+```{r}
+
+# One constraint node for each demand node
+Dmat = matrix(0, nrow=length(CITIES), ncol = nrow(edges))
+Dmat_rhs = demand
+Dmat_dir = rep(">=", length(demand))
+
+for(i in 1:nrow(Dmat)){
+  for(j in 1:ncol(Dmat)){
+    from = edges$from[j]
+    to = edges$to[j]
+    
+    if(to == CITY_NODE_IDS[i]){
+      Dmat[i, j] = 1
+    }
+  }
+}
+
+Dmat
+Dmat_rhs
+Dmat_dir
+```
+
+
+Now that we have our supply and demand data matrices put together, let's unify them and take a look at all of our constraints.
+
+```{r}
+
+# All `lpSolve` data
+f.obj <- f.obj
+f.cons <- rbind(Smat, Dmat)
+f.rhs <- c(Smat_rhs, Dmat_rhs)
+f.dir <- c(Smat_dir, Dmat_dir)
+
+f.obj
+f.cons
+f.rhs
+f.dir
+```
+
+
+## Solution
+
+Now we unite everything together and drop it into the solver. Remember, we are trying to minimize cost in our objective, the constraints will maximize the flow. So specify `min`.
+
+```{r solve_lp}
+
+# Get the results
+results <- lp(direction = "min",  
+              objective.in = f.obj, 
+              const.mat = f.cons, 
+              const.dir = f.dir, 
+              const.rhs = f.rhs)
+
+results$objval
+matrix(results$solution, nrow = length(supply), ncol = length(demand))
+```
+
+### Visualization
+
+Cool! We have our solution. It looks like:
+
+- `Plant 1` should supply `City 1` and `City 2`.
+- `Plant 2` should supply `City 1` and `City 3`, and
+- `Plant 3` should supply `City 1` and `City 4`.
+
+One interesting insight is the shared responsibility all plants have in getting resources to `City 1`.
+Another insight is the partnerships to make `City 1` supplied as cheaply as possible, may require some additional `coordination costs` to carefully handle any error in costs between ill-shipments.
+The last insights are the siloe's, `City 2` is entirely handled by `Plant 1`, `City 3` by `Plant 2`, and `City 4` by `Plant 3`. This shows us the reliance we have on those energy transfers going through, otherwise it's not only lights out, it is also a more expensive transfer to get them back on!
+
+```{r final_visual}
+
+# Add in the flow
+edges$flow <- results$solution
+
+# Color things if there exists flow
+edges <- edges %>% dplyr::mutate(weight = flow,
+                                 label = flow,
+                                 color = if_else(condition = flow > 0, true = "black",false = "grey"))
+
+# Create the graph
+g = DiagrammeR::create_graph(nodes_df = nodes,
+                             edges_df = edges, 
+                             directed = T, 
+                             graph_name = "transportation")
+
+# Draw the graph
+DiagrammeR::render_graph(g, title = "Power Plants Electricity Transportation to Cities")
+```
+
+# An Easier Way
+
+It's almost spooky how easy it is with the `lp.transport` API. Verify that we got the same solution, `880` and the decision vector is also the same. Since the objective value is the same, the solutions might differ, because they are equally optimal. Pretty interesting to see how easy it is with the convenience of `lpSolve` though!
+
+```{r}
+
+# Get the results
+results <- lpSolve::lp.transport(cost.mat = adj.matrix, 
+                                  direction = "min", 
+                                  row.signs = rep("<=", nrow(adj.matrix)), 
+                                  col.signs = rep(">=", ncol(adj.matrix)),
+                                  row.rhs = supply, 
+                                  col.rhs = demand)
+
+# Verify `objval` is the same as above
+results$objval
+results$solution
+```
+
+
