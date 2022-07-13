@@ -5,6 +5,7 @@ description: |
 categories:
   - network flows
   - linear programming
+  - r
 author:
   - name: Blake Conrad
     url: https://github.com/conradbm

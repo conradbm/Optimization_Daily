@@ -3,6 +3,7 @@ title: "Minimum Cost Network Flow Problem (MCNFP) in R"
 categories:
   - network flows
   - linear programming
+  - r
 description: |
   In this post we will walk through how to make least cost maximum flow decisions using linear programming.
 author:
