@@ -1,0 +1,512 @@
+---
+title: "Image Recognition in R"
+description: |
+  In this post we will explore image classification in keras for several datasets and how transfer learning can be readily applied to improve well known models.
+categories:
+  - image recognition
+  - deep learning
+  - keras
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-13
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+# Recognize Handwritten Digits
+
+Computer vision as a sub-field of deep learning has exploaded over the last decade. The advent of better computers, readily available data sources, and explosively intelligent models with very little code has made the unthinkable doable, and quickly. 
+
+## Libraries
+
+```{r setup}
+library(keras)
+library(dplyr)
+library(ggplot2)
+```
+
+First we will grab the MNIST dataset. This consists of an array of 28x28 images with 10 classification labels.
+
+## Data Retrieval
+
+```{r data, echo=FALSE}
+# Get the MNIST dataset
+mnist <- keras::dataset_mnist()
+
+# Normalize
+mnist$train$x <- mnist$train$x/255
+mnist$test$x <- mnist$test$x/255
+```
+```{r}
+mnist %>% names
+```
+
+We can save the shapes and number of classes for later.
+
+## Data Shapes
+
+```{r data_shapes}
+
+# Get the width and height
+WIDTH = dim(mnist$train$x)[[2]]
+HEIGHT = dim(mnist$train$x)[[3]]
+
+
+# Get unique number of classes
+CLASSES = length(unique(mnist$train$y))
+
+mnist$train$x %>% dim
+mnist$train$y %>% dim
+
+mnist$test$x %>% dim
+mnist$test$y %>% dim
+```
+## Visualize Images
+
+Next we can visualize a few images using the `plot` function in r. This was a little weird at first, because the images sometimes need standardized for rgb values depending on the function and data shape.
+
+```{r visualize}
+library(raster)
+plot_a_few <- function(x,y, a_few = 3, rgb_dim=FALSE){
+    # Render a few images
+    rand_image_index = sample(1:dim(x)[[1]], size = a_few)
+    par(mar=c(0, 0, 0, 0))
+    for(i in rand_image_index){
+      if(rgb_dim){
+        img = x[i,,,]
+      }
+      else{
+        img = x[i,,]
+        # image(img, useRaster=TRUE, axes=FALSE)
+      }
+      
+      plot(as.raster(img))
+      label = y[i]
+      print(label)
+    }
+}
+
+plot_a_few(mnist$train$x, mnist$train$y, a_few=3)
+```
+
+# Model
+
+## Simple Dense Model
+
+The simplest model will take the image tensor and flatten it into the standard feed forward format. The prediction is over our `CLASSES` which is `10`.
+
+```{r model}
+
+# Simple model
+model <- keras::keras_model_sequential() %>% 
+            keras::layer_flatten(input_shape = c(WIDTH, HEIGHT), 
+                                 name = "mnist_flatten_input") %>% 
+            keras::layer_dense(units = 128, activation = "relu", 
+                               name = "mnist_dense") %>% 
+            keras::layer_dropout(0.2, name = "mnist_dropout") %>% 
+            keras::layer_dense(CLASSES, activation = "softmax", 
+                               name = "mnist_dense_output")
+model
+```
+### Summary
+
+```{r}
+
+# Some summary statistics
+base::summary(model)
+```
+
+### Compile
+
+```{r}
+
+# Compile the model
+model %>% 
+  keras::compile(
+    loss = "sparse_categorical_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )
+```
+
+### Fit
+
+Once we configure our model, we can `compile` it, `fit`, then `plot` to see the performance. Turns out, you can just do `plot(history)` and the function to plot these metrics is entirely superfluous.
+
+```{r}
+
+# Fit the model
+history = model %>% 
+            keras::fit(
+              x = mnist$train$x, y = mnist$train$y,
+              epochs = 5,
+              validation_split = 0.3,
+              verbose = 2
+            )
+
+
+plot_history_metrics = function(history){
+    # Plot fit results - loss and accuracy for this model
+    tmp = data.frame(history$metrics) %>% dplyr::mutate(epoch = row_number())
+    plt1 = ggplot(data=tmp) +
+            geom_line(aes(x=epoch, y = loss, color="training loss")) +
+            geom_line(aes(x=epoch, y = val_loss, color="validation loss")) +
+            theme_bw() +
+            labs(color="Legend") + 
+            ggtitle("Model Loss")
+    plt1
+    
+    
+    plt2 = ggplot(data=tmp) +
+            geom_line(aes(x=epoch, y = accuracy, color="training accuracy")) +
+            geom_line(aes(x=epoch, y = val_accuracy, color="validation accuracy")) +
+            theme_bw() +
+            labs(color="Legend") + 
+            ggtitle("Model Accuracy")
+    plt2
+    
+    list(loss_plot = plt1, acc_plot = plt2)
+}
+
+plot_history_metrics(history)
+
+```
+
+### Predictions
+
+```{r}
+# Generate some predictions on the unseen data
+predictions = stats::predict(model, mnist$test$x)
+predictions %>% head()
+```
+
+### Evaluate
+
+```{r}
+
+# Evaluate performance
+test_results = model %>% 
+                  evaluate(mnist$test$x, mnist$test$y, verbose = 0)
+test_results
+```
+
+### Save Model
+
+One thing keras makes incredibly easy is the ability to save your model. This will create a folder and allow for easy access to and from your model if you need it for predictions in another environment or API.
+
+```{r}
+
+# Serialize the model (it becomes a folder)
+keras::save_model_tf(object = model, filepath = "mnist_model")
+```
+
+### Reload Model
+
+```{r}
+
+# Reload the model
+reloaded_model = keras::load_model_tf("mnist_model")
+reloaded_model %>% summary
+base::all.equal(stats::predict(model, mnist$test$x), 
+                stats::predict(reloaded_model, mnist$test$x))
+```
+
+# Recognize Fashion
+
+Recognizing other types of objects is just as easy as before. Let's repeat our steps for a new dataset, because **practice makes perfect!**
+
+## Load the data
+
+```{r}
+fashion_mnist <- dataset_fashion_mnist()
+
+c(train_images, train_labels) %<-% fashion_mnist$train
+c(test_images, test_labels) %<-% fashion_mnist$test
+```
+
+
+```{r}
+class_names = c('T-shirt/top',
+                'Trouser',
+                'Pullover',
+                'Dress',
+                'Coat', 
+                'Sandal',
+                'Shirt',
+                'Sneaker',
+                'Bag',
+                'Ankle boot')
+```
+
+```{r}
+
+dim(train_images)
+
+dim(train_labels)
+
+train_labels[1:20]
+
+dim(test_images)
+
+dim(test_labels)
+```
+
+## Preprocess the data
+
+```{r}
+library(tidyr)
+library(ggplot2)
+
+
+image_1 <- as.data.frame(train_images[1,,])
+colnames(image_1) <- seq_len(ncol(image_1))
+image_1$y <- seq_len(nrow(image_1))
+image_1 <- tidyr::gather(image_1, key = "x", value = "value", -y)
+image_1$x <- as.integer(image_1$x)
+
+ggplot(image_1, aes(x=x,y=y,fill=value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "black", na.value = NA) +
+  scale_y_reverse() +
+  theme_minimal() +
+  theme(panel.grid = element_blank()) +
+  theme(aspect.ratio = 1) +
+  xlab("") +
+  ylab("") +
+  ggtitle(paste(class_names[train_labels[1]+1]))
+```
+```{r}
+train_images <- train_images / 255
+test_images <- test_images / 255
+
+par(mfcol = c(5,5))
+par(mar=c(0,0,1.5,0), axs='i', yaxs='i')
+for(i in 1:25){
+  img <- train_images[i,,]
+  # img <- t(apply(img, 2, rev))
+  image(1:28, 1:28, img, col = gray((0:255)/255), xaxt = 'n', yaxt = 'n', main = paste(class_names[train_labels[i]+1]))
+}
+```
+## Build the model
+
+```{r}
+model <- keras_model_sequential() %>%
+  layer_flatten(input_shape = c(28, 28)) %>% 
+  layer_dense(units = 128, activation = 'relu') %>% 
+  layer_dense(units = 10, activation = 'softmax')
+
+model %>% compile(
+  optimizer = 'adam', 
+  loss = 'sparse_categorical_crossentropy',
+  metrics = c('accuracy')
+)
+
+model %>% 
+  fit(x=train_images, y=train_labels, 
+      epochs = 5, verbose = 2, validation_split=0.3)
+```
+
+## Evaluate Accuracy
+
+```{r}
+score <- model %>% evaluate(test_images, test_labels, verbose = 0)
+
+cat('Test loss:', score[1], "\n")
+cat('Test accuracy:', score[2], "\n")
+```
+## Make predictions
+```{r}
+predictions <- model %>% predict(test_images)
+predictions %>% head
+preds = apply(predictions, 1, which.max)
+preds %>% head
+
+#or
+
+preds = model %>% predict_classes(x = test_images)
+preds %>% unique
+```
+## How well did we do?
+```{r}
+par(mfcol=c(5,5))
+par(mar=c(0, 0, 1.5, 0), xaxs='i', yaxs='i')
+for (i in 1:25) { 
+  img <- test_images[i, , ]
+  img <- t(apply(img, 2, rev)) 
+  # subtract 1 as labels go from 0 to 9
+  predicted_label <- which.max(predictions[i, ]) - 1
+  true_label <- test_labels[i]
+  if (predicted_label == true_label) {
+    color <- '#008800' 
+  } else {
+    color <- '#bb0000'
+  }
+  image(1:28, 1:28, img, col = gray((0:255)/255), xaxt = 'n', yaxt = 'n',
+        main = paste0(class_names[predicted_label + 1], " (",
+                      class_names[true_label + 1], ")"),
+        col.main = color)
+}
+```
+```{r}
+train_images %>% dim
+```
+
+# Recognize Animals and Objects
+
+```{r}
+
+library(tensorflow)
+library(keras)
+
+cifar <- dataset_cifar10()
+
+class_names <- c('airplane', 'automobile', 'bird', 'cat', 'deer',
+               'dog', 'frog', 'horse', 'ship', 'truck')
+
+index <- 1:30
+
+par(mfcol = c(5,6), mar = rep(1,4), oma=rep(0.2, 4))
+cifar$train$x[index,,,] %>% 
+  purrr::array_tree(margin=1) %>% 
+  purrr::set_names(class_names[cifar$train$y[index] + 1]) %>% 
+  purrr::map(as.raster, max = 255) %>% 
+  purrr::iwalk(~{plot(.x); title(.y)})
+
+
+```
+
+## Convolutional Neural Network
+
+```{r}
+model <- keras_model_sequential() %>% 
+  layer_conv_2d(input_shape = c(32, 32, 3),  filters = 32, kernel_size = c(3,3), activation = "relu") %>% 
+  layer_max_pooling_2d(pool_size = c(2,2)) %>% 
+  layer_conv_2d(filters = 64, kernel_size = c(3,3), activation = "relu") %>% 
+  layer_max_pooling_2d(pool_size = c(2,2)) %>% 
+  layer_conv_2d(filters = 64, kernel_size = c(3,3), activation = "relu") %>% 
+  layer_flatten() %>% 
+  layer_dense(units = 64, activation = "relu") %>% 
+  layer_dense(units = 10, activation = "softmax")
+
+summary(model)
+
+
+model %>% compile(
+  optimizer = "adam",
+  loss = "sparse_categorical_crossentropy",
+  metrics = "accuracy"
+)
+
+
+history <- model %>% 
+  fit(
+    x = cifar$train$x, y = cifar$train$y,
+    epochs = 10,
+    validation_data = unname(cifar$test),
+    verbose = 2
+  )
+
+```
+```{r}
+evaluate(model, cifar$test$x, cifar$test$y, verbose = 0)
+```
+## Transfer Learning
+
+We will not actually train here, because it takes about 45 minutes. But we will just unload the model previously trained. But the idea is to take a layer or many layers from a previouos model and then stack our model on top of it. You don't have to stack it "on top", but I chose to here for simplicity. By taking what the previous model learned, we then put our custom output layers there so it can learn to classify new things, with old feature vectors it learned from the `imagenet` data set.
+
+```{r}
+library(devtools)
+library(tfhub)
+library(keras)
+library(reticulate)
+
+c(train_images, train_labels) %<-% cifar$train
+c(test_images, test_labels) %<-% cifar$test
+
+train_images %>% dim
+train_labels %>% dim
+test_images %>% dim
+test_labels %>% dim  
+
+image_shape <- c(32,32,3)
+
+conv_base <- keras::application_resnet101(weights = "imagenet",
+                                          include_top = FALSE, 
+                                          input_shape = c(32,32,3))
+
+
+freeze_weights(conv_base)
+
+model <- keras_model_sequential() %>%
+  conv_base %>%
+  layer_flatten() %>%
+  # layer_reshape(c(1,2048)) %>% 
+  layer_dense(units = 256, activation = "relu") %>%
+  layer_dense(units = 10, activation = "softmax")
+
+
+model %>% compile(
+  optimizer = "adam",
+  loss = "sparse_categorical_crossentropy",
+  metrics = "accuracy"
+)
+
+
+# Uncommented training (fit) section. Just load previous model. Takes 45 mins to train/update from the base model.
+
+# unfreeze_weights(conv_base, from = "block5_conv1")
+
+# history <- model %>% fit(
+#   x=train_images, y=train_labels, 
+#   validation_split = 0.3,
+#   epochs=10, 
+#   verbose = 2
+# )
+
+model = keras::load_model_tf("cifar10_tl_model")
+model %>% summary
+
+# summary(model)
+# train_images[1,,,] %>% dim
+# train_labels[1]
+
+```
+## Visualize performance
+
+```{r}
+# plot(history)
+```
+
+
+## Save the model
+
+The following code is used to serialize the model, since this is already done and the process is fairly intensive, we will not be repeating it here.
+
+```{r}
+# # Serialize the model (it becomes a folder)
+# keras::save_model_tf(object = model, filepath = "cifar10_tl_model")
+# 
+# # Reload the model
+# reloaded_model = keras::load_model_tf("cifar10_tl_model")
+# reloaded_model %>% summary
+
+```
+
+## Evaluate the model
+
+```{r}
+evaluate(model, x = test_images, y = test_labels)
+```
+
+# References
+
+<cite>https://tensorflow.rstudio.com/tutorials/beginners/</cite>
+<cite>https://tensorflow.rstudio.com/tutorials/advanced/images/cnn/</cite>
+<cite>https://tensorflow.rstudio.com/tutorials/advanced/images/transfer-learning-hub/</cite>
+<cite>https://keras.rstudio.com/reference/freeze_layers.html</cite>
+
