@@ -113,16 +113,18 @@ model <- keras::keras_model_sequential() %>%
             keras::layer_dense(CLASSES, activation = "softmax", 
                                name = "mnist_dense_output")
 model
+
 ```
 ### Summary
 
 ```{r}
-
 # Some summary statistics
 base::summary(model)
 ```
 
 ### Compile
+
+Reminder that `sparse_categorical_crossentropy` is for non-matrix like `y` values. This will do it for you. Otherwise, you need to use the `to_categorical` function to transform the `y` vector into a matrix.
 
 ```{r}
 
@@ -135,9 +137,9 @@ model %>%
   )
 ```
 
-### Fit
 
-Once we configure our model, we can `compile` it, `fit`, then `plot` to see the performance. Turns out, you can just do `plot(history)` and the function to plot these metrics is entirely superfluous.
+
+### Fit
 
 ```{r}
 
@@ -150,6 +152,11 @@ history = model %>%
               verbose = 2
             )
 
+```
+
+### Visualize
+
+```{r}
 
 plot_history_metrics = function(history){
     # Plot fit results - loss and accuracy for this model
@@ -175,14 +182,110 @@ plot_history_metrics = function(history){
 }
 
 plot_history_metrics(history)
+```
+
+## Another way
+
+Another equally valid way as oppose to flattening the input as an array is to do it explicitely on the outside. This can be done use the `array_reshape` function. We can also make our y values into a categorical matrix using the `to_Categorical` function. This will change our `sparse_categorical_crossentropy` into `categorical_crossentropy`. A tricky distinction, but one doesn't expect a matrix, one does.
+
+```{r}
+x_train <- keras::array_reshape(mnist$train$x, c(nrow(mnist$train$x), WIDTH*HEIGHT))
+x_test <- keras::array_reshape(mnist$test$x, c(nrow(mnist$test$x), WIDTH*HEIGHT))
+y_train <- keras::to_categorical(mnist$train$y, 10)
+y_test <- keras::to_categorical(mnist$test$y, 10)
+
+x_test %>% dim
+y_test %>% head
+```
+
+```{r}
+
+# Model pre-flattened for shape and made categorically long in y
+model <- keras::keras_model_sequential() %>%  
+            keras::layer_dense(input_shape = c(WIDTH*HEIGHT), 
+                               units = 128, 
+                               activation = "relu", 
+                               name = "mnist_dense") %>% 
+            keras::layer_dropout(0.2, 
+                                 name = "mnist_dropout") %>% 
+            keras::layer_dense(CLASSES, 
+                               activation = "softmax", 
+                               name = "mnist_dense_output")
+model
 
 ```
+### Summary
+
+```{r}
+# Model architectures
+base::summary(model)
+```
+
+
+### Compile
+
+```{r}
+
+# Compile the model
+model %>% 
+  keras::compile(
+    # loss = "sparse_categorical_crossentropy",
+    loss = "categorical_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )
+```
+
+### Fit
+
+Once we configure our model, we can `compile` it, `fit`, then `plot` to see the performance. Turns out, you can just do `plot(history)` and the function to plot these metrics is entirely superfluous.
+
+```{r}
+
+history = model %>% keras::fit(
+  x = x_train, y = y_train,
+  validation_split = 0.3,
+  epochs = 5,
+  verbose = 2
+)
+
+
+```
+### Visualize
+
+```{r}
+plot_history_metrics = function(history){
+    # Plot fit results - loss and accuracy for this model
+    tmp = data.frame(history$metrics) %>% dplyr::mutate(epoch = row_number())
+    plt1 = ggplot(data=tmp) +
+            geom_line(aes(x=epoch, y = loss, color="training loss")) +
+            geom_line(aes(x=epoch, y = val_loss, color="validation loss")) +
+            theme_bw() +
+            labs(color="Legend") + 
+            ggtitle("Model Loss")
+    plt1
+    
+    
+    plt2 = ggplot(data=tmp) +
+            geom_line(aes(x=epoch, y = accuracy, color="training accuracy")) +
+            geom_line(aes(x=epoch, y = val_accuracy, color="validation accuracy")) +
+            theme_bw() +
+            labs(color="Legend") + 
+            ggtitle("Model Accuracy")
+    plt2
+    
+    list(loss_plot = plt1, acc_plot = plt2)
+}
+
+plot_history_metrics(history)
+```
+
 
 ### Predictions
 
 ```{r}
 # Generate some predictions on the unseen data
-predictions = stats::predict(model, mnist$test$x)
+predictions = stats::predict(model, x_test)
 predictions %>% head()
 ```
 
@@ -191,9 +294,9 @@ predictions %>% head()
 ```{r}
 
 # Evaluate performance
-test_results = model %>% 
-                  evaluate(mnist$test$x, mnist$test$y, verbose = 0)
-test_results
+# test_results = model %>% 
+#                   evaluate(mnist$test$x, mnist$test$y, verbose = 0)
+# test_results
 ```
 
 ### Save Model
@@ -213,8 +316,8 @@ keras::save_model_tf(object = model, filepath = "mnist_model")
 # Reload the model
 reloaded_model = keras::load_model_tf("mnist_model")
 reloaded_model %>% summary
-base::all.equal(stats::predict(model, mnist$test$x), 
-                stats::predict(reloaded_model, mnist$test$x))
+base::all.equal(stats::predict(model, x_test), 
+                stats::predict(reloaded_model, x_test))
 ```
 
 # Recognize Fashion
