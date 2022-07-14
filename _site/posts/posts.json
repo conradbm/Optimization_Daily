@@ -1,5 +1,27 @@
 [
   {
+    "path": "posts/2022-07-14-q-learning-in-r/",
+    "title": "Q-learning in R",
+    "description": "In this post we will walk through the basics of Q-learning and source supporting functions.",
+    "author": [
+      {
+        "name": "Blake Conrad",
+        "url": "https://github.com/conradbm"
+      }
+    ],
+    "date": "2022-07-14",
+    "categories": [
+      "reinforcement learning",
+      "markov decision process",
+      "probability",
+      "r"
+    ],
+    "contents": "\r\n\r\nContents\r\nQ-Learning House\r\nNavigation\r\nValue Iteration\r\n\r\nThe Problem\r\nReward Matrix\r\n\r\nReferences\r\n\r\nQ-Learning House Navigation\r\nReinforcement learning is a relatively new field in machine learning,\r\nwith ties in control systems, decision theory, probability, and\r\nsimulation. A Markov Decision Process (MDP) is a process\r\nthat relies on previous information to make new decisions with maximum\r\nprobability of a meritorious outcome. One of the simplest algorithms to\r\ncompute this is called Value Iteration. We will be working\r\nthrough this with a simple housing example where we hope to\r\nlearn the optimal policy that will navigate an agent\r\nthrough the house. In general, these policies are often lodged in our\r\nown mental models, but once put on paper (or in a matrix), they are a\r\nlot more interesting, and sometimes calibrate even our own thinking.\r\nAfter all, the field of Deep Reinfrocement Learning has\r\nbeaten renouned championed in chess, alpha-go, and even star craft. So\r\nwhatever it is learning in those deep models can certainly augment our\r\nintelligence.\r\nThe simplicity of MCPs make them very interpretable, but at the cost\r\nof more power. So let’s take a look and see if we can cook up a function\r\nto solve the problem.\r\n\r\n\r\nlibrary(ggplot2)\r\nlibrary(dplyr)\r\n\r\n\r\nValue Iteration\r\nThe idea of value iteration is that it is a recursive function with a\r\nfew well known things.\r\nS = State-space\r\nA = Action-space\r\nR = Reward function\r\nThe problem is set up as an objective. The real goal is to acquire a\r\npolicy that acts optimally. By acting optimally, this is\r\nscoped to maximizing a univariate reward function. How is this done?\r\nLet’s take a look at the math.\r\nValue Iteration \\[\r\nQ(s_1,a_1)=R(s_1,a_1) + \\gamma\\sum_{s_2 \\neq s_1 \\in S}{P(s_2 | s_1,\r\na_1) \\: max(Q(s_2, a_2) \\: \\forall a_2 \\in A)}\r\n\\]\r\nAt each iteration, a reward is known, and the future reward is also\r\ncalculated for every other state.\r\nBellman Equation \\[\r\nQ_{now}(s_1,a_1) = Q_{old}(s_1,a_1) +\\alpha \\: (r + \\gamma \\:\r\nmax_{a_2}(s_2, a_2)-Q_{old}(s_1, a_1))\r\n\\]\r\nThe Bellman Equation is also well known for solving\r\nproblems like this, and it doesn’t require the transition probability\r\nabove.\r\nThe Problem\r\nWe hope to mimic a house navigation agent. The goal is to be able to\r\nreview the optimal policy at the end that teaches the agent to travel\r\nfrom any room to any other room.\r\nHouse floorplanReward Matrix\r\nThere are three criteria,\r\n-1 if “you can’t get there from here”\r\n0 if the destination is not the target state\r\n100 if the destination is the target state\r\n\r\n\r\nR <- matrix(c(-1, -1, -1, -1, 0, 1,\r\n       -1, -1, -1, 0, -1, 0,\r\n       -1, -1, -1, 0, -1, -1, \r\n       -1, 0, 0, -1, 0, -1,\r\n        0, -1, -1, 0, -1, 0,\r\n       -1, 100, -1, -1, 100, 100), nrow=6, ncol=6, byrow=TRUE)\r\n\r\nR\r\n\r\n     [,1] [,2] [,3] [,4] [,5] [,6]\r\n[1,]   -1   -1   -1   -1    0    1\r\n[2,]   -1   -1   -1    0   -1    0\r\n[3,]   -1   -1   -1    0   -1   -1\r\n[4,]   -1    0    0   -1    0   -1\r\n[5,]    0   -1   -1    0   -1    0\r\n[6,]   -1  100   -1   -1  100  100\r\n\r\n\r\n\r\ntmp <- R %>% as.data.frame()\r\ntmp <- tmp %>% dplyr::mutate(from = names(tmp))\r\ntmp <- tmp %>% tidyr::gather(., key = \"to\", \"reward\", -from)\r\ntmp <- tmp %>% dplyr::arrange(desc(reward))\r\n\r\nggplot(data = tmp) + \r\n  geom_tile(aes(x=from, y=to, fill=as.factor(reward))) + \r\n  labs(fill = \"Reward\") + theme_classic() + \r\n  ggtitle(\"Reward Matrix\")\r\n\r\n\r\n\r\n\r\n\r\nsource(\"https://raw.githubusercontent.com/NicoleRadziwill/R-Functions/master/qlearn.R\")\r\n\r\nresults <- q.learn(R,10000,alpha=0.1,gamma=0.8,tgt.state=6) \r\nround(results)\r\n\r\n     [,1] [,2] [,3] [,4] [,5] [,6]\r\n[1,]    0    0    0    0   64   80\r\n[2,]    0    0    0   51    0   80\r\n[3,]    0    0    0   51    0    0\r\n[4,]    0   64   41    0   64    0\r\n[5,]   64    0    0   51    0   80\r\n[6,]    0   84    0    0   84  100\r\n\r\nThe table produced tells us the average value to obtain policies. A\r\npolicy is a path through the states. One can quickly observe going from\r\nroom 0 to room 5 which is the solution. You\r\ncan walk through these and choose the argmax which along\r\nthe columns that provides the decision for your next row of choice.\r\nReferences\r\nhttps://www.r-bloggers.com/2017/12/a-simple-intro-to-q-learning-in-r-floor-plan-navigation/#google_vignette\r\n\r\n\r\n\r\n",
+    "preview": "posts/2022-07-14-q-learning-in-r/q-learning-in-r_files/figure-html5/unnamed-chunk-2-1.png",
+    "last_modified": "2022-07-14T15:59:11-04:00",
+    "input_file": "q-learning-in-r.knit.md"
+  },
+  {
     "path": "posts/2022-07-13-logistic-regression-and-gradient-descent-in-python/",
     "title": "Logistic Regression and Gradient Descent in Python",
     "description": "In this post we will walk through how to train a Logistic Regression model from scratch using Gradient Descent in Python.",

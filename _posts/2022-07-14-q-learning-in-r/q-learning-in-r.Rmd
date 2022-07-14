@@ -1,0 +1,106 @@
+---
+title: "Q-learning in R"
+description: |
+  In this post we will walk through the basics of Q-learning and source supporting functions.
+categories:
+  - reinforcement learning
+  - markov decision process
+  - probability
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-14
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+# Q-Learning House Navigation
+
+Reinforcement learning is a relatively new field in machine learning, with ties in control systems, decision theory, probability, and simulation. A `Markov Decision Process (MDP)` is a process that relies on previous information to make new decisions with maximum probability of a meritorious outcome. One of the simplest algorithms to compute this is called `Value Iteration`. We will be working through this with a simple housing example where we hope to `learn` the optimal policy that will navigate an agent through the house. In general, these policies are often lodged in our own mental models, but once put on paper (or in a matrix), they are a lot more interesting, and sometimes calibrate even our own thinking. After all, the field of `Deep Reinfrocement Learning` has beaten renouned championed in chess, alpha-go, and even star craft. So whatever it is learning in those deep models can certainly augment our intelligence.
+
+The simplicity of MCPs make them very interpretable, but at the cost of more power. So let's take a look and see if we can cook up a function to solve the problem.
+
+```{r libraries}
+library(ggplot2)
+library(dplyr)
+```
+
+
+## Value Iteration
+
+The idea of value iteration is that it is a recursive function with a few well known things.
+
+1. S = State-space
+2. A = Action-space
+3. R = Reward function
+
+The problem is set up as an objective. The real goal is to acquire a `policy` that acts optimally. By acting optimally, this is scoped to maximizing a univariate reward function. How is this done? Let's take a look at the math.
+
+*Value Iteration*
+$$
+Q(s_1,a_1)=R(s_1,a_1) + \gamma\sum_{s_2 \neq s_1 \in S}{P(s_2 | s_1, a_1) \: max(Q(s_2, a_2) \: \forall a_2 \in A)}
+$$
+
+At each iteration, a reward is known, and the future reward is also calculated for every other state. 
+
+*Bellman Equation*
+$$
+Q_{now}(s_1,a_1) = Q_{old}(s_1,a_1) +\alpha \: (r + \gamma \: max_{a_2}(s_2, a_2)-Q_{old}(s_1, a_1))
+$$
+
+The `Bellman Equation` is also well known for solving problems like this, and it doesn't require the transition probability above.
+
+# The Problem
+
+We hope to mimic a house navigation agent. The goal is to be able to review the optimal policy at the end that teaches the agent to travel from any room to any other room.
+
+![House floorplan](../../images/floor-plan.PNG)
+
+## Reward Matrix
+
+There are three criteria,
+
+- -1 if “you can’t get there from here”
+- 0 if the destination is not the target state
+- 100 if the destination is the target state
+
+```{r}
+R <- matrix(c(-1, -1, -1, -1, 0, 1,
+       -1, -1, -1, 0, -1, 0,
+       -1, -1, -1, 0, -1, -1, 
+       -1, 0, 0, -1, 0, -1,
+        0, -1, -1, 0, -1, 0,
+       -1, 100, -1, -1, 100, 100), nrow=6, ncol=6, byrow=TRUE)
+
+R
+```
+
+```{r}
+tmp <- R %>% as.data.frame()
+tmp <- tmp %>% dplyr::mutate(from = names(tmp))
+tmp <- tmp %>% tidyr::gather(., key = "to", "reward", -from)
+tmp <- tmp %>% dplyr::arrange(desc(reward))
+
+ggplot(data = tmp) + 
+  geom_tile(aes(x=from, y=to, fill=as.factor(reward))) + 
+  labs(fill = "Reward") + theme_classic() + 
+  ggtitle("Reward Matrix")
+```
+
+
+```{r}
+source("https://raw.githubusercontent.com/NicoleRadziwill/R-Functions/master/qlearn.R")
+
+results <- q.learn(R,10000,alpha=0.1,gamma=0.8,tgt.state=6) 
+round(results)
+```
+The table produced tells us the average value to obtain policies. A policy is a path through the states. One can quickly observe going from `room 0` to `room 5` which is the solution. You can walk through these and choose the `argmax` which along the columns that provides the decision for your next row of choice.
+
+
+# References
+
+<cite>https://www.r-bloggers.com/2017/12/a-simple-intro-to-q-learning-in-r-floor-plan-navigation/#google_vignette</cite>
