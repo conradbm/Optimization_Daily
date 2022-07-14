@@ -101,6 +101,21 @@ round(results)
 The table produced tells us the average value to obtain policies. A policy is a path through the states. One can quickly observe going from `room 0` to `room 5` which is the solution. You can walk through these and choose the `argmax` which along the columns that provides the decision for your next row of choice.
 
 
+```{r}
+tmp <- results %>% as.data.frame()
+tmp <- tmp %>% dplyr::mutate(from = names(tmp))
+tmp <- tmp %>% tidyr::gather(., key = "to", "reward", -from)
+tmp <- tmp %>% dplyr::arrange(desc(reward))
+
+ggplot(data = tmp) + 
+  geom_tile(aes(x=from, y=to, fill=reward)) + 
+  labs(fill = "Average Value (%)") + theme_classic() + 
+  ggtitle("Policy Decision Matrix") +
+  scale_fill_gradient(low = "red", high = "green")
+  
+```
+
+
 # References
 
 <cite>https://www.r-bloggers.com/2017/12/a-simple-intro-to-q-learning-in-r-floor-plan-navigation/#google_vignette</cite>
