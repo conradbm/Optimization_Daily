@@ -5,6 +5,7 @@ description: |
 categories:
   - image recognition
   - deep learning
+  - transfer learning
   - keras
   - r
 author:

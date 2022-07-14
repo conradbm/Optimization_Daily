@@ -113,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","categories","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Image Recognition in R"]},{"type":"character","attributes":{},"value":["In this post we will explore image classification in keras for several datasets and how transfer learning can be readily applied to improve well known models.\n"]},{"type":"character","attributes":{},"value":["image recognition","deep learning","keras","r"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-13"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","categories","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Image Recognition in R"]},{"type":"character","attributes":{},"value":["In this post we will explore image classification in keras for several datasets and how transfer learning can be readily applied to improve well known models.\n"]},{"type":"character","attributes":{},"value":["image recognition","deep learning","transfer learning","keras","r"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-13"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1504,6 +1504,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="dt-tags">
 <div class="dt-tag">image recognition</div>
 <div class="dt-tag">deep learning</div>
+<div class="dt-tag">transfer learning</div>
 <div class="dt-tag">keras</div>
 <div class="dt-tag">r</div>
 </div>
@@ -1652,11 +1653,11 @@ data shape.</p>
 <span><span class='fu'>plot_a_few</span><span class='op'>(</span><span class='va'>mnist</span><span class='op'>$</span><span class='va'>train</span><span class='op'>$</span><span class='va'>x</span>, <span class='va'>mnist</span><span class='op'>$</span><span class='va'>train</span><span class='op'>$</span><span class='va'>y</span>, a_few<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span></span></code></pre>
 </div>
 <p><img src="image-recognition-in-r_files/figure-html5/visualize-1.png" width="624" /></p>
-<pre><code>[1] 9</code></pre>
-<p><img src="image-recognition-in-r_files/figure-html5/visualize-2.png" width="624" /></p>
 <pre><code>[1] 1</code></pre>
+<p><img src="image-recognition-in-r_files/figure-html5/visualize-2.png" width="624" /></p>
+<pre><code>[1] 4</code></pre>
 <p><img src="image-recognition-in-r_files/figure-html5/visualize-3.png" width="624" /></p>
-<pre><code>[1] 5</code></pre>
+<pre><code>[1] 2</code></pre>
 </div>
 <h1 id="model">Model</h1>
 <h2 id="simple-dense-model">Simple Dense Model</h2>
@@ -1784,19 +1785,19 @@ $acc_plot</code></pre>
 <span><span class='va'>predictions</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>             [,1]         [,2]         [,3]         [,4]         [,5]
-[1,] 7.572944e-09 5.413275e-09 2.662181e-06 6.081372e-05 2.162106e-11
-[2,] 1.211719e-07 5.547014e-03 9.940053e-01 2.471891e-04 2.103253e-12
-[3,] 2.710472e-07 9.986191e-01 7.729427e-05 6.689593e-05 2.564582e-05
-[4,] 9.997090e-01 1.605839e-09 1.428631e-04 1.630458e-06 2.254078e-06
-[5,] 5.393741e-06 1.716095e-07 3.779151e-06 1.121415e-06 9.947633e-01
-[6,] 8.779599e-09 9.991683e-01 1.572972e-06 3.041523e-06 1.336006e-06
+[1,] 4.440431e-06 1.514351e-07 2.021352e-05 9.448298e-04 7.644724e-10
+[2,] 1.766948e-07 3.410226e-04 9.996421e-01 1.047565e-05 1.402447e-12
+[3,] 1.594681e-05 9.984669e-01 1.389434e-04 3.773739e-05 4.692072e-05
+[4,] 9.995901e-01 2.986376e-08 8.218557e-06 7.621363e-06 5.438855e-07
+[5,] 1.848003e-06 1.924709e-08 3.215878e-06 4.052999e-08 9.990461e-01
+[6,] 4.725581e-07 9.994407e-01 2.319447e-06 5.825547e-06 6.980830e-06
              [,6]         [,7]         [,8]         [,9]        [,10]
-[1,] 4.535714e-08 3.068526e-12 9.999360e-01 1.601676e-08 4.615389e-07
-[2,] 9.609709e-05 3.668436e-06 3.860429e-10 1.006641e-04 5.977687e-11
-[3,] 5.924557e-06 9.657827e-06 8.282851e-04 3.643778e-04 2.614914e-06
-[4,] 2.943740e-06 9.047587e-06 1.575879e-05 9.630394e-07 1.154481e-04
-[5,] 1.592879e-06 2.803392e-05 1.079213e-04 2.152857e-05 5.067210e-03
-[6,] 5.502504e-08 1.483463e-07 7.973683e-04 2.815245e-05 2.580425e-07</code></pre>
+[1,] 6.192927e-07 2.025387e-10 9.989948e-01 1.081564e-06 3.389999e-05
+[2,] 1.616532e-06 4.766827e-07 6.959702e-11 4.034698e-06 9.754333e-13
+[3,] 9.426012e-06 2.163683e-05 9.681206e-04 2.852925e-04 8.995856e-06
+[4,] 4.308217e-05 1.339181e-04 2.082766e-04 2.314296e-08 8.066717e-06
+[5,] 1.957225e-07 4.121759e-06 3.840416e-05 7.124087e-07 9.052943e-04
+[6,] 3.039774e-08 1.097370e-07 5.061054e-04 3.651817e-05 8.906715e-07</code></pre>
 </div>
 <h3 id="evaluate">Evaluate</h3>
 <div class="layout-chunk" data-layout="l-body">
@@ -1807,7 +1808,7 @@ $acc_plot</code></pre>
 <span><span class='va'>test_results</span></span></code></pre>
 </div>
 <pre><code>      loss   accuracy 
-0.08365589 0.97390002 </code></pre>
+0.07934876 0.97530001 </code></pre>
 </div>
 <h3 id="save-model">Save Model</h3>
 <p>One thing keras makes incredibly easy is the ability to save your
@@ -1965,11 +1966,11 @@ perfect!</strong></p>
 <span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>'Test loss:'</span>, <span class='va'>score</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='st'>"\n"</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>Test loss: 0.3808335 </code></pre>
+<pre><code>Test loss: 0.361315 </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>'Test accuracy:'</span>, <span class='va'>score</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='st'>"\n"</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>Test accuracy: 0.8566 </code></pre>
+<pre><code>Test accuracy: 0.8704 </code></pre>
 </div>
 <h2 id="make-predictions">Make predictions</h2>
 <div class="layout-chunk" data-layout="l-body">
@@ -1978,19 +1979,19 @@ perfect!</strong></p>
 <span><span class='va'>predictions</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
 </div>
 <pre><code>             [,1]         [,2]         [,3]         [,4]         [,5]
-[1,] 4.816638e-07 8.270225e-09 1.039637e-06 4.781368e-08 8.720099e-09
-[2,] 1.965598e-05 1.372884e-09 9.983274e-01 1.252986e-08 1.041674e-03
-[3,] 6.361076e-06 9.999923e-01 1.816772e-07 7.545183e-07 4.612727e-07
-[4,] 1.822370e-06 9.999176e-01 3.902041e-07 7.826946e-05 1.837336e-06
-[5,] 3.625052e-01 3.935909e-05 1.042619e-01 1.322230e-02 1.515230e-02
-[6,] 3.659913e-04 9.995671e-01 9.492812e-06 1.846171e-05 2.141528e-05
+[1,] 7.750498e-06 1.257211e-08 9.671354e-07 1.020834e-06 7.518684e-06
+[2,] 1.329857e-05 2.206157e-11 9.986254e-01 1.055632e-07 5.624837e-04
+[3,] 1.490282e-06 9.999967e-01 8.735447e-08 1.269249e-06 3.345600e-07
+[4,] 1.294425e-07 9.999821e-01 2.093012e-07 1.724021e-05 2.553091e-07
+[5,] 2.894388e-01 2.007626e-06 2.610349e-02 2.038230e-03 3.091794e-03
+[6,] 1.430975e-03 9.973477e-01 1.518837e-04 3.550578e-04 6.194559e-04
              [,6]         [,7]         [,8]         [,9]        [,10]
-[1,] 3.703494e-02 8.187347e-07 7.500684e-03 3.092222e-06 9.554589e-01
-[2,] 5.913919e-10 6.111966e-04 8.725440e-12 2.587454e-08 1.599074e-10
-[3,] 2.120034e-12 1.933589e-08 5.421517e-16 1.675059e-10 6.443952e-11
-[4,] 2.061153e-09 9.424513e-08 1.327154e-11 2.289819e-09 1.385846e-08
-[5,] 3.708307e-05 4.990963e-01 6.679856e-05 5.591436e-03 2.721752e-05
-[6,] 2.438457e-10 1.753570e-05 1.830097e-13 5.595801e-09 1.679229e-09</code></pre>
+[1,] 1.042628e-02 2.011778e-05 1.819125e-02 1.250722e-04 9.712200e-01
+[2,] 4.214947e-10 7.987102e-04 2.755621e-15 1.995697e-08 4.976308e-15
+[3,] 6.927744e-11 9.834269e-09 5.930184e-10 2.501211e-08 5.441134e-11
+[4,] 1.292153e-09 9.357337e-09 2.067088e-10 1.779212e-09 1.400266e-10
+[5,] 3.910718e-06 6.772248e-01 8.931976e-07 2.095341e-03 8.282548e-07
+[6,] 3.413141e-09 6.965704e-05 1.413792e-07 2.521574e-05 1.246039e-08</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>preds</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>predictions</span>, <span class='fl'>1</span>, <span class='va'>which.max</span><span class='op'>)</span></span>
 <span><span class='va'>preds</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
@@ -2118,9 +2119,17 @@ ______________________________________________________________________</code></p
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/tensorflow/man/evaluate.html'>evaluate</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>cifar</span><span class='op'>$</span><span class='va'>test</span><span class='op'>$</span><span class='va'>x</span>, <span class='va'>cifar</span><span class='op'>$</span><span class='va'>test</span><span class='op'>$</span><span class='va'>y</span>, verbose <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>    loss accuracy 
-1.100049 0.648400 </code></pre>
+1.109757 0.653500 </code></pre>
 </div>
 <h2 id="transfer-learning">Transfer Learning</h2>
+<p>We will not actually train here, because it takes about 45 minutes.
+But we will just unload the model previously trained. But the idea is to
+take a layer or many layers from a previouos model and then stack our
+model on top of it. You don’t have to stack it “on top”, but I chose to
+here for simplicity. By taking what the previous model learned, we then
+put our custom output layers there so it can learn to classify new
+things, with old feature vectors it learned from the
+<code>imagenet</code> data set.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://devtools.r-lib.org/'>devtools</a></span><span class='op'>)</span></span>
@@ -2170,7 +2179,8 @@ ______________________________________________________________________</code></p
 <span>  metrics <span class='op'>=</span> <span class='st'>"accuracy"</span></span>
 <span><span class='op'>)</span></span>
 <span></span>
-<span><span class='co'># We will not actually train here, because it takes about 45 minutes. But we will just unload the model previously trained.</span></span>
+<span></span>
+<span><span class='co'># Uncommented training (fit) section. Just load previous model. Takes 45 mins to train/update from the base model.</span></span>
 <span></span>
 <span><span class='co'># unfreeze_weights(conv_base, from = "block5_conv1")</span></span>
 <span></span>
