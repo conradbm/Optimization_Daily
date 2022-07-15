@@ -74,7 +74,7 @@ R <- matrix(c(-1, -1, -1, -1, 0, 1,
        -1, -1, -1, 0, -1, -1, 
        -1, 0, 0, -1, 0, -1,
         0, -1, -1, 0, -1, 0,
-       -1, 100, -1, -1, 100, 100), nrow=6, ncol=6, byrow=TRUE)
+       -1, 100, -1, -1, 100, 100), nrow=6, ncol=6, byrow=TRUE) %>% t
 
 R
 ```
@@ -108,13 +108,133 @@ tmp <- tmp %>% tidyr::gather(., key = "to", "reward", -from)
 tmp <- tmp %>% dplyr::arrange(desc(reward))
 
 ggplot(data = tmp) + 
-  geom_tile(aes(x=from, y=to, fill=reward)) + 
+  geom_tile(aes(x=to, y=from, fill=reward)) + 
   labs(fill = "Average Value (%)") + theme_classic() + 
   ggtitle("Policy Decision Matrix") +
-  scale_fill_gradient(low = "red", high = "green")
+  scale_fill_gradient(low = "red", high = "green") +
+  ylab("State From") + 
+  xlab("Action To")
   
 ```
 
+
+Pretty cool!
+
+## Episilon-greedy
+
+One common way of sampling an action is the `epislon-greedy` approach. This tells us to exploit with epsilon probability and randomly explore with 1-epsilon. Let's take a look.
+
+```{r}
+
+q.learn.epsilon.greedy <- function(R, epochs = 10000, alpha = 0.1,gamma = 0.8, epsilon = 0.75,tgt.state = 6, testme = T){
+  
+  Q = matrix(0, nrow = nrow(R), ncol=ncol(R))
+  
+  epsilon.greedy <- function(state, Q, epsilon = 0.75, test = F){
+    random_number <- runif(n = 1, min = 0, max = 1)
+    if(random_number < epsilon){
+      
+      if(test)
+        paste("exploit")
+      else
+        which.max(Q[state,])
+    }
+    else{
+      
+      if(test)
+        paste("explore")
+      else
+        sample(which(Q[state, ] != state), 1)
+      
+    }
+  }
+  
+  test.epsilon.greedy <- function(epsilon = 0.75){
+    memory <- c()
+    tmp <- c()
+    for(j in 1:100){
+      for(i in 1:100){
+      # Start at a random state
+      cs = sample(1:nrow(Q), 1)
+      ns = epsilon.greedy(cs, Q, epsilon = epsilon, test = T) 
+      tmp <- c(tmp, ns) # we expect 75/100 to be exploits
+      } 
+      memory <- c(memory, mean(tmp == "exploit"))
+    }
+    
+    # looks good.
+    memory %>% mean
+  }
+  
+  # Test it
+  if(testme){
+    
+    t1<-test.epsilon.greedy(epsilon=0.75)
+    t2<-test.epsilon.greedy(epsilon=0.5)
+    t3<-test.epsilon.greedy(epsilon=0.25)
+    print(paste(round(t1,2)," == 0.75"))
+    print(paste(round(t2,2)," == 0.50"))
+    print(paste(round(t3,2)," == 0.25"))
+  }
+  
+  
+  learning_rate = alpha
+  discount_rate = gamma
+  dest.state = tgt.state
+  
+  for(i in 1:epochs){
+    
+    # Start at a random state
+    cs = sample(1:nrow(Q), 1)
+    cs    
+  
+    while(TRUE){
+        
+        
+        # Take an action
+        a = epsilon.greedy(cs, Q, epsilon = 0.8, test = F)
+        
+        
+        # Assess the reward
+        r = R[cs, a]
+        
+        # Update policy matrix
+        Q[cs, a] = learning_rate * (Q[cs, a]) + (1 - learning_rate) * (r + discount_rate * max(Q[a, ]) )
+         # Q[cs,a] <- Q[cs,a] + learning_rate*(R[cs,a] + discount_rate*max(Q[a, ]) - Q[cs,a])
+        
+         # Update the current state
+        cs = a
+        
+        
+        if(a == dest.state){
+          break
+        }
+    }
+  }
+  Q*100/max(Q)
+}
+
+Q = q.learn.epsilon.greedy(R, epochs = 10000, alpha = 0.1,gamma = 0.8, epsilon = 0.75, tgt.state = 6, testme=T)
+
+idx = apply(Q, 1, which.max)
+I <- matrix(0, nrow=nrow(Q), ncol=ncol(Q))
+for(i in 1:nrow(I)){
+  I[i,idx[i]] = 1
+}
+I
+```
+
+Our resulting matrix from an `epsilon greedy` algorithm does something similar to the 100% exploit algorithm sourced in from the github above. The policy is as follows:
+
+- If in room 0 go to room 4, then to room 5 for the victory. (2 steps)
+- If in room 4 go to room 5 for the victory. (1 step)
+- If in room 1 go to room 5 for the victory. (1 step)
+- If in room 2 go to room 1, then go to room 5 for the victory. (2 steps)
+- If in room 3 go to room 1, then go to room 5 for the victory. (2 steps)
+- If in room 4, go to room 5 for the victory. (1 step)
+- If in room 5 .. victory! (0 steps)
+
+For convenience, an indicator matrix is also built to illustrate the best possibile choice to and from any state with zero ambiguity. At a glance, outside of room 5, room 1 is a favorable place to be. It seems like it discovered a good outlet to arrive at the optimal, that is not optimal itself. Very interesting!
 
 # References
 

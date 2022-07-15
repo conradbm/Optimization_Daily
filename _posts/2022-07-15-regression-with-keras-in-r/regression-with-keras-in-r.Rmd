@@ -1,0 +1,227 @@
+---
+title: "Regression With Keras in R"
+description: |
+  In this post we will explore how to do deep regression in R using Keras.
+categories:
+  - deep learning
+  - machine learning
+  - regression
+  - keras
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-15
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+# Boston Housing Prices
+
+```{r}
+library(tfdatasets)
+library(keras)
+
+library(tidyr)
+library(dplyr)
+```
+
+```{r}
+boston_housing <- dataset_boston_housing()
+train_data <- boston_housing$train$x
+train_labels <- boston_housing$train$y
+
+test_data <- boston_housing$test$x
+test_labels <- boston_housing$test$y
+
+paste0("Training entries: ", length(train_data), ", labels: ", length(train_labels))
+```
+
+```{r}
+train_data[1, ]
+```
+
+```{r}
+column_names <- c('CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 
+                  'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT')
+
+train_df <- train_data %>% 
+  dplyr::as_tibble(.name_repair = "minimal") %>% 
+  stats::setNames(., column_names) %>% 
+  dplyr::mutate(label = train_labels)
+train_df
+
+test_df <- test_data %>% 
+  dplyr::as_tibble(.name_repair = "minimal") %>% 
+  stats::setNames(., column_names) %>% 
+  dplyr::mutate(label = test_labels)
+test_df
+
+```
+
+```{r}
+train_labels[1:10]
+```
+
+
+## Visualize Correlation
+
+```{r}
+# See what features are correlated
+# Center and normalize
+Xtrain <- train_df %>% select(-label)
+Xs <- scale(Xtrain, center = TRUE, scale = TRUE)
+
+
+# Tidy the data
+C <- cor(Xs) %>% as.data.frame
+C$from <- row.names(C)
+C <- C %>% tidyr::gather(., key = "to", value = "correlation", -from)
+
+# Present a heatmap
+plt <- ggplot(data = C) + 
+  geom_tile(aes(x=to, y=from, fill=correlation)) + 
+  scale_fill_gradient(low = "red", high = "green") +
+  ggtitle("Correlation between Boston House features") +
+  theme(axis.text.x = element_text(angle = 90)) 
+
+plt
+```
+
+
+A few areas of concern are those with greater than about 0.5 correlation. This could mean they are excessive information and redundant. Let's look at those who have a magnitude greater than between 0.25 and 0.5.
+
+## Visualize Serious Correlation
+
+Below is an analysis of some of the correlations. I performed a detailed analysis on a pre-centered correlation matrix, which I will leave below for kicks. But ultimately, **high correlated features should be considered for removal from the model**.
+
+```{r}
+# Present a heatmap
+plt <- ggplot(data = C %>% filter(abs(correlation) > .75)) + 
+  geom_tile(aes(x=to, y=from, fill=correlation)) + 
+  scale_fill_gradient(low = "red", high = "green") +
+  ggtitle("Correlation between Boston House features") +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90))
+
+plt
+```
+
+It looks like we have 4 candidates for deletion.
+
+- PTRATIO and INDUS is explained by CHAS (negatively; as CHAS goes up ... PTRATIO goes down)
+- NOX is explained by B (negatively; as B goes up .. NOX goes down)
+- RM is explained by NOX (positively; as NOX goes up .. RM goes up)
+
+By inference RM is also explained by B (as B goes up .. NOX goes down .. and when NOX goes down ... RM goes down..)
+
+- RM is explained by B (negatively; as B goes up ... RM goes down)
+
+Let's see what's going on here.
+
+1. **PTRATIO** is "Pupil-teacher ratio by town." and **INDUS** is "The proportion of non-retail business acres per town are explained by **CHAS** "Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)". So it appears that if the house is off the Charles river, there are much less apprenticeships and bussinesses per acre.
+2. **NOX** "Nitric oxides concentration (parts per 10 million)" is explained by **B** "1000 * (Bk - 0.63) ** 2 where Bk is the proportion of Black people by town." That is to say, if there is less nitric oxides in the air, there are more black people and vice versa. Since **RM** "The average number of rooms per dwelling" is explained by **NOX** and **NOX** is explained by **B**, we can see that there are less rooms with more black people and vice versa. This tells me the space is more sparse, and is likely more metropolitan where the black population is located.
+
+So in theory, we could probably denoise this data right now and just drop out the following variables because of their explainability in other members of the data.
+
+Drop:
+
+- PTRATIO: "The proportion of non-retail business acres per town."
+- NOX: "Nitric oxides concentration (parts per 10 million)."
+- RM: "The average number of rooms per dwelling."
+
+As tempting as this idea is, we will table it for just a moment to continue on our deep learning adventure. But at the end we will revisit our model and see if *AFTER* we have trained by dropping these few features we could perform better. Stay tuned! Let's save these droppers and come back to them later.
+
+```{r}
+EXCESSIVE_FEATURES <- c("PTRATIO", "NOX", "RM")
+EXCESSIVE_FEATURES
+```
+
+## Standardize the data
+
+```{r}
+
+# Center and normalize
+Xtrain <- train_df %>% select(-label)
+Xs_train <- scale(Xtrain, center = T, scale = T)
+train_df_scaled <- cbind(Xs_train, train_df %>% select(label))
+
+Xtest <- test_df %>% select(-label)
+Xs_test <- scale(Xtest, center = T, scale = T)
+test_df_scaled <- cbind(Xs_test, test_df %>% select(label))
+
+
+```
+
+## Model
+
+Some cheat codes are required to make `keras` work with dataframes. First, you have to make a multi-head model. Define an `input` with your dimensionality of the data frame. Second, create your other layers to pass it through. Merge them using the `keras_model` function. R is great, but can be very painful at times. This was not pleasant. Further, **only feed in matrices**. Don't even fight with throwing in a data frame. This API isn't smart like that.
+
+```{r}
+
+input <- keras::layer_input(shape = c(13))
+
+output <- input %>% 
+  keras::layer_dense(units = 1)
+
+model <- keras::keras_model(input, output)
+
+model %>% keras::compile(
+  loss = "mse",
+  optimizer = "adam",
+  metrics = list("mean_absolute_error")
+)
+
+history = model %>% keras::fit(
+  x = train_df_scaled %>% select(-label) %>% as.matrix,
+  y = train_df_scaled$label %>% as.matrix,
+  validation_split = 0.2,
+  epochs = 200,
+  verbose = 2
+)
+
+evaluate(model,
+         x = test_df_scaled %>% select(-label) %>% as.matrix, 
+         y = test_df_scaled$label %>% as.matrix)
+
+ypred <- predict(model, 
+                x = test_df_scaled %>% select(-label) %>% as.matrix)
+tmp <- data.frame(id = 1:length(ypred),
+                  prediction = ypred,
+                  target = test_df_scaled$label)
+
+plot(tmp)
+```
+
+```{r}
+input <- keras::layer_input(shape = c(10))
+
+output <- input %>% 
+  keras::layer_dense(units = 1)
+
+model <- keras::keras_model(input, output)
+
+model %>% keras::compile(
+  loss = "mse",
+  optimizer = "adam",
+  metrics = list("mean_absolute_error")
+)
+
+history = model %>% keras::fit(
+  x = train_df_scaled %>% select(-label) %>% as.matrix,
+  y = train_df_scaled$label %>% as.matrix,
+  validation_split = 0.2,
+  epochs = 200,
+  verbose = 2
+)
+```
+
+
+# References
+
+<cite>https://tensorflow.rstudio.com/tutorials/beginners/basic-ml/tutorial_basic_regression/</cite>
+
+
