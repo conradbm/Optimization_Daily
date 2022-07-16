@@ -1,5 +1,5 @@
 ---
-title: "Regression With Keras in R"
+title: "Regression with Keras in R"
 description: |
   In this post we will explore how to do deep regression in R using Keras.
 categories:
