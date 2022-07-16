@@ -1,0 +1,306 @@
+---
+title: "Text Classification with Keras in R"
+description: |
+  In this post we will walk through text classification using keras in R.
+categories:
+  - deep learning
+  - machine learning
+  - classification
+  - natural language processing
+  - keras
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-15
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Movie Reviews
+
+This problem is a binary classification problem. So we have a text-based data set and a binary response variable.
+
+```{r}
+library(keras)
+library(dplyr)
+library(ggplot2)
+library(purrr)
+```
+
+```{r}
+path <- "C:/Users/blake/Desktop/blog_data/movie_review.csv"
+
+df <- readr::read_csv(path)
+df %>% dplyr::glimpse()
+```
+
+## Data Landscape
+
+The data appears to have over 60,000 rows, each containing a movie review in the `text` column with a response in the `tag` column for `pos` or `neg` (of the review).
+
+```{r}
+# The spread on the response looks pretty even
+df %>% dplyr::count(tag)
+```
+
+```{r}
+df$text[1]
+```
+
+```{r}
+training_id <- sample(nrow(df), size = nrow(df)*.8)
+training <- df[training_id,]
+testing <- df[-training_id,]
+
+```
+
+It might be useful to know the number of words in each review.
+
+## Sentence Length Visualization
+
+```{r}
+
+df$text %>% 
+  strsplit(., " ") %>% 
+  sapply(., length) %>% 
+  head(10)
+  # hist(main = "Distribution of Words Per Sentiment", xlab = "Number of Words")
+
+```
+
+We will make the text a tensor. The most common `10,000` words will be specified by an integer. Every sequence will be represented by a sequence of integers.
+
+## Vectorizer
+
+```{r}
+# total words to account ids for, otherwise drop - this becomes the [UNK] token to represent unknown characters.
+num_words <- 10000 
+
+# per sequence, how many words to keep, or pad to
+max_length <- 50 
+
+# Fit the parameters into the vectorizer
+text_vectorization <- keras::layer_text_vectorization(
+  max_tokens = num_words,
+  output_sequence_length = max_length
+)
+
+```
+
+### Adapt
+
+Next we will adapt the `Text Vectorization`. Once we `adapt` the layer will learn unique words in our dataset and assign integer values for each.
+
+```{r}
+# Now it knows the vocab of 10,000
+# Each will become a size 50 vector, of shape Nx50 now.
+
+text_vectorization %>% 
+  adapt(df$text)
+
+```
+
+```{r}
+
+# Notice they are all tokeninzed and lower cased nice and neat.
+get_vocabulary(text_vectorization)[1:100]
+```
+
+
+### Sample Sentence
+
+Lets convert one sample. Since tensorflow will only accept matrices, we will transform that sample into a matrix and pass it in. Out comes the 1x50 vector transformation. 
+
+```{r}
+
+# Lets convert one sample
+x <- matrix(df$text[1], ncol=1)
+
+# Since tensorflow will ONLY accept matrices, we have to make it a fat 1x1 matrix and throw it in. Out comes a 1x50
+text_vectorization(x)
+
+# Out comes a 1x50. It looks to be rightside padded.
+```
+
+## Build the Model
+
+```{r}
+input <- layer_input(shape = c(1), dtype = "string")
+
+output <- input %>% 
+  #custom layer, input text; output tensor
+  text_vectorization() %>% 
+  # produce 16 new dimensions for each sentiment 
+  layer_embedding(input_dim = num_words, output_dim = 16) %>% 
+  # average over the new 16 dimensions
+  layer_global_average_pooling_1d() %>% 
+  layer_dense(units = 16, activation = "relu") %>% 
+  layer_dropout(0.5) %>% 
+  layer_dense(units = 1, activation = "sigmoid")
+
+model <- keras_model(input, output)
+
+```
+
+I politely steal this from the documentation,
+
+- "The first layer is an embedding layer. <mark>This layer takes the integer-encoded vocabulary and looks up the embedding vector for each word-index.</mark> These vectors are learned as the model trains. The vectors add a dimension to the output array. The resulting dimensions are: (batch, sequence, embedding)."
+
+So the `word embedding layer`does indeed `expand` the dimensions for each `word index`. It learns these as it trains. Once complete, we can go back and pluck this layer out and go start to visualize words from our corpus against one another. Maybe we could perform the famous `man - woman = king - queen` example? More to follow.
+
+- "Next, a `global_average_pooling_1d layer` returns a fixed-length output vector for each example by <mark>averaging over the sequence dimension</mark>. This allows the model to handle input of variable length, in the simplest way possible."
+
+I gladly steal more excellent interpretation
+
+"
+HIDDEN UNITS
+The above model has two intermediate or “hidden” layers, between the input and output. The number of outputs (units, nodes, or neurons) is the dimension of the representational space for the layer. In other words, the amount of freedom the network is allowed when learning an internal representation.
+
+If a model has more hidden units (a higher-dimensional representation space), and/or more layers, then the network can learn more complex representations. However, it makes the network more computationally expensive and may lead to learning unwanted patterns — patterns that improve performance on training data but not on the test data. This is called overfitting, and we’ll explore it later"
+
+## Loss Function and Optimizer
+
+```{r}
+model %>% compile(
+  optimizer = 'adam',
+  loss = 'binary_crossentropy',
+  metrics = list("accuracy")
+)
+```
+
+## Train the model
+
+```{r}
+history <- model %>% fit(
+  x = training$text,
+  y = as.numeric(training$tag == "pos"),
+  epochs = 10,
+  batch_size = 512,
+  validation_split = 0.2,
+  verbose = 2
+)
+```
+
+## Evaluate 
+
+```{r}
+evaluate(model, testing$text, 
+         as.numeric(testing$tag == "pos"), 
+         verbose = 0)
+```
+
+This fairly naive approach achieves an accuracy of about 68%. With more advanced approaches, the model should get closer to 85%.
+
+## Plot Metrics
+
+```{r}
+plot(history)
+```
+
+## What's in that layer?
+
+That's the magic question. Time to take a peak.
+
+```{r}
+embeddings <- model$layers[[3]]
+```
+
+
+```{r}
+X <- embeddings$embeddings %>% 
+  as.matrix %>% 
+  as.data.frame %>% 
+  select(V1, V2, V3) %>% 
+  mutate(word = get_vocabulary(text_vectorization))
+
+ggplot(data = X,
+       aes(x=V1, y=V2, color = V3, label = word)) + 
+  geom_point() + 
+  geom_text() + 
+  theme_bw() +
+  xlab("Embedding 1") +
+  ylab("Embedding 2") +
+  labs(color = "Embedding 3") +
+  ggtitle("Word Embeddings", subtitle = "First Three Embeddings") +
+  geom_vline(xintercept=min(X$V1), color="red") +
+  geom_vline(xintercept=-0.01, color="red", linetype="dotted") +
+  geom_vline(xintercept=max(X$V1), color="green") +
+  geom_vline(xintercept=0.01, color="green", linetype="dotted")
+
+# Maybe we can drill in
+ggplot(data = X %>% filter(V1 < -0.4, V2 >-0.5),
+       aes(x=V1, y=V2, color = V3, label = word)) +
+  geom_point() +
+  geom_text() +
+  xlab("Embedding 1") +
+  ylab("Embedding 2") +
+  labs(color = "Embedding 3") +
+  theme_bw()
+
+```
+
+Kind of amazing. Words such as ...
+
+- Outstanding
+- Breathtaking
+- Fantastic
+- Guido (which is usually a term for awesome)
+- Damon (probably for Matt Damon, who is pretty awesome)
+
+... are all in just this little region. We learned a lot in this little model. Let's look at one more visual with just our first two dimensions of word embeddings without `pca`. 
+
+```{r}
+
+# What a treasure trove. For each word, we have a 16 dimensional representation it learned.
+X <- embeddings$embeddings %>% as.matrix
+dim(X)
+components <- prcomp(X)
+PC <- components$x %>% as.data.frame %>% select(PC1, PC2)
+PC <- PC %>% dplyr::mutate(word = get_vocabulary(text_vectorization))
+
+ggplot(data = PC, aes(x=PC1, y=PC2, label = word)) + 
+  geom_point() + 
+  geom_text() + 
+  theme_bw() +
+  ggtitle("Word Embeddings", subtitle = "PCA Dimensionality Reduction")+
+  geom_vline(xintercept=min(PC$PC1), color="red") +
+  geom_vline(xintercept=-0.1, color="red", linetype="dotted") +
+  geom_vline(xintercept=max(PC$PC1), color="green") +
+  geom_vline(xintercept=0.1, color="green", linetype="dotted")
+  
+
+# What about those just in a certain region?
+ggplot(data = PC %>% filter(PC1 < 2, PC1 > 1.5,
+                            PC2 < 0.1, PC2 > -0.1),
+       aes(x=PC1, y=PC2, label = word)) +
+  geom_point() +
+  geom_text() +
+  theme_bw()
+
+  
+```
+
+
+Pretty amazing, even just the first few layers of word embeddings show the same thing. Words like:
+
+- awful
+- waste
+- jawbreaker
+- rediculous
+- stupid
+- stupidity
+
+Incredible. This language model has learned words from our custom domain. 
+
+One can only imagine that there are two populations of words because this domain was specifically trained on them.
+
+Another exercise is to flow these files from the directory structure.
+
+# References
+
+<cite>https://tensorflow.rstudio.com/tutorials/beginners/basic-ml/tutorial_basic_text_classification/</cite>
