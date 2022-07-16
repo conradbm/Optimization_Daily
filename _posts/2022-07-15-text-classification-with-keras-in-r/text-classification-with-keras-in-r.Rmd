@@ -33,7 +33,9 @@ library(purrr)
 ```
 
 ```{r}
-df <- readr::read_csv("movie_review.csv")
+path <- "C:/Users/blake/Desktop/blog_data/movie_review.csv"
+
+df <- readr::read_csv(path)
 df %>% dplyr::glimpse()
 ```
 
@@ -225,13 +227,12 @@ ggplot(data = PC, aes(x=PC1, y=PC2, label = word)) +
   
 
 # What about those just in a certain region?
-
-ggplot(data = PC %>% filter(PC1 < 2, PC1 > 1.5,
-                            PC2 < 0.1, PC2 > -0.1),
-       aes(x=PC1, y=PC2, label = word)) + 
-  geom_point() + 
-  geom_text() + 
-  theme_bw()
+# ggplot(data = PC %>% filter(PC1 < 2, PC1 > 1.5,
+#                             PC2 < 0.1, PC2 > -0.1),
+#        aes(x=PC1, y=PC2, label = word)) + 
+#   geom_point() + 
+#   geom_text() + 
+#   theme_bw()
 
   
 ```
@@ -268,14 +269,14 @@ ggplot(data = X,
   geom_vline(xintercept=0.01, color="green", linetype="dotted")
 
 # Maybe we can drill in
-ggplot(data = X %>% filter(V1 < -0.4, V2 >-0.5),
-       aes(x=V1, y=V2, color = V3, label = word)) + 
-  geom_point() + 
-  geom_text() + 
-  xlab("Embedding 1") +
-  ylab("Embedding 2") +
-  labs(color = "Embedding 3") +
-  theme_bw() 
+# ggplot(data = X %>% filter(V1 < -0.4, V2 >-0.5),
+#        aes(x=V1, y=V2, color = V3, label = word)) + 
+#   geom_point() + 
+#   geom_text() + 
+#   xlab("Embedding 1") +
+#   ylab("Embedding 2") +
+#   labs(color = "Embedding 3") +
+#   theme_bw() 
 
 ```
 

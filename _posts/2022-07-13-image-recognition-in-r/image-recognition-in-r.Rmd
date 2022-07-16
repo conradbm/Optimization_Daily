@@ -73,6 +73,7 @@ Next we can visualize a few images using the `plot` function in r. This was a li
 
 ```{r visualize}
 library(raster)
+
 plot_a_few <- function(x,y, a_few = 3, rgb_dim=FALSE){
     # Render a few images
     rand_image_index = sample(1:dim(x)[[1]], size = a_few)
@@ -306,7 +307,7 @@ One thing keras makes incredibly easy is the ability to save your model. This wi
 ```{r}
 
 # Serialize the model (it becomes a folder)
-keras::save_model_tf(object = model, filepath = "mnist_model")
+# keras::save_model_tf(object = model, filepath = "mnist_model")
 ```
 
 ### Reload Model
@@ -314,10 +315,10 @@ keras::save_model_tf(object = model, filepath = "mnist_model")
 ```{r}
 
 # Reload the model
-reloaded_model = keras::load_model_tf("mnist_model")
-reloaded_model %>% summary
-base::all.equal(stats::predict(model, x_test), 
-                stats::predict(reloaded_model, x_test))
+# reloaded_model = keras::load_model_tf("mnist_model")
+# reloaded_model %>% summary
+# base::all.equal(stats::predict(model, x_test), 
+#                 stats::predict(reloaded_model, x_test))
 ```
 
 # Recognize Fashion
@@ -561,19 +562,17 @@ model %>% compile(
 )
 
 
-# Uncommented training (fit) section. Just load previous model. Takes 45 mins to train/update from the base model.
-
 # unfreeze_weights(conv_base, from = "block5_conv1")
 
-# history <- model %>% fit(
-#   x=train_images, y=train_labels, 
-#   validation_split = 0.3,
-#   epochs=10, 
-#   verbose = 2
-# )
+history <- model %>% fit(
+  x=train_images, y=train_labels,
+  validation_split = 0.3,
+  epochs=3,
+  verbose = 2
+)
 
-model = keras::load_model_tf("cifar10_tl_model")
-model %>% summary
+# model = keras::load_model_tf("cifar10_tl_model")
+# model %>% summary
 
 # summary(model)
 # train_images[1,,,] %>% dim
