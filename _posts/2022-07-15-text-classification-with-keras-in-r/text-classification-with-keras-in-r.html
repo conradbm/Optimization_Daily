@@ -118,7 +118,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["text-classification-with-keras-in-r_files/anchor-4.2.2/anchor.min.js","text-classification-with-keras-in-r_files/bowser-1.9.3/bowser.min.js","text-classification-with-keras-in-r_files/distill-2.2.21/template.v2.js","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-15-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-16-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-16-2.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-2.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-6-1.png","text-classification-with-keras-in-r_files/header-attrs-2.11/header-attrs.js","text-classification-with-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.js","text-classification-with-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js","text-classification-with-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.map","text-classification-with-keras-in-r_files/popper-2.6.0/popper.min.js","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy-bundle.umd.min.js","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy-light-border.css","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy.css","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy.umd.min.js","text-classification-with-keras-in-r_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["text-classification-with-keras-in-r_files/anchor-4.2.2/anchor.min.js","text-classification-with-keras-in-r_files/bowser-1.9.3/bowser.min.js","text-classification-with-keras-in-r_files/distill-2.2.21/template.v2.js","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-15-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-16-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-16-2.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-2.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-18-1.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-18-2.png","text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-6-1.png","text-classification-with-keras-in-r_files/header-attrs-2.11/header-attrs.js","text-classification-with-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.js","text-classification-with-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js","text-classification-with-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.map","text-classification-with-keras-in-r_files/popper-2.6.0/popper.min.js","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy-bundle.umd.min.js","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy-light-border.css","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy.css","text-classification-with-keras-in-r_files/tippy-6.2.7/tippy.umd.min.js","text-classification-with-keras-in-r_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1612,9 +1612,12 @@ Visualization</h2>
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df</span><span class='op'>$</span><span class='va'>text</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='st'>" "</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='va'>length</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span>main <span class='op'>=</span> <span class='st'>"Distribution of Words Per Sentiment"</span>, xlab <span class='op'>=</span> <span class='st'>"Number of Words"</span><span class='op'>)</span></span></code></pre>
+<span>  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span></span></code></pre>
 </div>
-<p><img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+<pre><code> [1] 52 36 27 30 13 27 52 16 37 36</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span>  <span class='co'># hist(main = "Distribution of Words Per Sentiment", xlab = "Number of Words")</span></span></code></pre>
+</div>
 </div>
 <p>We will make the text a tensor. The most common <code>10,000</code>
 words will be specified by an integer. Every sequence will be
@@ -1777,7 +1780,7 @@ called overfitting, and we’ll explore it later”</p>
 <span>         verbose <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>     loss  accuracy 
-0.5949487 0.6839463 </code></pre>
+0.5914385 0.6876545 </code></pre>
 </div>
 <p>This fairly naive approach achieves an accuracy of about 68%. With
 more advanced approaches, the model should get closer to 85%.</p>
@@ -1792,50 +1795,9 @@ more advanced approaches, the model should get closer to 85%.</p>
 <p>That’s the magic question. Time to take a peak.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>embeddings</span> <span class='op'>&lt;-</span> <span class='va'>model</span><span class='op'>$</span><span class='va'>layers</span><span class='op'>[[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>]</span></span>
-<span></span>
-<span><span class='co'># What a treasure trove. For each word, we have a 16 dimensional representation it learned.</span></span>
-<span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='va'>embeddings</span><span class='op'>$</span><span class='va'>embeddings</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>as.matrix</span></span>
-<span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span></code></pre>
-</div>
-<pre><code>[1] 10000    16</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>components</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
-<span><span class='va'>PC</span> <span class='op'>&lt;-</span> <span class='va'>components</span><span class='op'>$</span><span class='va'>x</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>as.data.frame</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>PC1</span>, <span class='va'>PC2</span><span class='op'>)</span></span>
-<span><span class='va'>PC</span> <span class='op'>&lt;-</span> <span class='va'>PC</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>word <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/keras/man/layer_text_vectorization.html'>get_vocabulary</a></span><span class='op'>(</span><span class='va'>text_vectorization</span><span class='op'>)</span><span class='op'>)</span></span>
-<span></span>
-<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>PC</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>PC1</span>, y<span class='op'>=</span><span class='va'>PC2</span>, label <span class='op'>=</span> <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Word Embeddings"</span>, subtitle <span class='op'>=</span> <span class='st'>"PCA Dimensionality Reduction"</span><span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>PC</span><span class='op'>$</span><span class='va'>PC1</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='op'>-</span><span class='fl'>0.1</span>, color<span class='op'>=</span><span class='st'>"red"</span>, linetype<span class='op'>=</span><span class='st'>"dotted"</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>PC</span><span class='op'>$</span><span class='va'>PC1</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fl'>0.1</span>, color<span class='op'>=</span><span class='st'>"green"</span>, linetype<span class='op'>=</span><span class='st'>"dotted"</span><span class='op'>)</span></span></code></pre>
-</div>
-<img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-16-1.png" width="624" />
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># What about those just in a certain region?</span></span>
-<span><span class='co'># ggplot(data = PC %&gt;% filter(PC1 &lt; 2, PC1 &gt; 1.5,</span></span>
-<span><span class='co'>#                             PC2 &lt; 0.1, PC2 &gt; -0.1),</span></span>
-<span><span class='co'>#        aes(x=PC1, y=PC2, label = word)) + </span></span>
-<span><span class='co'>#   geom_point() + </span></span>
-<span><span class='co'>#   geom_text() + </span></span>
-<span><span class='co'>#   theme_bw()</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>embeddings</span> <span class='op'>&lt;-</span> <span class='va'>model</span><span class='op'>$</span><span class='va'>layers</span><span class='op'>[[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>]</span></span></code></pre>
 </div>
 </div>
-<p>Kind of amazing. Words such as …</p>
-<ul>
-<li>Outstanding</li>
-<li>Breathtaking</li>
-<li>Fantastic</li>
-<li>Guido (which is usually a term for awesome)</li>
-<li>Damon (probably for Matt Damon, who is pretty awesome)</li>
-</ul>
-<p>… are all in just this little region. We learned a lot in this little
-model. Let’s look at one more visual with just our first two dimensions
-of word embeddings without <code>pca</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='va'>embeddings</span><span class='op'>$</span><span class='va'>embeddings</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
@@ -1858,18 +1820,64 @@ of word embeddings without <code>pca</code>.</p>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fl'>0.01</span>, color<span class='op'>=</span><span class='st'>"green"</span>, linetype<span class='op'>=</span><span class='st'>"dotted"</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-1.png" width="624" data-distill-preview=1 />
+<img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Maybe we can drill in</span></span>
-<span><span class='co'># ggplot(data = X %&gt;% filter(V1 &lt; -0.4, V2 &gt;-0.5),</span></span>
-<span><span class='co'>#        aes(x=V1, y=V2, color = V3, label = word)) + </span></span>
-<span><span class='co'>#   geom_point() + </span></span>
-<span><span class='co'>#   geom_text() + </span></span>
-<span><span class='co'>#   xlab("Embedding 1") +</span></span>
-<span><span class='co'>#   ylab("Embedding 2") +</span></span>
-<span><span class='co'>#   labs(color = "Embedding 3") +</span></span>
-<span><span class='co'>#   theme_bw() </span></span></code></pre>
+<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>X</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>V1</span> <span class='op'>&lt;</span> <span class='op'>-</span><span class='fl'>0.4</span>, <span class='va'>V2</span> <span class='op'>&gt;</span><span class='op'>-</span><span class='fl'>0.5</span><span class='op'>)</span>,</span>
+<span>       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>V1</span>, y<span class='op'>=</span><span class='va'>V2</span>, color <span class='op'>=</span> <span class='va'>V3</span>, label <span class='op'>=</span> <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Embedding 1"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Embedding 2"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"Embedding 3"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
+<p><img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-17-2.png" width="624" /></p>
+</div>
+<p>Kind of amazing. Words such as …</p>
+<ul>
+<li>Outstanding</li>
+<li>Breathtaking</li>
+<li>Fantastic</li>
+<li>Guido (which is usually a term for awesome)</li>
+<li>Damon (probably for Matt Damon, who is pretty awesome)</li>
+</ul>
+<p>… are all in just this little region. We learned a lot in this little
+model. Let’s look at one more visual with just our first two dimensions
+of word embeddings without <code>pca</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># What a treasure trove. For each word, we have a 16 dimensional representation it learned.</span></span>
+<span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='va'>embeddings</span><span class='op'>$</span><span class='va'>embeddings</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>as.matrix</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 10000    16</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>components</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
+<span><span class='va'>PC</span> <span class='op'>&lt;-</span> <span class='va'>components</span><span class='op'>$</span><span class='va'>x</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>as.data.frame</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>PC1</span>, <span class='va'>PC2</span><span class='op'>)</span></span>
+<span><span class='va'>PC</span> <span class='op'>&lt;-</span> <span class='va'>PC</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>word <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/keras/man/layer_text_vectorization.html'>get_vocabulary</a></span><span class='op'>(</span><span class='va'>text_vectorization</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>PC</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>PC1</span>, y<span class='op'>=</span><span class='va'>PC2</span>, label <span class='op'>=</span> <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Word Embeddings"</span>, subtitle <span class='op'>=</span> <span class='st'>"PCA Dimensionality Reduction"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>PC</span><span class='op'>$</span><span class='va'>PC1</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='op'>-</span><span class='fl'>0.1</span>, color<span class='op'>=</span><span class='st'>"red"</span>, linetype<span class='op'>=</span><span class='st'>"dotted"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>PC</span><span class='op'>$</span><span class='va'>PC1</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept<span class='op'>=</span><span class='fl'>0.1</span>, color<span class='op'>=</span><span class='st'>"green"</span>, linetype<span class='op'>=</span><span class='st'>"dotted"</span><span class='op'>)</span></span></code></pre>
+</div>
+<img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-18-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># What about those just in a certain region?</span></span>
+<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>PC</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>PC1</span> <span class='op'>&lt;</span> <span class='fl'>2</span>, <span class='va'>PC1</span> <span class='op'>&gt;</span> <span class='fl'>1.5</span>,</span>
+<span>                            <span class='va'>PC2</span> <span class='op'>&lt;</span> <span class='fl'>0.1</span>, <span class='va'>PC2</span> <span class='op'>&gt;</span> <span class='op'>-</span><span class='fl'>0.1</span><span class='op'>)</span>,</span>
+<span>       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>PC1</span>, y<span class='op'>=</span><span class='va'>PC2</span>, label <span class='op'>=</span> <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="text-classification-with-keras-in-r_files/figure-html5/unnamed-chunk-18-2.png" width="624" /></p>
 </div>
 <p>Pretty amazing, even just the first few layers of word embeddings
 show the same thing. Words like:</p>
@@ -1891,7 +1899,7 @@ structure.</p>
 <p><cite><a
 href="https://tensorflow.rstudio.com/tutorials/beginners/basic-ml/tutorial_basic_text_classification/"
 class="uri">https://tensorflow.rstudio.com/tutorials/beginners/basic-ml/tutorial_basic_text_classification/</a></cite></p>
-<div class="sourceCode" id="cb8"><pre
+<div class="sourceCode" id="cb9"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

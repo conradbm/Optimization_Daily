@@ -68,7 +68,8 @@ It might be useful to know the number of words in each review.
 df$text %>% 
   strsplit(., " ") %>% 
   sapply(., length) %>% 
-  hist(main = "Distribution of Words Per Sentiment", xlab = "Number of Words")
+  head(10)
+  # hist(main = "Distribution of Words Per Sentiment", xlab = "Number of Words")
 
 ```
 
@@ -207,47 +208,10 @@ That's the magic question. Time to take a peak.
 
 ```{r}
 embeddings <- model$layers[[3]]
-
-# What a treasure trove. For each word, we have a 16 dimensional representation it learned.
-X <- embeddings$embeddings %>% as.matrix
-dim(X)
-components <- prcomp(X)
-PC <- components$x %>% as.data.frame %>% select(PC1, PC2)
-PC <- PC %>% dplyr::mutate(word = get_vocabulary(text_vectorization))
-
-ggplot(data = PC, aes(x=PC1, y=PC2, label = word)) + 
-  geom_point() + 
-  geom_text() + 
-  theme_bw() +
-  ggtitle("Word Embeddings", subtitle = "PCA Dimensionality Reduction")+
-  geom_vline(xintercept=min(PC$PC1), color="red") +
-  geom_vline(xintercept=-0.1, color="red", linetype="dotted") +
-  geom_vline(xintercept=max(PC$PC1), color="green") +
-  geom_vline(xintercept=0.1, color="green", linetype="dotted")
-  
-
-# What about those just in a certain region?
-# ggplot(data = PC %>% filter(PC1 < 2, PC1 > 1.5,
-#                             PC2 < 0.1, PC2 > -0.1),
-#        aes(x=PC1, y=PC2, label = word)) + 
-#   geom_point() + 
-#   geom_text() + 
-#   theme_bw()
-
-  
 ```
 
-Kind of amazing. Words such as ...
 
-- Outstanding
-- Breathtaking
-- Fantastic
-- Guido (which is usually a term for awesome)
-- Damon (probably for Matt Damon, who is pretty awesome)
-
-... are all in just this little region. We learned a lot in this little model. Let's look at one more visual with just our first two dimensions of word embeddings without `pca`. 
-
-```{r, preview = TRUE}
+```{r}
 X <- embeddings$embeddings %>% 
   as.matrix %>% 
   as.data.frame %>% 
@@ -269,16 +233,58 @@ ggplot(data = X,
   geom_vline(xintercept=0.01, color="green", linetype="dotted")
 
 # Maybe we can drill in
-# ggplot(data = X %>% filter(V1 < -0.4, V2 >-0.5),
-#        aes(x=V1, y=V2, color = V3, label = word)) + 
-#   geom_point() + 
-#   geom_text() + 
-#   xlab("Embedding 1") +
-#   ylab("Embedding 2") +
-#   labs(color = "Embedding 3") +
-#   theme_bw() 
+ggplot(data = X %>% filter(V1 < -0.4, V2 >-0.5),
+       aes(x=V1, y=V2, color = V3, label = word)) +
+  geom_point() +
+  geom_text() +
+  xlab("Embedding 1") +
+  ylab("Embedding 2") +
+  labs(color = "Embedding 3") +
+  theme_bw()
 
 ```
+
+Kind of amazing. Words such as ...
+
+- Outstanding
+- Breathtaking
+- Fantastic
+- Guido (which is usually a term for awesome)
+- Damon (probably for Matt Damon, who is pretty awesome)
+
+... are all in just this little region. We learned a lot in this little model. Let's look at one more visual with just our first two dimensions of word embeddings without `pca`. 
+
+```{r}
+
+# What a treasure trove. For each word, we have a 16 dimensional representation it learned.
+X <- embeddings$embeddings %>% as.matrix
+dim(X)
+components <- prcomp(X)
+PC <- components$x %>% as.data.frame %>% select(PC1, PC2)
+PC <- PC %>% dplyr::mutate(word = get_vocabulary(text_vectorization))
+
+ggplot(data = PC, aes(x=PC1, y=PC2, label = word)) + 
+  geom_point() + 
+  geom_text() + 
+  theme_bw() +
+  ggtitle("Word Embeddings", subtitle = "PCA Dimensionality Reduction")+
+  geom_vline(xintercept=min(PC$PC1), color="red") +
+  geom_vline(xintercept=-0.1, color="red", linetype="dotted") +
+  geom_vline(xintercept=max(PC$PC1), color="green") +
+  geom_vline(xintercept=0.1, color="green", linetype="dotted")
+  
+
+# What about those just in a certain region?
+ggplot(data = PC %>% filter(PC1 < 2, PC1 > 1.5,
+                            PC2 < 0.1, PC2 > -0.1),
+       aes(x=PC1, y=PC2, label = word)) +
+  geom_point() +
+  geom_text() +
+  theme_bw()
+
+  
+```
+
 
 Pretty amazing, even just the first few layers of word embeddings show the same thing. Words like:
 
