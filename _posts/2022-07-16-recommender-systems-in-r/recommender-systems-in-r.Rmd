@@ -1,0 +1,384 @@
+---
+title: "Recommender Systems in R"
+description: |
+  In this post we will describe the sub-field of recommender systems, simulate some data, and solve the problem analytically using iterative regression.
+categories:
+  - machine learning
+  - recommender systems
+  - regression
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-16
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Recommender Systems as a Field
+
+`Recommender Systems` as such is often referred to as a sub-field of machine learning. This is a class of learning problems that is entirely based on recommendation. As such, this sub-field has it's own unique flavor of data. In short, there is some form of recommendation as the objective of the problem. Whether it be a movie, song, or some other object of potential interest to someone who has yet to actually experience it. The most popular paradigms to approaching the problem are:
+
+1. Content-based Recommendation
+2. Collaborative Filtering
+
+## Content-based Recommendation
+
+In `Content-based Recommendation` the goal is acquire highly intelligent information about the domain. By obtaining a `feature vector` on the items, as users experience those items we can train based on their preferences, then predict out new observations using the standard classification paradigm. This is very convenient, and powerful, as `classification` is time tested and can be produce great results. Some challenges this faces are that of small datasets, as users will have to experience things first, which may take hours, days, or weeks in some cases. 
+
+*Feature Vector*
+$$
+\phi(x) \rightarrow \mathbb{R^d}
+$$
+The feature vector will take all of the items and produce a highly articulate representation of it. How would you describe features of music? What about a movie? How about a trip to a state park? Though complex, many companies have had success at this. Pandora pays experts to accurately tag down a high dimensional space for this. As users experience a movie they populate one of these `d-vectors` and their positive or negative experience to it will drill into the feature space of preferences, making recommendation possible.
+
+*Data Set*
+$$
+D_{items}=\{(\phi(x_i), y_i)\}_{i=1..n}
+$$
+The data set becomes what item a user experiences as x and their response as y. Apply a simple transformation to make x tabular and boom ... you've got a classification problem.
+
+## Collaborative Filtering
+
+A far more common approach to solving the problem is that of `Collaborative Filtering`. The data set for this is an accumulation of `all` user experience. The data set has one form with two common notations.
+
+*User Rating Matrix*
+$$
+R_{i,j}\in \mathbb{R^{n,m}} \: \forall i \in 1..n, \: \forall j \in 1..m
+$$
+The user rating matrix contains every user `i` and every item `j`. Populated typically with a `1 to 5` type of ordinal ranking. This matrix becomes HUGE very quickly. Seldom can you actually load this into memory. We will discuss the tricks required in order to extract meaningful information this later.
+
+*Database*
+$$
+D=\{(i,j,r)\}_{i=1..l}
+$$
+
+Since the above matrix will become so sparse, the database is often a book keeping data structure to contain all of the non-zero elements of this matrix. For some user `i` with some rating `r` for item `j`. We assume there are `l` of these. Clearly, we expect `l` to be significantly smaller than `n*m` which is the total number of entries in this matrix.
+
+# Problem Setup
+
+
+We would like to construct a matrix that will essentially fill in the gaps for us with a highly suggestive amount of potential rating, then argmax over any particular user and provide the top k as a recommendation. We could construct a loss function for this, but it might not be too useful. Instead, we will stand on the shoulders of giants and set up our problem as follows:
+
+## Model Parameters
+
+*User Latent Representation*
+$$
+U \in \mathbb{R^{n,k+1}}
+$$
+*Item Latent Representation*
+$$
+V \in \mathbb{R^{k+1,n}}
+$$
+
+The plus one represents the bias for each user and item respectively (e.g., how pessimistic I am, and in general how well the movie is liked by folks).
+
+U will contain information about each user lodged up in `k+1` mystical components. V will contain information about each item lodged up in `k+1` mystical components. These become a feature vector of sorts for users and items respectively.
+
+## Loss Function
+
+The loss function is as follows:
+
+$$
+J(U,V)=[\frac{1}{2}\sum_{(i,j,r)\in D}{(u_i^Tv_j + b_{u_{i}} + b_{v_{j}} - r)^2}] + \frac{\lambda}{2}\sum_{i=1..n}{||U_i||^2}+ \frac{\lambda}{2}\sum_{j=1..m}{||V_j||^2}
+$$
+
+At a glance this looks like typical linear regression. Don't be fooled. Try taking the derivative and setting to zero you end up with a nasty set of equations in both directions. One clever trick to solve this problem is what is known as iterative regression.
+
+## Iterative Regression
+
+In iterative regression we will leverage the fact that we know how to solve a simple regression problem analytically. If we hold `V` constant and solve for `U` using the typical ordinary least squares model, we will arrive at cofficients for some user. We can loop this for all users to obtain their estimates. Then, we can hold these estimates `U` constant and go solve for `V` for all items. We will leverage the fact that we know the following as true for any data set `X`, response column `Y` and coefficient estimate `theta` from least squares.
+
+*Ordinary Least Squares Solution*
+$$
+\theta^*=(X^TX)^{-1}X^TY
+$$
+
+### Simulating Data
+
+Let's see if we can tackle this monster with some fake data.
+
+```{r}
+# Items
+M = 3
+
+# Users
+N = 10
+
+# Populate ratings matrix
+R = matrix(0, nrow=N, ncol=M)
+
+# Populating ratings matrix
+R[1,] <- c(2,0,5)
+R[2,] <- c(1,5,3)
+R[3,] <- c(0,0,5)
+R[4,] <- c(4,1,5)
+R[5,] <- c(0,0,2)
+R[6,] <- c(2,4,0)
+R[7,] <- c(0,3,5)
+R[8,] <- c(2,0,1)
+R[9,] <- c(0,1,2)
+R[10,] <- c(2,0,0)
+
+# for(n in 1:N){
+#   user_n_ratings = rbinom(M, 5, 0.5)
+#   
+#   R[n, ] = user_n_ratings
+#   
+#   # Put some holes in the data
+#   R[n, floor(runif(1, min=0, max=4))] = 0
+#   # R[n, floor(runif(1, min=0, max=4))] = 0
+# }
+
+R
+```
+# (User, Movie, Rating) Tuples
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+We are all fully aware this matrix will never fit into memory, so let's make it a structure we will probably actually be working with in the real world.
+
+```{r}
+D <- R %>% as.data.frame %>%
+  setNames(nm = 1:M) %>% 
+  dplyr::mutate(user_id=row_number()) %>% 
+  tidyr::gather(., key = "item_id", value ="rating", -user_id) %>% 
+  dplyr::mutate(user_name = paste("User_", user_id, sep=""),
+                item_name = paste("Item_", item_id, sep="")) %>% 
+  dplyr::filter(rating != 0)
+D
+```
+
+
+### Ordinary Least Squares
+
+That looks better. Now let's see if we can do some iterative least squares to solve this beast.
+
+```{r}
+library(MASS)
+
+solve.ols <- function(X,y){
+  theta = (ginv(t(X) %*% X) %*% t(X)) %*% y
+}
+
+X = matrix(rep(rnorm(2), 10), nrow = 10)
+y = matrix(rnorm(10), ncol=1)
+theta = solve.ols(X,y)
+theta
+```
+
+## Create the U matrix
+
+Neat-o, we can solve a single OLS problem. Let's define our parameters.
+
+```{r}
+# Latent dimensions
+K = 3
+
+# User matrix
+U = matrix(rnorm(N*K), nrow=N, ncol=K)
+
+# Don't forget to append the bias vector for the items
+U = cbind(U, 1)
+
+# # Don't forget to append the bias vector
+U = cbind(U, rnorm(N))
+
+
+U
+```
+## Create the V matrix
+
+```{r}
+
+# Item matrix
+V = matrix(rnorm(K*M), nrow=K, ncol=M)
+
+# Don't forget to append the bias vector
+V = rbind(V, rnorm(M))
+
+# Don't forget to append the bias vector for the users
+V = rbind(V, 1)
+
+V
+```
+
+I believe by alternating those columns of ones like that we will bundle up the bias terms inside both matrices. So then when we get our dot product from the problem, it will hit a bias term for the user and a bias term for the item with ones of alternating locations. Just remember they are at the end. :)
+
+Excellent so far, now we need to perform loops in succession to solve the following sub-problem.
+
+$$
+U_i = \frac{1}{2}\sum_{(j | (i,j,r) \in D)}{(u_i^Tv_j - r)^2}
+$$
+Once we solve the above problem for all users `i`, we will alternative over and solve the inverse problem of all items. This is as follows.
+
+$$
+V_j = \frac{1}{2}\sum_{(i | (i,j,r) \in D)}{(u_i^Tv_j - r)^2}
+$$
+Same exact setup, this just alternates which role will be data and which will be parameters. So for the user problem, the items will serve as data `X` and `u` will be the theta. On the item side the users will serve as data `X` and items will be the theta `v`. Let's give it a shot and cause some trouble.
+
+## Learn the U matrix
+
+```{r}
+
+# Solve for U
+n = unique(D$user_id)
+for(uid in as.numeric(n)){
+  
+  # The user id
+  # cat(uid, "\n")
+  
+  # Get all the items now
+  all_items <- D %>% dplyr::filter(user_id ==  uid) %>% dplyr::pull(item_id)
+  m <- length(all_items)
+  
+  tmp_X <- matrix(0, nrow=m, ncol=K+2)
+  tmp_y <- matrix(0, nrow=m, ncol=1)
+  
+  idx = 1
+  for(iid in as.numeric(all_items)){
+    
+    # The item id
+    # cat(" ", iid, " ")
+    
+    # Store away the item vector for this record
+    tmp_X[idx, ] = V[,iid]
+    
+    # Store away the response element for this record
+    r = D %>% dplyr::filter(user_id == uid, item_id == iid) %>% dplyr::pull(rating)
+    tmp_y[idx] = r
+    
+    # Iterate to the next item
+    idx = idx + 1
+    
+  }
+  # cat("\n")
+  # break
+  
+  U[uid,] = solve.ols(tmp_X, tmp_y)
+}
+
+U
+```
+## Learn the V matrix
+
+We got the `U` matrix after performing `i=1..n` regressions and building up our vectors from the item data. Now let's do it for the ratings matrix.
+
+```{r}
+
+# U[,M+1] = 1
+
+# Solve for V
+m = unique(D$item_id)
+for(iid in as.numeric(m)){
+  
+  # The item id
+  # cat(iid, "\n")
+  
+  # Get all the users now
+  all_users <- D %>% dplyr::filter(item_id ==  iid) %>% dplyr::pull(user_id)
+  n <- length(all_users)
+  
+  tmp_X <- matrix(0, nrow=n, ncol=K+2)
+  tmp_y <- matrix(0, nrow=n, ncol=1)
+  
+  idx = 1
+  for(uid in as.numeric(all_users)){
+    
+    # The user id
+    # cat(" ", uid, " ")
+    
+    # Store away the user vector for this record
+    tmp_X[idx, ] = U[uid,]
+    
+    # Store away the response element for this record, same as last time
+    r = D %>% dplyr::filter(user_id == uid, item_id == iid) %>% dplyr::pull(rating)
+    tmp_y[idx] = r
+    
+    # Iterate to the next item
+    idx = idx + 1
+    
+  }
+
+  V[,iid] = solve.ols(tmp_X, tmp_y)
+}
+
+V
+```
+
+```{r}
+t(V)
+U
+```
+
+
+# Learning From Users and Item Embeddings
+
+Pretty sweet. Now we have two matrices `U` and `V`. `U` for our users. `V` for our items. But they are SUBSTANTIALLY smaller than our initial matrix
+
+```{r}
+U %>% dim
+V %>% dim
+R %>% dim
+
+cat("\n")
+
+nrow(U) * ncol(U)
+nrow(V) * ncol(V)
+nrow(R) * ncol(R)
+```
+
+We didn't really gas the problem, but we literally cut it in half. That is 550 entries of data to learn instead of 1000. Imagine if we had TONS of items (which most do) and TONS of users (which most do). There it is folks. Now let's see what we've learned
+
+For users the bias column was in the last slot. Let's see what each users `bias` rating is.
+
+```{r}
+library(ggplot2)
+```
+
+We want to be careful about interpreting that intercept necessarily as the basic, because it is ultimately created as a projection with many of things being factored in. Namely `V1..V3`. With each variable it collectively minimizes things with that offset.
+
+```{r}
+U_df <- U %>% 
+  as.data.frame %>%
+  dplyr::rename(user_bias = V4) %>%
+  dplyr::mutate(user = paste("User_", row_number(), sep=""),
+                user_actual_mean_rating = apply(R, 1, mean)) 
+
+row.names(U_df) <- U_df$user
+U_df
+```
+
+```{r}
+ggplot(data = U_df, aes(label = user_bias)) +
+  geom_col(aes(x=user, y=user_actual_mean_rating, fill = "Average Rating"), alpha = 0.5) +
+  geom_col(aes(x=user, y=user_bias, fill="User Bias"), alpha = 0.5) +
+  ggtitle("Latent User Bias vs. Average Rating") +
+  labs(fill = "User Centrality") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  xlab("User") +
+  ylab("Rating")
+  
+  
+```
+
+Since the iterative regression trains the users first, we will lose bias information for the
+
+## Recommendations
+
+We can now construct our rating matrix at once, or piece by piece since we have `U` and `V`.
+
+```{r}
+R_reconstructed <- U %*% V
+
+R_reconstructed
+
+R
+```
