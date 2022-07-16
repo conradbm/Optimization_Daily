@@ -211,7 +211,7 @@ embeddings <- model$layers[[3]]
 ```
 
 
-```{r}
+```{r, preview=TRUE}
 X <- embeddings$embeddings %>% 
   as.matrix %>% 
   as.data.frame %>% 
