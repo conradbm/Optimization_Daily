@@ -1,0 +1,262 @@
+---
+title: "Automatic Differentiation with Keras in R"
+description: |
+  In this post we will explore the keras API and how it handles low level mathematical operations to perform automatic differentiation.
+categories:
+  - machine learning
+  - deep learning
+  - non-linear programming
+  - keras
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-17
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+# Automatic Differentiation Examples
+
+Automatic differentiation is arguable one of the greatest inventions of all time. It has completely changed the face of modern deep learning. Some of the worlds hardest problems, like self-driving cars, actually become computationally feasible (and with ease) because of this breakthrough. I personally never dove into using it, but gently knew of it from years ago being mentioned. Today the goal is to walk through some boiler plate from the developers themselves, then try to expand on it with a small example to open up the mind. Let's get started.
+
+```{r}
+library(tensorflow)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+## Basic Example
+
+We are going to walk through several examples of using the `GradientTape` function built in the keras API. These snippets are graciously taken from the keras tutorial in the references. The `Sandbox` section will go into an example using some of these ideas for an example use case.
+
+```{r}
+# A variable matrix x, initialized to ones
+x <- tf$ones(shape(2, 2))
+x
+
+with(tf$GradientTape() %as% tape, {
+  
+  # Observe operations on x
+  tape$watch(x)
+  
+  y <- tf$reduce_sum(x) # y(x) = sum(x)
+  z <- tf$multiply(y, y) # z(y) = y(x)^2
+  # z = sum{x}^2
+})
+
+# Now z is a function of x on the tape
+dz_dx = tape$gradient(z, x) # dz = 2*y(x)dy_dx = 2*4*1 = 8; for all x [2x2]
+dz_dx
+```
+
+$$
+\frac{dz}{dy} = 2*y(x)*\frac{dy}{dx} = 2*y(x)(\frac{dy}{dx_j}\sum_{i}{x_i})=2*4*1=8 \:\forall x_j
+$$
+
+
+```{r}
+x <- tf$ones(tensorflow::shape(2,2))
+
+with(tf$GradientTape() %as% tape, {
+  tape$watch(x)
+  y <- tf$reduce_sum(x) # y(x) = sum(x)
+  z <- tf$multiply(y, y) # z(y) = y(x)^2
+})
+
+dz_dy = tape$gradient(z, y) # dz_dy = 2*y(x) = 2*4 = 8; for all y [just 1]
+dz_dy
+```
+
+$$
+\frac{dz}{dy} = 2*y(x) = 2\sum{x}=2 * 4 = 8
+$$
+
+
+
+```{r}
+x <- tf$constant(3)
+
+with(tf$GradientTape(persistent = TRUE) %as% tape, {
+  tape$watch(x)
+  y <- x * x # y(x) = x^2
+  z <- y * y # z(y) = y(x)^2
+})
+
+dz_dx <- tape$gradient(z, x) # dz_dx = 2*y(x)*dy_dx = 2*x^2*2*x = 2*(3^2)*2*3
+dz_dx
+
+```
+$$
+\frac{dz}{dx} = 2*y(x)*\frac{dy}{dx} = 2*x^2*2*x = 2*(3^2)*2*3=108
+$$
+
+
+
+```{r}
+dy_dx <- tape$gradient(y, x) # 6.0
+dy_dx
+```
+
+$$
+\frac{dy}{dx} = 2x=2*3=6
+$$
+
+```{r}
+f <- function(x, y) {
+  output <- 1
+  for (i in seq_len(y)) {
+    if (i > 2 & i <= 5)
+      output = tf$multiply(output, x)
+  }
+  output
+}
+
+grad <- function(x, y) {
+  with(tf$GradientTape() %as% t, {
+    t$watch(x)
+    out <- f(x, y)
+  })
+  t$gradient(out, x)
+}
+
+x <- tf$constant(2)
+grad(x, 6)
+grad(x, 5)
+grad(x, 4)
+```
+
+```{r}
+x <- tf$Variable(1.0)  # Create a Tensorflow variable initialized to 1.0
+```
+
+## Advanced Example
+
+```{r}
+x <- tf$Variable(1)  # Create a Tensorflow variable initialized to 1.0
+x
+
+with(tf$GradientTape() %as% t, {
+  
+  with(tf$GradientTape() %as% t2, {
+    y <- x*x*x
+  })
+  
+  # Compute the gradient inside the 't' context manager
+  # which means the gradient computation is differentiable as well.
+  dy_dx <- t2$gradient(y, x)
+  
+})
+
+d2y_dx <- t$gradient(dy_dx, x)
+
+# Momentum of change
+d2y_dx
+
+# Rate of change
+dy_dx
+
+```
+
+# Sandbox
+
+Let's imagine for a second we had a really complex function, and we knew the type of variables that we were going to feed into it, but calculating the gradient might be extremely difficult. Let's say, we wanted to calculate a matrix of derivatives (or a tensor) of 10x10.
+
+```{r}
+X = tf$Variable(matrix(rnorm(100), nrow=10, ncol=10))
+X
+```
+
+These are the initial values of the matrix, but we want this matrix to match a response matrix as closely as possible.
+
+```{r}
+R = matrix(rbinom(100, 4, 0.25), nrow = 10, ncol = 10)
+R
+```
+
+So the goal is to fill in the gaps, for say, recommender systems or something. Let's build a loss function and go for it.
+
+```{r}
+X = tf$Variable(matrix(rnorm(100), nrow=10, ncol=10))
+
+
+# Consider a loss function L
+with(tf$GradientTape(persistent = T) %as% t, {
+  t$watch(X)
+  
+  L <- tf$reduce_sum(
+          tf$square(
+            tf$subtract(R,X)
+          )
+      )
+  
+  
+  lambda = 0.2
+  reg <- lambda*tf$reduce_sum(tf$sqrt(tf$square(X)))
+  
+  L <- tf$add(L, reg)
+})
+  
+# For 100 steps, go descend
+for(i in 1:1000){
+  
+  # learning rate
+  alpha = 0.1/i
+  
+  # gradient
+  dL_dX <- t$gradient(L, X)
+  
+  # derivative
+  X$assign_sub(alpha*dL_dX)
+}
+
+X
+```
+
+```{r}
+R
+```
+
+```{r}
+# Final loss
+E <- (as.matrix(X) - R)^2 %>%
+  as.data.frame %>%
+  dplyr::mutate(from=paste("V",row_number(),sep="")) %>% 
+  tidyr::gather(., key = "to", value = "error", -from)
+```
+
+
+```{r}
+ggplot(data=E) + 
+  geom_density(aes(x=error, fill=to)) +
+  facet_wrap(~to) + theme_classic() +
+  labs(fill="Destination Variable") +
+  theme_classic() +
+  xlab("Error") +
+  ylab("Probability") +
+  ggtitle("Reconstruction Matrix Error", subtitle = paste("Total Error: ", round(sum((as.matrix(X) - R)^2), 2), " units", sep="" ))
+```
+
+
+```{r}
+E %>% ggplot(., aes(x=to, y=from, fill=error)) + 
+  geom_tile() + 
+  scale_fill_gradient(low = "lightgreen", high = "red") +
+  labs(fill = "Reconstruction Error") +
+  theme_classic() +
+  ggtitle("Reconstruction Matrix Error", subtitle = paste("Total Error: ", round(sum((as.matrix(X) - R)^2), 2), " units", sep="" ))
+```
+
+
+
+Pretty remarkable. It went out and learned how to match our `R` data matrix to minimize squared error with a penalty for large noisy matrices.
+
+
+# References
+
+<cite>https://tensorflow.rstudio.com/tutorials/advanced/customization/autodiff/</cite>
+<cite>https://keras.rstudio.com/articles/eager_guide.html</cite>

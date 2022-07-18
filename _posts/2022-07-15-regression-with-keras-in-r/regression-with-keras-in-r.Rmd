@@ -21,6 +21,8 @@ output:
 
 # Boston Housing Prices
 
+The objective of this post is to walk through doing regression on tabular data in keras. There are an abundance of tutorials to explore the mechanics of this, our goal is to open the mind with examples.
+
 ```{r}
 library(tfdatasets)
 library(keras)

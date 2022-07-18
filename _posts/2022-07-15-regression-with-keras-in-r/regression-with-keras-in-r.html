@@ -1545,6 +1545,9 @@ Features</a></li>
 </nav>
 </div>
 <h1 id="boston-housing-prices">Boston Housing Prices</h1>
+<p>The objective of this post is to walk through doing regression on
+tabular data in keras. There are an abundance of tutorials to explore
+the mechanics of this, our goal is to open the mind with examples.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/rstudio/tfdatasets'>tfdatasets</a></span><span class='op'>)</span></span>
@@ -1744,7 +1747,7 @@ API isn’t smart like that.</p>
 <span>         y <span class='op'>=</span> <span class='va'>test_df</span><span class='op'>$</span><span class='va'>label</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>as.matrix</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>               loss mean_absolute_error 
-          45.818676            4.947122 </code></pre>
+          29.055779            3.862492 </code></pre>
 </div>
 <h3 id="visualize">Visualize</h3>
 <div class="layout-chunk" data-layout="l-body">
@@ -1780,7 +1783,7 @@ API isn’t smart like that.</p>
     Shapiro-Wilk normality test
 
 data:  tmp$error
-W = 0.92345, p-value = 1.802e-05</code></pre>
+W = 0.92301, p-value = 1.706e-05</code></pre>
 </div>
 <h2 id="dropping-correlated-features">Dropping Correlated Features</h2>
 <p>In efforts to save time and effort. The experiment to drop
@@ -1800,19 +1803,19 @@ in that layer are in fact our parameters</p>
 <span><span class='va'>theta</span></span></code></pre>
 </div>
 <pre><code>           [,1]
- [1,] -1.218570
- [2,] -1.493150
- [3,] -1.120976
- [4,]  1.250989
- [5,] -1.618032
- [6,] -1.061731
- [7,]  1.370469
- [8,] -1.680144
- [9,] -1.481679
-[10,]  1.354187
-[11,] -1.510517
-[12,] -1.712969
-[13,]  1.233638</code></pre>
+ [1,] -1.101465
+ [2,] -1.401569
+ [3,]  1.574454
+ [4,] -1.463762
+ [5,]  1.619609
+ [6,]  1.167189
+ [7,] -1.666827
+ [8,]  1.558088
+ [9,] -1.257356
+[10,] -1.094540
+[11,]  1.392148
+[12,]  1.659781
+[13,] -1.575807</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>est_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>train_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>label</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"intercept"</span><span class='op'>)</span>,</span>
 <span>                     estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>bias</span><span class='op'>)</span></span>
