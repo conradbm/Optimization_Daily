@@ -6,6 +6,7 @@ categories:
   - machine learning
   - deep learning
   - non-linear programming
+  - automatic differentiation
   - keras
   - r
 author:

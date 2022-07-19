@@ -1,5 +1,29 @@
 [
   {
+    "path": "posts/2022-07-17-create-custom-ml-models-using-keras-in-r/",
+    "title": "Create Custom ML Models using Keras in R",
+    "description": "In this post we will explore automatic differentiation as applied to custom machine learning model generation using keras in R.",
+    "author": [
+      {
+        "name": "Blake Conrad",
+        "url": "https://github.com/conradbm"
+      }
+    ],
+    "date": "2022-07-18",
+    "categories": [
+      "machine learning",
+      "deep learning",
+      "non-linear programming",
+      "automatic differentiation",
+      "keras",
+      "r"
+    ],
+    "contents": "\r\n\r\nContents\r\nBuilding Custom Models\r\nFitting a linear model\r\nDefine a loss\r\nObtain training data\r\nDefine a training loop\r\n\r\nReferences\r\n\r\nBuilding Custom Models\r\nIn the post on Automatic Differentiation with Keras in R\r\nthere was a walk through some of the documentation and an example of\r\nusing the GradientTape API. There is no creativity in this\r\npost, just a repeat from the keras documentation. The goal\r\nhere is to take an example, play around with it, and explore the API a\r\nbit.\r\nFitting a linear model\r\n\r\n\r\nlibrary(tensorflow)\r\nModel <- R6::R6Class(\r\n  classname = \"Model\",\r\n  public = list(\r\n    W = NULL,\r\n    b = NULL,\r\n    \r\n    initialize = function(){\r\n      self$W <- tf$Variable(5) # Initialize weight to 5\r\n      self$b <- tf$Variable(0) # Initialize bias to 0 \r\n      \r\n    },\r\n    \r\n    call = function(x){\r\n      self$W*x + self$b\r\n    }\r\n  )\r\n)\r\nmodel <- Model$new()\r\nmodel$call(3)\r\n\r\ntf.Tensor(15.0, shape=(), dtype=float32)\r\n\r\nDefine a loss\r\n\r\n\r\nloss <- function(y_pred, y_true) {\r\n  tf$reduce_mean(tf$square(y_pred - y_true))\r\n}\r\n\r\n\r\nObtain training data\r\n\r\n\r\nTRUE_W = 3.0\r\nTRUE_b = 2.0\r\n\r\nNUM_EXAMPLES = 1000\r\n\r\n# Random 1-d vector of inputs\r\ninputs = tf$random$normal(shape = shape(NUM_EXAMPLES))\r\n# Random 1-d noise\r\nnoise = tf$random$normal(shape = shape(NUM_EXAMPLES))\r\n\r\n# True 1-d output target population\r\noutputs = inputs * TRUE_W + TRUE_b + noise\r\n\r\n\r\n\r\n\r\nlibrary(dplyr)\r\nlibrary(ggplot2)\r\ndf = tibble(\r\n  inputs = as.numeric(inputs),\r\n  outputs = as.numeric(outputs),\r\n  predicted = as.numeric(model$call(inputs))\r\n) \r\n\r\ndf %>% ggplot(., aes(x=inputs)) +\r\n  geom_point(aes(y = outputs)) +\r\n  geom_line(aes(y = predicted), color = \"blue\")\r\n\r\n\r\n\r\nDefine a training loop\r\n\r\n\r\ntrain <- function(model, inputs, outputs, learning_rate) {\r\n  with (tf$GradientTape() %as% t, {\r\n    current_loss = loss(model$call(inputs), outputs)\r\n  })\r\n  \r\n  d <- t$gradient(current_loss, list(model$W, model$b))\r\n  \r\n  model$W$assign_sub(learning_rate * d[[1]])\r\n  model$b$assign_sub(learning_rate * d[[2]])\r\n  current_loss\r\n}\r\n\r\n\r\n\r\n\r\nlibrary(glue)\r\n\r\nmodel <- Model$new()\r\n\r\nWs <- bs <- c()\r\n\r\nfor(epoch in seq_len(20)){\r\n  \r\n  Ws[epoch] <- as.numeric(model$W)\r\n  bs[epoch] <- as.numeric(model$b)\r\n  \r\n  current_loss <- train(model, inputs, outputs, learning_rate = 0.1)\r\n  cat(glue::glue(\"Epoch: {epoch}, Loss: {as.numeric(current_loss)}\"), \"\\n\")\r\n}\r\n\r\nEpoch: 1, Loss: 9.06868553161621 \r\nEpoch: 2, Loss: 6.2009859085083 \r\nEpoch: 3, Loss: 4.36241483688354 \r\nEpoch: 4, Loss: 3.1836473941803 \r\nEpoch: 5, Loss: 2.42789936065674 \r\nEpoch: 6, Loss: 1.94336175918579 \r\nEpoch: 7, Loss: 1.63270616531372 \r\nEpoch: 8, Loss: 1.43353259563446 \r\nEpoch: 9, Loss: 1.30583393573761 \r\nEpoch: 10, Loss: 1.22396111488342 \r\nEpoch: 11, Loss: 1.17146837711334 \r\nEpoch: 12, Loss: 1.13781309127808 \r\nEpoch: 13, Loss: 1.11623501777649 \r\nEpoch: 14, Loss: 1.10240018367767 \r\nEpoch: 15, Loss: 1.0935298204422 \r\nEpoch: 16, Loss: 1.08784282207489 \r\nEpoch: 17, Loss: 1.08419632911682 \r\nEpoch: 18, Loss: 1.08185827732086 \r\nEpoch: 19, Loss: 1.08035933971405 \r\nEpoch: 20, Loss: 1.07939827442169 \r\n\r\n\r\n\r\nlibrary(tidyr)\r\n\r\n# Variables per column\r\ndf = tibble(\r\n  epoch = 1:20,\r\n  Ws = Ws,\r\n  bs = bs\r\n)\r\n\r\n# Melt on multiple columns! Name their similarity..\r\ndf = df %>% tidyr::pivot_longer(c(Ws, bs), \r\n                           names_to = \"parameter\", \r\n                           values_to = \"estimate\")\r\n\r\nggplot(df, aes(x=epoch, y=estimate)) +\r\n  geom_line() +\r\n  facet_wrap(~parameter, scales = \"free\")\r\n\r\n\r\n\r\nReferences\r\nhttps://tensorflow.rstudio.com/tutorials/advanced/customization/custom-training/\r\n\r\n\r\n\r\n",
+    "preview": "posts/2022-07-17-create-custom-ml-models-using-keras-in-r/create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-4-1.png",
+    "last_modified": "2022-07-18T20:23:57-04:00",
+    "input_file": "create-custom-ml-models-using-keras-in-r.knit.md"
+  },
+  {
     "path": "posts/2022-07-17-automatic-differentiation-with-keras-in-r/",
     "title": "Automatic Differentiation with Keras in R",
     "description": "In this post we will explore the keras API and how it handles low level mathematical operations to perform automatic differentiation.",
