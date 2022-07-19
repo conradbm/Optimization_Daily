@@ -119,7 +119,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["create-custom-ml-models-using-keras-in-r_files/anchor-4.2.2/anchor.min.js","create-custom-ml-models-using-keras-in-r_files/bowser-1.9.3/bowser.min.js","create-custom-ml-models-using-keras-in-r_files/distill-2.2.21/template.v2.js","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-4-1.png","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-7-1.png","create-custom-ml-models-using-keras-in-r_files/header-attrs-2.11/header-attrs.js","create-custom-ml-models-using-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.js","create-custom-ml-models-using-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js","create-custom-ml-models-using-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.map","create-custom-ml-models-using-keras-in-r_files/popper-2.6.0/popper.min.js","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy-bundle.umd.min.js","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy-light-border.css","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy.css","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy.umd.min.js","create-custom-ml-models-using-keras-in-r_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["create-custom-ml-models-using-keras-in-r_files/anchor-4.2.2/anchor.min.js","create-custom-ml-models-using-keras-in-r_files/bowser-1.9.3/bowser.min.js","create-custom-ml-models-using-keras-in-r_files/distill-2.2.21/template.v2.js","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-12-1.png","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-13-1.png","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-14-1.png","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-4-1.png","create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-7-1.png","create-custom-ml-models-using-keras-in-r_files/header-attrs-2.11/header-attrs.js","create-custom-ml-models-using-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.js","create-custom-ml-models-using-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js","create-custom-ml-models-using-keras-in-r_files/jquery-3.6.0/jquery-3.6.0.min.map","create-custom-ml-models-using-keras-in-r_files/popper-2.6.0/popper.min.js","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy-bundle.umd.min.js","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy-light-border.css","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy.css","create-custom-ml-models-using-keras-in-r_files/tippy-6.2.7/tippy.umd.min.js","create-custom-ml-models-using-keras-in-r_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2161,6 +2161,14 @@ class="uri">https://github.com/conradbm</a>
 <li><a href="#define-a-loss">Define a loss</a></li>
 <li><a href="#obtain-training-data">Obtain training data</a></li>
 <li><a href="#define-a-training-loop">Define a training loop</a></li>
+<li><a href="#custom-logistic-regression">Custom Logistic Regression</a>
+<ul>
+<li><a href="#log-likelihood">Log likelihood</a></li>
+<li><a href="#train">Train</a></li>
+<li><a href="#visualize">Visualize</a></li>
+<li><a href="#learning-populations">Learning populations</a></li>
+<li><a href="#predictions">Predictions</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#references">References</a></li>
 </ul>
@@ -2273,26 +2281,26 @@ bit.</p>
 <span>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"Epoch: {epoch}, Loss: {as.numeric(current_loss)}"</span><span class='op'>)</span>, <span class='st'>"\n"</span><span class='op'>)</span></span>
 <span><span class='op'>}</span></span></code></pre>
 </div>
-<pre><code>Epoch: 1, Loss: 9.06868553161621 
-Epoch: 2, Loss: 6.2009859085083 
-Epoch: 3, Loss: 4.36241483688354 
-Epoch: 4, Loss: 3.1836473941803 
-Epoch: 5, Loss: 2.42789936065674 
-Epoch: 6, Loss: 1.94336175918579 
-Epoch: 7, Loss: 1.63270616531372 
-Epoch: 8, Loss: 1.43353259563446 
-Epoch: 9, Loss: 1.30583393573761 
-Epoch: 10, Loss: 1.22396111488342 
-Epoch: 11, Loss: 1.17146837711334 
-Epoch: 12, Loss: 1.13781309127808 
-Epoch: 13, Loss: 1.11623501777649 
-Epoch: 14, Loss: 1.10240018367767 
-Epoch: 15, Loss: 1.0935298204422 
-Epoch: 16, Loss: 1.08784282207489 
-Epoch: 17, Loss: 1.08419632911682 
-Epoch: 18, Loss: 1.08185827732086 
-Epoch: 19, Loss: 1.08035933971405 
-Epoch: 20, Loss: 1.07939827442169 </code></pre>
+<pre><code>Epoch: 1, Loss: 9.27498435974121 
+Epoch: 2, Loss: 6.29132127761841 
+Epoch: 3, Loss: 4.38681507110596 
+Epoch: 4, Loss: 3.17101907730103 
+Epoch: 5, Loss: 2.39479780197144 
+Epoch: 6, Loss: 1.89916634559631 
+Epoch: 7, Loss: 1.58266150951385 
+Epoch: 8, Loss: 1.38052105903625 
+Epoch: 9, Loss: 1.25140619277954 
+Epoch: 10, Loss: 1.16892516613007 
+Epoch: 11, Loss: 1.11622834205627 
+Epoch: 12, Loss: 1.08255589008331 
+Epoch: 13, Loss: 1.0610374212265 
+Epoch: 14, Loss: 1.04728376865387 
+Epoch: 15, Loss: 1.0384920835495 
+Epoch: 16, Loss: 1.03287136554718 
+Epoch: 17, Loss: 1.02927708625793 
+Epoch: 18, Loss: 1.0269787311554 
+Epoch: 19, Loss: 1.02550864219666 
+Epoch: 20, Loss: 1.02456820011139 </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2316,11 +2324,218 @@ Epoch: 20, Loss: 1.07939827442169 </code></pre>
 </div>
 <p><img src="create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
 </div>
+<h2 id="custom-logistic-regression">Custom Logistic Regression</h2>
+<p>Now let’s build a custom logistic regression model.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Generate data</span></span>
+<span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>100</span>, ncol<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>df</span><span class='op'>$</span><span class='va'>Y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>Y</span><span class='op'>)</span></span>
+<span><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='va'>as.matrix</span></span></code></pre>
+</div>
+</div>
+<p>Notice the data is collected from the following distributions:</p>
+<p><em>Independent Variables</em> <span class="math display">\[
+X \sim \mathcal{N}(\mu=0,\,\sigma^{2}=1)\
+\]</span> <em>Dependent Variables</em> <span class="math display">\[
+y \sim \mathcal{B}(n=1, p=0.25)\
+\]</span> ### Build the model</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/rstudio/tensorflow'>tensorflow</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>Model</span> <span class='op'>&lt;-</span> <span class='fu'>R6</span><span class='fu'>::</span><span class='kw'><a href='https://r6.r-lib.org/reference/R6Class.html'>R6Class</a></span><span class='op'>(</span></span>
+<span>  classname <span class='op'>=</span> <span class='st'>"Model"</span>,</span>
+<span>  public <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>    W <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span>    b <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span>    </span>
+<span>    initialize <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>      </span>
+<span>      <span class='co'># Manually runs great, but won't knit..</span></span>
+<span>      <span class='va'>self</span><span class='op'>$</span><span class='va'>W</span> <span class='op'>&lt;-</span> <span class='va'>tf</span><span class='op'>$</span><span class='fu'>Variable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>D</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>1</span>, ncol<span class='op'>=</span><span class='va'>D</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>      <span class='va'>self</span><span class='op'>$</span><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='va'>tf</span><span class='op'>$</span><span class='fu'>Variable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>1</span>, ncol<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span>    <span class='op'>}</span>,</span>
+<span>    </span>
+<span>    call <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>      <span class='fl'>1</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='op'>-</span><span class='op'>(</span><span class='va'>tf</span><span class='op'>$</span><span class='fu'>matmul</span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>self</span><span class='op'>$</span><span class='va'>W</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>self</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>    <span class='op'>}</span></span>
+<span>  <span class='op'>)</span></span>
+<span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='va'>Model</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>model</span><span class='op'>$</span><span class='fu'>call</span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
+</div>
+<pre><code>tf.Tensor(
+[[0.90854418]
+ [0.94750512]
+ [0.72264755]
+ [0.69501559]
+ [0.97674013]
+ [0.85342092]], shape=(6, 1), dtype=float64)</code></pre>
+</div>
+<p><span class="math display">\[
+L(X; W, b) = \prod_{i=1}^n{\hat y_{i}^{y_{i}} (1-\hat y_{i})^{1-y_{i}} }
+\]</span></p>
+<h3 id="log-likelihood">Log likelihood</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Monotonic increasing, value function</span></span>
+<span><span class='va'>log_likelihood</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>y_pred</span>, <span class='va'>y_true</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='va'>ll</span> <span class='op'>&lt;-</span> <span class='va'>tf</span><span class='op'>$</span><span class='fu'>reduce_sum</span><span class='op'>(</span><span class='va'>y_true</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>y_pred</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>y_true</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>y_pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  <span class='va'>ll</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># y_pred = model$call(X)</span></span>
+<span></span>
+<span><span class='co'># log_likelihood(model$call(X), y)</span></span></code></pre>
+</div>
+</div>
+<h3 id="train">Train</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Generate data</span></span>
+<span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>100</span>, ncol<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>df</span><span class='op'>$</span><span class='va'>Y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>Y</span><span class='op'>)</span></span>
+<span><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='va'>as.matrix</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>D</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Create a fresh model</span></span>
+<span><span class='va'>learning_rate</span> <span class='op'>=</span> <span class='fl'>0.1</span></span>
+<span><span class='va'>W</span> <span class='op'>=</span> <span class='va'>tf</span><span class='op'>$</span><span class='fu'>Variable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>1</span>, ncol<span class='op'>=</span><span class='va'>D</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>b</span> <span class='op'>=</span> <span class='va'>tf</span><span class='op'>$</span><span class='fu'>Variable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>1</span>, ncol<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>sigmoid</span> <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='fl'>1</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>+</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>z</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>predict.sigmoid</span> <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>W</span>, <span class='va'>b</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='va'>y_pred</span> <span class='op'>=</span> <span class='fu'>sigmoid</span><span class='op'>(</span><span class='va'>tf</span><span class='op'>$</span><span class='fu'>matmul</span><span class='op'>(</span><span class='va'>X</span>, <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>W</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>b</span><span class='op'>)</span></span>
+<span>  <span class='va'>y_pred</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>losses</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='kw'>for</span><span class='op'>(</span><span class='va'>epoch</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span> <span class='op'>(</span><span class='va'>tf</span><span class='op'>$</span><span class='fu'>GradientTape</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rstudio.github.io/reticulate/reference/with-as-operator.html'>%as%</a></span> <span class='va'>t</span>, <span class='op'>{</span></span>
+<span>    <span class='va'>t</span><span class='op'>$</span><span class='fu'>watch</span><span class='op'>(</span><span class='va'>W</span><span class='op'>)</span></span>
+<span>    <span class='va'>t</span><span class='op'>$</span><span class='fu'>watch</span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span></span>
+<span>    <span class='va'>y_pred</span> <span class='op'>=</span> <span class='fu'>predict.sigmoid</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>W</span>, <span class='va'>b</span><span class='op'>)</span></span>
+<span>    </span>
+<span>    <span class='va'>L</span> <span class='op'>=</span> <span class='fu'>log_likelihood</span><span class='op'>(</span><span class='va'>y_pred</span>, <span class='va'>y</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='va'>d</span> <span class='op'>&lt;-</span> <span class='va'>t</span><span class='op'>$</span><span class='fu'>gradient</span><span class='op'>(</span><span class='va'>L</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>W</span>, <span class='va'>b</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>    </span>
+<span>  <span class='co'># Gradient ascent</span></span>
+<span>  <span class='va'>W</span><span class='op'>$</span><span class='fu'>assign_add</span><span class='op'>(</span><span class='va'>learning_rate</span> <span class='op'>*</span> <span class='va'>d</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
+<span>  <span class='va'>b</span><span class='op'>$</span><span class='fu'>assign_add</span><span class='op'>(</span><span class='va'>learning_rate</span> <span class='op'>*</span> <span class='va'>d</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='va'>current_loss</span> <span class='op'>=</span> <span class='va'>L</span></span>
+<span>  </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"Epoch: {epoch}, Loss: {as.numeric(current_loss)}"</span><span class='op'>)</span>, <span class='st'>"\n"</span><span class='op'>)</span></span>
+<span></span>
+<span>  <span class='va'>losses</span><span class='op'>[</span><span class='va'>epoch</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>current_loss</span><span class='op'>)</span></span>
+<span>    </span>
+<span><span class='op'>}</span></span></code></pre>
+</div>
+<pre><code>Epoch: 1, Loss: -64.884168727686 
+Epoch: 2, Loss: -52.0970964369214 
+Epoch: 3, Loss: -40.7580844729695 
+Epoch: 4, Loss: -39.6961741609297 
+Epoch: 5, Loss: -39.6138575017734 
+Epoch: 6, Loss: -39.5851677656405 
+Epoch: 7, Loss: -39.5785648703051 
+Epoch: 8, Loss: -39.5763458015593 
+Epoch: 9, Loss: -39.5757237923894 
+Epoch: 10, Loss: -39.5755299326785 
+Epoch: 11, Loss: -39.5754728446656 
+Epoch: 12, Loss: -39.5754554963127 
+Epoch: 13, Loss: -39.5754503139949 
+Epoch: 14, Loss: -39.5754487512676 
+Epoch: 15, Loss: -39.5754482824529 
+Epoch: 16, Loss: -39.5754481414108 
+Epoch: 17, Loss: -39.5754480990443 
+Epoch: 18, Loss: -39.5754480863074 
+Epoch: 19, Loss: -39.5754480824799 
+Epoch: 20, Loss: -39.5754480813295 </code></pre>
+</div>
+<h3 id="visualize">Visualize</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span></span>
+<span>  epoch <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>20</span>,</span>
+<span>  loss <span class='op'>=</span> <span class='va'>losses</span></span>
+<span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>epoch</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>loss</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<h3 id="learning-populations">Learning populations</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span></span>
+<span>  y_true <span class='op'>=</span> <span class='va'>y</span>,</span>
+<span>  y_pred <span class='op'>=</span> <span class='fu'>predict.sigmoid</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>W</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>as.matrix</span></span>
+<span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>y_pred_class <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='va'>y_pred</span> <span class='op'>&gt;</span> <span class='fl'>0.5</span>, true <span class='op'>=</span> <span class='fl'>1</span>, false <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>.</span>,<span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>y_true</span>, fill<span class='op'>=</span><span class='st'>"Target"</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>y_pred</span>, fill<span class='op'>=</span><span class='st'>"Prediction"</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"Response"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Target vs. Prediction Distribution"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<p>It looks like training in this way the
+<code>Logistic Classifier</code> was able to discover the population
+parameter for our underlying response distribution.</p>
+<p><span class="math display">\[
+\hat p =0.25
+\]</span></p>
+<h3 id="predictions">Predictions</h3>
+<p>But how well did it predict on the training data? Notice the
+<code>over prediction</code> on the class 0 and the
+<code>under prediction</code> on the class 1. This is an infamous
+illustration of the <code>class imbalance</code> problem and how we
+learned to maximize a the majority, which was not the target class.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>y_true</span>, fill<span class='op'>=</span><span class='st'>"Target"</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>y_pred_class</span>, fill <span class='op'>=</span> <span class='st'>"Prediction"</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"Response"</span>, x <span class='op'>=</span> <span class='st'>"Class"</span>, y<span class='op'>=</span><span class='st'>"Appearances"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Target vs. Prediction"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="create-custom-ml-models-using-keras-in-r_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
+</div>
 <h1 id="references">References</h1>
 <p><cite><a
 href="https://tensorflow.rstudio.com/tutorials/advanced/customization/custom-training/"
 class="uri">https://tensorflow.rstudio.com/tutorials/advanced/customization/custom-training/</a></cite></p>
-<div class="sourceCode" id="cb3"><pre
+<div class="sourceCode" id="cb5"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
@@ -2329,6 +2544,15 @@ class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"><
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->

@@ -145,8 +145,189 @@ ggplot(df, aes(x=epoch, y=estimate)) +
   geom_line() +
   facet_wrap(~parameter, scales = "free")
 ```
+## Custom Logistic Regression
+
+Now let's build a custom logistic regression model.
+
+```{r}
+# Generate data
+df <- data.frame(matrix(rnorm(1000), nrow=100, ncol=2))
+df$Y <- rbinom(n = 100, size = 1, prob = 0.25)
+
+X <- df %>% 
+  select(-Y)
+y <- df %>% select(Y) %>% 
+  dplyr::pull(Y) %>% 
+  as.matrix
+```
+
+Notice the data is collected from the following distributions:
+
+*Independent Variables*
+$$
+X \sim \mathcal{N}(\mu=0,\,\sigma^{2}=1)\
+$$
+*Dependent Variables*
+$$
+y \sim \mathcal{B}(n=1, p=0.25)\
+$$
+### Build the model
+
+```{r}
+library(tensorflow)
+library(dplyr)
+
+Model <- R6::R6Class(
+  classname = "Model",
+  public = list(
+    W = NULL,
+    b = NULL,
+    
+    initialize = function(D){
+      
+      # Manually runs great, but won't knit..
+      self$W <- tf$Variable(matrix(rnorm(n = D), nrow=1, ncol=D))
+      self$b <- tf$Variable(matrix(rnorm(n = 1), nrow=1, ncol=1))
+
+    },
+    
+    call = function(x){
+      1/(1 + exp(-(tf$matmul(x, t(self$W)) + self$b)))
+    }
+  )
+)
 
 
+model <- Model$new(ncol(X))
+model$call(X) %>% head
+
+```
+
+$$
+L(X; W, b) = \prod_{i=1}^n{\hat y_{i}^{y_{i}} (1-\hat y_{i})^{1-y_{i}} }
+$$
+
+### Log likelihood 
+
+```{r}
+# Monotonic increasing, value function
+log_likelihood <- function(y_pred, y_true){
+  ll <- tf$reduce_sum(y_true * log(y_pred) + (1 - y_true) * log(1 - y_pred))
+  ll
+}
+
+# y_pred = model$call(X)
+
+# log_likelihood(model$call(X), y)
+```
+
+### Train
+
+```{r}
+
+# Generate data
+df <- data.frame(matrix(rnorm(1000), nrow=100, ncol=2))
+df$Y <- rbinom(n = 100, size = 1, prob = 0.25)
+
+X <- df %>% 
+  select(-Y)
+y <- df %>% select(Y) %>% 
+  dplyr::pull(Y) %>% 
+  as.matrix
+
+
+D = ncol(X)
+
+# Create a fresh model
+learning_rate = 0.1
+W = tf$Variable(matrix(rnorm(D), nrow=1, ncol=D))
+b = tf$Variable(matrix(rnorm(1), nrow=1, ncol=1))
+
+sigmoid = function(z){
+  1/(1+exp(-z))
+}
+
+predict.sigmoid = function(x, W, b){
+  y_pred = sigmoid(tf$matmul(X, t(W)) + b)
+  y_pred
+}
+
+losses <- c()
+
+for(epoch in seq_len(20)){
+  
+  
+  with (tf$GradientTape() %as% t, {
+    t$watch(W)
+    t$watch(b)
+    y_pred = predict.sigmoid(X, W, b)
+    
+    L = log_likelihood(y_pred, y)
+  })
+  
+  d <- t$gradient(L, list(W, b))
+    
+  # Gradient ascent
+  W$assign_add(learning_rate * d[[1]])
+  b$assign_add(learning_rate * d[[2]])
+  
+  current_loss = L
+  
+  cat(glue::glue("Epoch: {epoch}, Loss: {as.numeric(current_loss)}"), "\n")
+
+  losses[epoch] <- as.numeric(current_loss)
+    
+}
+```
+### Visualize
+
+```{r}
+library(ggplot2)
+tibble(
+  epoch = 1:20,
+  loss = losses
+) %>% 
+  ggplot(., aes(x = epoch)) +
+  geom_line(aes(y=loss))
+
+```
+
+### Learning populations
+
+```{r}
+df <- tibble(
+  y_true = y,
+  y_pred = predict.sigmoid(X, W, b) %>% as.matrix
+) %>% 
+  mutate(y_pred_class = if_else(condition = y_pred > 0.5, true = 1, false = 0))
+
+df %>% 
+  ggplot(.,) + 
+  geom_density(aes(x=y_true, fill="Target"), alpha = 0.5) +
+  geom_density(aes(x=y_pred, fill="Prediction"), alpha = 0.5) +
+  labs(fill = "Response") +
+  ggtitle("Target vs. Prediction Distribution") +
+  theme_classic()
+```
+
+It looks like training in this way the `Logistic Classifier` was able to discover the population parameter for our underlying response distribution.
+
+$$
+\hat p =0.25
+$$
+
+
+### Predictions
+
+But how well did it predict on the training data? Notice the `over prediction` on the class 0 and the `under prediction` on the class 1. This is an infamous illustration of the `class imbalance` problem and how we learned to maximize a the majority, which was not the target class.
+
+```{r}
+df %>% ggplot() + 
+  geom_bar(aes(x=y_true, fill="Target"), alpha = 0.5) +
+  geom_bar(aes(x=y_pred_class, fill = "Prediction"), alpha = 0.5) +
+  labs(fill = "Response", x = "Class", y="Appearances") +
+  ggtitle("Target vs. Prediction")
+```
 
 
 # References
