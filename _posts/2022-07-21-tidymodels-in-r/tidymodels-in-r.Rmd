@@ -1,0 +1,821 @@
+---
+title: "Tidymodels in R"
+description: |
+  This post is an introduction to using Tidymodels in R.
+categories:
+  - machine learning
+  - data pipeline
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-23
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Introduction
+
+Tidymodels is a relatively new R package that integrates data processing, cleaning, and modeling into a single workflow. Tidymodels also solves the notorious problem of multiple R interfaces to different statistical models that one might want to develop (e.g., `rpart` for decision tree, `glm` for logistic regression, or `randomForest` for a random forest). Each with redudanct and duplicative parameters with multiple meanings and uses, tidymodels unifies the modeling process.
+
+The [tidy models site](https://www.tidymodels.org/) contains many of the code snippets found here. Also the [tidy models book](https://www.tmwr.org/) provides a great more deal of information using the package.
+
+Let's get started!
+
+## Building a model
+
+```{r}
+library(tidymodels)  # for the parsnip package, along with the rest of tidymodels
+
+# Helper packages
+library(readr)       # for importing data
+library(broom.mixed) # for converting bayesian models to tidy tibbles
+library(dotwhisker)  # for visualizing regression results
+
+```
+
+### Getting data
+
+The urchins dataset has three columns:
+
+- Food regime [independent]
+- Initial Volume [indepdenent]
+- Width [dependent]
+
+This dataset is used just to illustrate the capability that `tidymodels` offers for model building and using `recipes` to construct a data pipeline.
+
+```{r}
+urchins <- read_csv("https://tidymodels.org/start/models/urchins.csv") %>% 
+  setNames(c("food_regime", "initial_volume", "width")) %>% 
+  dplyr::mutate(food_regime = factor(food_regime, levels = c("Initial", "Low", "High")))
+urchins
+```
+
+Below is a quick visual of the dataset with some trends within the `group=food_regime`.
+
+```{r}
+ggplot(urchins,
+       aes(x= initial_volume,
+           y= width,
+           group = food_regime,
+           col = food_regime)) +
+  geom_point() + 
+  geom_smooth(method = lm, formula = "y~x", se = FALSE) +
+  scale_color_viridis_d(option = "plasma", end = 0.7) +
+  theme_bw() +
+  ggtitle("Urchins Food Regime Width")
+```
+
+### Build and fit a model
+
+the `parsnip` package comes along with `tidymodels` and this contains a bunch of unified interfaces to models we know and love. Linear regression being `linear_reg()`. As usual, create the model, fit with a formula, then predict on new data. The `tidy` function is a dominant feature to this package. It trumps the historic `summary` and `coef` from the fit model object by outputting a clean table with estimates, errors, and p-values.
+
+```{r}
+lm_mod = parsnip::linear_reg()
+lm_fit = lm_mod %>% 
+  fit(width ~ initial_volume * food_regime, data = urchins)
+broom.mixed::tidy(lm_fit)
+
+```
+
+One can easily construct upper and lower confidence limits by `+- std.error` and view the ranges on the population (if the model assumptions are validated, i.e., errors normally distributed).
+
+```{r}
+tidy(lm_fit) %>% 
+  mutate(estimate_lower = estimate - 2*std.error,
+         estimate_upper = estimate + 2*std.error) %>% 
+  ggplot(., aes(x = estimate, y = term, color = p.value)) +
+  scale_colour_gradient(low = "red", high = "green") + 
+  geom_point() + 
+  geom_linerange(aes(xmin = estimate_lower, xmax=estimate_upper)) +
+  geom_vline(xintercept = 0, colour = "grey50", linetype = "dashed") +
+  labs(color = "Statistical p-value", x = "Estimate", y = "Term") +
+  ggtitle("Urchin Coefficient Estimates") +
+  theme_bw()
+```
+
+### Using a model to predict
+
+Predicting new points is super easy too. Simply construct a dataframe with the same columns as your trained data. For us it was `initial_volume` which was numeric and `food_regime` which was a factor with three levels. So we want to ultimately predict on `volume = 20`, but we will `expand.grid` that for each level supplied. The output of `expand.grid` is always the product of each list supplied (e.g., `A = c(a1,a2,a3), B=c(b1,b2,b3,b4) will be |A|*|B|=3*4= 12 rows`, containing every possible tupple combination). In general this is,
+
+$$
+rows =\prod_{j=1}^{k}{|S_{j}|}
+$$
+
+```{r}
+new_points = expand.grid(initial_volume= c(20),
+                         food_regime = c("Initial", "Low", "High"))
+
+new_points
+```
+
+Predictions are made using a standard interface.
+
+```{r}
+mean_pred = predict(lm_fit, new_data = new_points)
+mean_pred
+```
+
+Confidence intervals are a `type` option, which is nice for getting the above values without the computation.
+
+```{r}
+conf_int_pred = predict(lm_fit,
+                        new_data = new_points,
+                        type = "conf_int")
+conf_int_pred
+```
+
+Error plots on prediction intervals are now made pretty easy.
+
+```{r}
+
+# Combine
+plot_data = new_points %>% 
+  dplyr::bind_cols(mean_pred) %>% 
+  dplyr::bind_cols(conf_int_pred)
+
+# and plot:
+ggplot(plot_data, aes(x=food_regime, col = food_regime)) +
+  scale_color_viridis_d(option = "plasma", end = 0.7) + # for discrete color option
+  geom_point(aes(y = .pred)) +
+  geom_errorbar(aes(ymin = .pred_lower,
+                    ymax = .pred_upper),
+                width = 0.2) +
+  labs(y="Urchin size", x = "Food Regime", col = "Food Regime") +
+  theme_bw() +
+  ggtitle("Urchin Width Prediction Interval")
+
+```
+
+Now we can fit a bayesian model to this and see how the differences compare.
+
+```{r}
+prior_dist <- rstanarm::student_t(df = 1)
+set.seed(123)
+
+# make the parsnip model
+bayes_mod <-   
+  linear_reg() %>% 
+  set_engine("stan", 
+             prior_intercept = prior_dist, 
+             prior = prior_dist) 
+
+# train the model
+bayes_fit <- bayes_mod %>% 
+  fit(width ~ initial_volume * food_regime, data = urchins)
+
+print(bayes_fit, digits = 5)
+
+tidy(bayes_fit, conf.int = TRUE)
+```
+
+```{r}
+bayes_plot_data <-
+  new_points %>% 
+  bind_cols(predict(bayes_fit, new_data = new_points)) %>% 
+  bind_cols(predict(bayes_fit, new_data = new_points, type = "conf_int")) %>% 
+  mutate(model = "bayes")
+
+plot_data <- plot_data %>% 
+  mutate(model = "linear_reg")
+
+new_plot_data <- bind_rows(plot_data, bayes_plot_data) %>% 
+  mutate(model = factor(model, levels = c("linear_reg", "bayes")))
+
+ggplot(data = new_plot_data, aes(x=food_regime, group=model, col=food_regime)) +
+  geom_point(aes( y = .pred)) +
+  geom_errorbar(aes(ymin = .pred_lower,
+                    ymax = .pred_upper),
+                width = 0.2) +
+  facet_grid(cols = vars(model)) +
+  scale_colour_viridis_d(option = "plasma", end = 0.7) +
+  labs(col = "Food Regime", x = "Food Regime", y = "Prediction") +
+  ggtitle("Urchin Model Prediction Interval Comparison") +
+  theme_bw()
+
+```
+
+So far we've learned some pretty handy tricks from the tidymodels package. There is a unified interface for models and we explored the `linear_reg()` one today. This was as simple as fitting and predicting. We even explored putting in new data and getting predictions using the `expand.grid` function. A simple linar model comparison was done also to see how different models can be brought together using the `dplyr` package. The `type = "conf_int"` option from the tidymodel interface provided a `.pred_lower` and `.pred_upper` output, which was helpful to surround the estimate with error bars. Lastly, the `tidy` function was new and can be used in place of the existing `summary` option that most go to with the unweildy interface of getting information (i.e., using the `coef` function).
+
+
+## Preprocess your data with recipes
+
+### Getting data
+
+The NYC Flights data contains two data tables. 
+
+- Flights
+- Weather
+
+The `flights` table contain information about `source`, `destination`, `time`, `carrier` and other useful aircraft related information. The important thing to note about this dataset is that it is **not time series** even though there *is date time attributes* attributes. This threw me off at first. Each row is a flight. The goal is to see if we can predict if a flight is late. We will define late as follows,
+
+$$
+late=delay\ge30\:mins
+$$
+On time as,
+
+$$
+on \: time =delay < 30 \: mins
+$$
+The `weather` table contains a key which can be joined against to augment the flight information. This time stamp column will allow the flight to be observed with other, possibly useful, attributes such as temperature, windspeed, and others. One very impressive augmentation for dates (YYYY-MM-DD specifically) is the package `timeDate::listHolidays("US")`, which will create indicators for over 19 holidays and light them up with a `1` or `0` if it is found in the record. Pretty nifty to have in the tool kit.
+
+Let's get moving!
+
+```{r}
+library(tidymodels)
+library(nycflights13)
+library(skimr)
+```
+
+```{r}
+flights %>% glimpse
+```
+Remember, every row is just a flight :) The goal is to perform classification. Do we think a new flight will be `late` or not? Let's decide on features to make this prediction.
+
+```{r}
+weather %>% glimpse
+```
+
+Notice the commonality, `time_hour`. We will also use this with `lubridate` to construct a convenient `date` column that can be used for our above-said feature engineering on holidays.
+
+```{r}
+set.seed(123)
+
+flight_data <- 
+  flights %>% 
+  mutate(
+    # Resposne variable
+    arr_delay = ifelse(arr_delay >= 30, "late", "on_time"),
+    arr_delay = factor(arr_delay),
+    
+    # Handy date column
+    date = lubridate::as_date(time_hour)
+  ) %>% 
+  
+  # Weather info
+  inner_join(weather, by = c("origin", "time_hour")) %>% 
+  
+  # Everything we want
+  select( # IDs
+          time_hour, flight,
+          
+          # To Be Engineered..
+          date, 
+          
+          # Independent Variables
+          # Numeric/Nominal Flight Info.
+          dep_time, origin, dest, air_time, distance, carrier,
+          
+          # Numeric/Nominal Weather Info.
+          temp, dewp, humid, starts_with("wind_"), precip, pressure, visib,
+          
+          #Dependent Variables
+           arr_delay) %>% 
+  drop_na() %>% 
+  mutate_if(is.character, as.factor)
+
+flight_data
+```
+
+Using the `dplyr::count` function we can quickly seeh ow balanced our data is. About 2/10 were late. This would be class imbalance, something to consider when training our models.
+
+```{r}
+flight_data %>% 
+  dplyr::count(arr_delay)  %>% 
+  mutate(prop = n/sum(n))
+```
+
+```{r}
+glimpse(flight_data)
+```
+
+I had never heard of the `skimr` package, but it's pretty slick. You pass in some variables you want it to skim over and it will return a data frame with tons of great information on it, like top counts, missing rows, etc. I really like the top_counts one.
+
+```{r}
+tmp = flight_data %>% skimr::skim(dest, carrier)
+tmp
+
+```
+
+We can extract that information in different ways using `tidyr`. Be mindful, scales are different.
+
+```{r}
+worked = tmp %>% 
+  tidyr::separate(factor.top_counts, sep = ", ", into = paste("Top_", 1:4, sep="")) %>% 
+  tidyr::gather(., key = "Top_Rank", value = "AirportAndQuantity", -c(skim_type, skim_variable, n_missing, complete_rate, factor.ordered, factor.n_unique)) %>% 
+  tidyr::separate(., col = AirportAndQuantity, sep = ": ", into = c("Source","Count")) %>% 
+  dplyr::mutate(Count = as.numeric(Count),
+                skim_variable = as.factor(skim_variable))
+
+par(mfrow = c(1,2))
+worked %>% filter(skim_variable == "dest") %>%
+  ggplot(., aes(x = reorder(Source, -Count), y = Count, fill = Count)) +
+    scale_fill_gradient(low = "green", high = "red") +
+    geom_col() +
+    labs(fill = "Number of Flights") +
+    xlab("Source") +
+    ylab("Number of Flights") +
+    ggtitle("Destination Airports Counts") +
+    theme_light()
+    
+worked %>% filter(skim_variable == "carrier") %>% 
+  ggplot(., aes(x = reorder(Source, -Count), y = Count, fill = Count)) + 
+    scale_fill_gradient(low = "green", high = "red") +
+    geom_col() +
+    labs(fill = "Number of Flights") +
+    xlab("Source") +
+    ylab("Number of Flights") +
+    ggtitle("Airline Carrier Counts") +
+    theme_light()
+```
+
+### Data splitting
+
+Using the built in ecosystem, `rsample` is used to get the train test split.
+
+```{r}
+set.seed(222)
+
+data_split = rsample::initial_split(flight_data, prop = 3/4)
+train_data = rsample::training(data_split)
+test_data = rsample::testing(data_split)
+```
+
+### Create recipe and roles
+
+Building up a recipe is easy. Now we can quickly throw a formula at the recipe and it can start to do work for us. As long as the recipe receives the same information as the model, all should be well. Tagging the ID variables is nice for debugging on the backend. It will not model those variables flagged as ID.
+
+```{r}
+flights_rec = 
+  recipes::recipe(arr_delay ~ ., data = train_data) %>% 
+  recipes::update_role(flight, time_hour, new_role = "ID")
+summary(flights_rec)
+
+```
+
+### Create features
+
+This is probably the most magical of steps. 
+
+- Create the roles for ID variables
+- Engineer the day of the week and month variables
+- Engineer the holiday indicators
+- Engineer dummies for every other feature (because some models require this, others don't)
+- Clean all features that have only one value (see nzv for those whose variation is so small we may want to drop them also).
+
+```{r}
+flights_rec <- 
+  # Recipe for all variables in the table
+  recipe(arr_delay ~ ., data = train_data) %>% 
+  
+  # Make ID variables explit (not modeled)
+  update_role(flight, time_hour, new_role = "ID") %>%
+  
+  # Create features from the `lubridate` column, explore what options exist
+  step_date(date, features = c("dow", "month")) %>%               
+  
+  # Create holiday indicator for `lubdridate` column
+  step_holiday(date, 
+               holidays = timeDate::listHolidays("US"), 
+               keep_original_cols = FALSE) %>% 
+  # Create dummy variables for `nominal` columns
+  step_dummy(all_nominal_predictors()) %>% 
+  
+  # Remove zero-variance values; i.e., only 1 value in the column
+  step_zv(all_numeric_predictors())
+summary(flights_rec)
+
+
+# This will make sure that all of the test data `dest` have the same levels as the train data.
+# test_data %>% 
+#   distinct(dest) %>% 
+#   anti_join(train_data)
+
+```
+
+
+### Fit a model with recipe
+
+We can now build a logistic regression model. We first create a `workflow`, then pass in our model, and our recipe, which has several steps. The workflow will show us each of them.
+
+```{r}
+lr_mod <- logistic_reg() %>% 
+  set_engine("glm")
+
+
+flights_workflow = workflows::workflow() %>% 
+  workflows::add_model(lr_mod) %>% 
+  workflows::add_recipe(flights_rec)
+flights_workflow
+
+```
+
+Now we can build a 
+```{r}
+flights_fit = flights_workflow %>% 
+  fit(data = train_data)
+
+flights_fit
+```
+
+The final model contains the recipe and the model, so we *can* extract them out individually, but do not have to.
+
+```{r}
+flights_fit %>% 
+  extract_fit_parsnip() %>% # not needed, but useful to know
+  tidy()
+```
+
+```{r}
+tidy(flights_fit) %>% filter(p.value <= 0.00001) %>% 
+  ggplot(., aes(fill=p.value)) +
+  geom_col(aes(x=term, y=estimate)) +
+  coord_flip() +
+  scale_fill_gradient(low = "green", high = "red") +
+  theme_bw() +
+  labs(fill = "Statistical p-value", x = "Term", y = "Estimate") +
+  ggtitle("NYC Flights Signifiant Coeffients")
+```
+
+
+### Use a trained workflow to predict
+
+```{r}
+predict(flights_fit, test_data)
+```
+
+
+This amazing little function will give us not only our predictions, but the probability presented from the model, and all of the original row data from the fit (pre-receipe). This will be useful for plotting.
+
+```{r}
+flights_aug = broom.mixed::augment(flights_fit, test_data)
+flights_aug %>% head
+flights_aug %>% select(arr_delay : .pred_on_time)
+
+```
+
+```{r}
+
+flights_aug %>% 
+  roc_curve(truth = arr_delay, .pred_late)
+
+flights_aug %>% 
+  roc_curve(truth = arr_delay, .pred_late) %>% 
+  autoplot()
+
+```
+
+As a reminder 
+
+- **Sensitivity** = TP / (TP + FN)
+- **Specificity** = TN / (TN + FP)
+
+Sensitivity is goodness against the first row of the confusion matrix.
+Specificity is goodness against the second row of the confusion matrix.
+
+## Evaluate your model with resampling
+
+
+
+### Getting data
+
+```{r}
+library(tidymodels)
+library(modeldata)
+```
+
+```{r}
+data(cells, package = "modeldata")
+cells %>% glimpse
+```
+
+```{r}
+cells %>% 
+  count(class) %>% 
+  mutate(prop = n/sum(n))
+```
+
+
+### Data splitting
+
+The `rsample` package is used to preserve splits for a future date. The seed guarentees we can reproduce the same random numbers if we should choose to return to this step.
+
+```{r}
+set.seed(123)
+cell_split = rsample::initial_split(cells %>% select(-case),
+                                    strata = class)
+```
+
+The `strata` argument keeps the class proportion balanced in the train and test split.
+
+```{r}
+cell_train = rsample::training(cell_split)
+cell_test = rsample::testing(cell_split)
+
+nrow(cell_train)
+nrow(cell_train)/nrow(cells)
+
+nrow(cell_test)
+nrow(cell_test)/nrow(cells)
+
+cell_train %>% 
+  count(class) %>% 
+  mutate(prop = n/sum(n))
+
+cell_test %>% 
+  count(class) %>% 
+  mutate(prop = n/sum(n))
+```
+
+
+
+### Modeling
+
+Time to build a random forest model. We won't be building a `recipe` because very little pre-processing is needed for random forests and decision trees to be useful out of the box.
+
+```{r}
+
+rf_mod =
+  rand_forest(trees = 1000) %>% 
+  set_engine("ranger") %>% 
+  set_mode("classification")
+
+set.seed(234)
+rf_fit =
+  rf_mod %>% 
+  fit(class ~ ., data = cell_train)
+
+rf_fit
+```
+
+
+
+### Estimating performance
+
+The `yardstick` package can be used to measure the `roc_auc()` to see how our model performs
+
+```{r}
+rf_training_pred = 
+  predict(rf_fit, cell_train) %>% 
+  dplyr::bind_cols(predict(rf_fit, cell_train, type="prob")) %>% 
+  dplyr::bind_cols(cell_train %>% select(class))
+rf_training_pred
+```
+
+```{r}
+rf_training_pred %>% 
+  roc_auc(truth = class, .pred_PS)
+#auc = 0.99 - lol
+
+rf_training_pred %>% 
+  accuracy(truth = class, .pred_class)
+# acc = 0.99 - lol
+```
+
+```{r}
+rf_testing_pred = 
+  predict(rf_fit, cell_test) %>% 
+  dplyr::bind_cols(predict(rf_fit, cell_test, type="prob")) %>% 
+  dplyr::bind_cols(cell_test %>% select(class))
+
+rf_testing_pred %>% head
+
+rf_testing_pred %>% 
+  roc_auc(truth = class, .pred_PS)
+
+rf_testing_pred %>% 
+  accuracy(truth = class, .pred_class)
+```
+
+This shows that predicting on the training set only shows what the model actually knows. It essentially memorizes the data it has seen.
+
+### Resampling
+
+Cross-validation, bootstrap, and empirical simulations can remedy this!
+
+These create a series of data sets that can be used to measure performance against numerous `folds` of data, giving a much better indicator of performance.
+
+We will use 10-fold cross validation. This essential chunks the data up into 10 slices (remember, only the training data), then for 10 iterations loops through it with 9/10 of the chunks as training and 1/10 for testing. You can repeat this process multiple times since it is stochastic in nature (chunks can be the same if resampled). This is a very robust approach as it uses your data as a representative sample from the population.
+
+```{r}
+set.seed(345)
+folds = vfold_cv(cell_train, v = 10)
+folds
+```
+
+
+```{r}
+split = folds %>% select(splits) %>% filter(row_number() == 1) %>% pull(splits)
+split_1_analysis_set = split[[1]] %>% analysis
+split_1_analysis_set %>% head
+
+split_1_assessment_set = split[[1]] %>% assessment
+split_1_assessment_set %>% head
+```
+### Fit a model with resampling
+
+
+```{r}
+rf_wf =
+  workflow() %>% 
+  add_model(rf_mod) %>% 
+  add_formula(class ~ .)
+
+set.seed(456)
+rf_fit_rs = 
+  rf_wf %>% 
+  fit_resamples(folds)
+
+rf_fit_rs
+```
+
+```{r}
+collect_metrics(rf_fit_rs)
+```
+
+This is a much better representation than the original metrics produced from testing on our training data. This is always over-optimistic. Using cross-validation, we can simulate how well our model will perform on actual test data. Then finally once we are done we can use our test set as the final unbiased check for the model's performance.
+
+## Tune model parameters
+
+Lastly, we can explore how to tune the model parameters to make our models even better.
+
+```{r}
+library(tidymodels)
+library(rpart.plot)
+library(vip)
+```
+
+### Getting data
+
+### Data splitting
+
+```{r}
+set.seed(123)
+cell_split <- initial_split(cells %>% select(-case), 
+                            strata = class)
+cell_train <- training(cell_split)
+cell_test  <- testing(cell_split)
+```
+
+### Tuning hyperparameters
+```{r}
+# model with tunings specifications
+tune_spec =
+  decision_tree(
+    cost_complexity = tune(), 
+    tree_depth = tune()
+  ) %>% 
+  set_engine("rpart") %>% 
+  set_mode("classification")
+
+tune_spec
+```
+
+```{r}
+tree_grid = grid_regular(cost_complexity(), 
+                         tree_depth(),
+                         levels = 5)
+tree_grid
+
+tree_grid %>% count(tree_depth)
+```
+
+```{r}
+set.seed(234)
+cell_folds = vfold_cv(cell_train)
+```
+
+
+### Model tuning with a grid
+
+```{r}
+set.seed(345)
+tree_wf = workflow() %>% 
+  add_model(tune_spec) %>% 
+  add_formula(class ~ .)
+tree_wf
+
+
+tree_res =
+  tree_wf %>% 
+  tune_grid(
+    resamples = cell_folds,
+    grid = tree_grid
+  )
+tree_res
+```
+
+
+```{r}
+tree_res %>% 
+  collect_metrics()
+
+tree_res %>% 
+  collect_metrics() %>% 
+  mutate(tree_depth = factor(tree_depth)) %>% 
+  ggplot(aes(x=cost_complexity, y=mean, color=tree_depth)) +
+  geom_line(size = 1.5, alpha = 0.5) +
+  geom_point(size = 2) +
+  facet_wrap(~ .metric, scales = "free", nrow = 2) +
+  scale_x_log10(labels = scales::label_number()) +
+  scale_color_viridis_d(option = "plasma", begin = 0.9, end = 0)
+
+```
+
+
+We can quickly identify the best best parameter configuration as `tree_depth=4` on any `cost_complexity`. 
+
+```{r}
+tree_res %>% show_best("roc_auc")
+tree_res %>% show_best("accuracy")
+
+```
+The `show_best` is pretty sweet. It gives us just the parameter configurations that performed the best at the top. `select_best()` will actually get that model configuration.
+
+```{r}
+best_tree <- tree_res %>%
+  select_best("accuracy")
+
+best_tree
+
+```
+
+### Finalizing our model
+
+The `finalize_workflow()` will accept the optimal parameter, pluck it out, and save our best model for us in the final workflow object. Now we just need one last fit with that excellent final model.
+
+```{r}
+final_wf =
+  tree_wf %>% 
+  finalize_workflow(best_tree)
+
+final_wf
+```
+
+
+```{r}
+final_fit =
+  final_wf %>% 
+  last_fit(cell_split)
+
+final_fit %>% 
+  collect_metrics()
+
+final_fit %>% 
+  collect_predictions() %>% 
+  roc_curve(truth = class, .pred_PS) %>% 
+  autoplot()
+```
+
+
+```{r}
+final_tree <- extract_workflow(final_fit)
+final_tree
+```
+```{r, preview=TRUE}
+library(rpart.plot)
+final_tree %>%
+  extract_fit_engine() %>%
+  rpart.plot(roundint = FALSE)
+```
+```{r}
+library(vip)
+final_tree %>% 
+  extract_fit_parsnip() %>% 
+  vip()
+```
+```{r}
+args(decision_tree)
+```
+
+# Summary
+
+In summary, a typical `tidymodels` workflow will look like this:
+
+1. Create an `initial_split` for your data
+2. Create a `vfold_cv()` with the number of folds to pull from the training data.
+3. Create a `model` object, `set_engine` and `set_mode`.
+  - add the `tune()` argument to the model parameters if tuning desired.
+  - add a `grid_regular` with the amount of parameters to tune for.
+4. `fit` the model object on your data using a formula.
+5. Create a `workflow()`
+  - `add_recipe` (with formula in recipe) OR `add_formula`
+  - pass the workflow into `tune_grid()` with the `resamples=folds` and `grid=grid_regular()`.
+
+6. `collect_metrics()`
+7. `show_best()`
+8. `select_best()`
+9. `finalize_workflow()`
+10. `last_fit()`
+11. `collect_prediction`
+12. `roc_curve()`
+13. `extrac_workflow()`
+14. `extract_fit_engine()` or `extract_fit_parsnip()` and plot if needed.
+
+# References
+
+<cite>https://www.tidymodels.org</cite>

@@ -1,0 +1,3317 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { color: #00769e; background-color: #f1f3f5; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #00769e; } /* Normal */
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #657422; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #00769e; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #00769e; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #00769e; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Tidymodels in R</title>
+
+  <meta property="description" itemprop="description" content="This post is an introduction to using Tidymodels in R."/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2022-07-23"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-07-23"/>
+  <meta name="article:author" content="Blake Conrad"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Tidymodels in R"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="This post is an introduction to using Tidymodels in R."/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Tidymodels in R"/>
+  <meta property="twitter:description" content="This post is an introduction to using Tidymodels in R."/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","categories","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Tidymodels in R"]},{"type":"character","attributes":{},"value":["This post is an introduction to using Tidymodels in R.\n"]},{"type":"character","attributes":{},"value":["machine learning","data pipeline","r"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-23"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["tidymodels-in-r_files/anchor-4.2.2/anchor.min.js","tidymodels-in-r_files/bowser-1.9.3/bowser.min.js","tidymodels-in-r_files/distill-2.2.21/template.v2.js","tidymodels-in-r_files/figure-html5/unnamed-chunk-11-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-19-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-19-2.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-26-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-29-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-3-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-49-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-5-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-53-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-55-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-56-1.png","tidymodels-in-r_files/figure-html5/unnamed-chunk-9-1.png","tidymodels-in-r_files/header-attrs-2.14/header-attrs.js","tidymodels-in-r_files/jquery-3.6.0/jquery-3.6.0.js","tidymodels-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js","tidymodels-in-r_files/jquery-3.6.0/jquery-3.6.0.min.map","tidymodels-in-r_files/popper-2.6.0/popper.min.js","tidymodels-in-r_files/tippy-6.2.7/tippy-bundle.umd.min.js","tidymodels-in-r_files/tippy-6.2.7/tippy-light-border.css","tidymodels-in-r_files/tippy-6.2.7/tippy.css","tidymodels-in-r_files/tippy-6.2.7/tippy.umd.min.js","tidymodels-in-r_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          return "<p>" + $('#ref-' + ref).html() + "</p>";
+        }).join("\n");
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="tidymodels-in-r_files/header-attrs-2.14/header-attrs.js"></script>
+  <script src="tidymodels-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="tidymodels-in-r_files/popper-2.6.0/popper.min.js"></script>
+  <link href="tidymodels-in-r_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="tidymodels-in-r_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="tidymodels-in-r_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="tidymodels-in-r_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="tidymodels-in-r_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="tidymodels-in-r_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="tidymodels-in-r_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Tidymodels in R","description":"This post is an introduction to using Tidymodels in R.","authors":[{"author":"Blake Conrad","authorURL":"https://github.com/conradbm","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-07-23T00:00:00.000-04:00","citationText":"Conrad, 2022"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Tidymodels in R</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt-tag">machine learning</div>
+<div class="dt-tag">data pipeline</div>
+<div class="dt-tag">r</div>
+</div>
+<!--/radix_placeholder_categories-->
+<p><p>This post is an introduction to using Tidymodels in R.</p></p>
+</div>
+
+<div class="d-byline">
+  Blake Conrad <a href="https://github.com/conradbm"
+class="uri">https://github.com/conradbm</a> 
+  
+<br/>2022-07-23
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#building-a-model">Building a model</a>
+<ul>
+<li><a href="#getting-data">Getting data</a></li>
+<li><a href="#build-and-fit-a-model">Build and fit a model</a></li>
+<li><a href="#using-a-model-to-predict">Using a model to
+predict</a></li>
+</ul></li>
+<li><a href="#preprocess-your-data-with-recipes">Preprocess your data
+with recipes</a>
+<ul>
+<li><a href="#getting-data-1">Getting data</a></li>
+<li><a href="#data-splitting">Data splitting</a></li>
+<li><a href="#create-recipe-and-roles">Create recipe and roles</a></li>
+<li><a href="#create-features">Create features</a></li>
+<li><a href="#fit-a-model-with-recipe">Fit a model with recipe</a></li>
+<li><a href="#use-a-trained-workflow-to-predict">Use a trained workflow
+to predict</a></li>
+</ul></li>
+<li><a href="#evaluate-your-model-with-resampling">Evaluate your model
+with resampling</a>
+<ul>
+<li><a href="#getting-data-2">Getting data</a></li>
+<li><a href="#data-splitting-1">Data splitting</a></li>
+<li><a href="#modeling">Modeling</a></li>
+<li><a href="#estimating-performance">Estimating performance</a></li>
+<li><a href="#resampling">Resampling</a></li>
+<li><a href="#fit-a-model-with-resampling">Fit a model with
+resampling</a></li>
+</ul></li>
+<li><a href="#tune-model-parameters">Tune model parameters</a>
+<ul>
+<li><a href="#getting-data-3">Getting data</a></li>
+<li><a href="#data-splitting-2">Data splitting</a></li>
+<li><a href="#tuning-hyperparameters">Tuning hyperparameters</a></li>
+<li><a href="#model-tuning-with-a-grid">Model tuning with a
+grid</a></li>
+<li><a href="#finalizing-our-model">Finalizing our model</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</nav>
+</div>
+<h1 id="introduction">Introduction</h1>
+<p>Tidymodels is a relatively new R package that integrates data
+processing, cleaning, and modeling into a single workflow. Tidymodels
+also solves the notorious problem of multiple R interfaces to different
+statistical models that one might want to develop (e.g.,
+<code>rpart</code> for decision tree, <code>glm</code> for logistic
+regression, or <code>randomForest</code> for a random forest). Each with
+redudanct and duplicative parameters with multiple meanings and uses,
+tidymodels unifies the modeling process.</p>
+<p>The <a href="https://www.tidymodels.org/">tidy models site</a>
+contains many of the code snippets found here. Also the <a
+href="https://www.tmwr.org/">tidy models book</a> provides a great more
+deal of information using the package.</p>
+<p>Let’s get started!</p>
+<h2 id="building-a-model">Building a model</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span>  <span class='co'># for the parsnip package, along with the rest of tidymodels</span></span>
+<span></span>
+<span><span class='co'># Helper packages</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://readr.tidyverse.org'>readr</a></span><span class='op'>)</span>       <span class='co'># for importing data</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/bbolker/broom.mixed'>broom.mixed</a></span><span class='op'>)</span> <span class='co'># for converting bayesian models to tidy tibbles</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>dotwhisker</span><span class='op'>)</span>  <span class='co'># for visualizing regression results</span></span></code></pre>
+</div>
+</div>
+<h3 id="getting-data">Getting data</h3>
+<p>The urchins dataset has three columns:</p>
+<ul>
+<li>Food regime [independent]</li>
+<li>Initial Volume [indepdenent]</li>
+<li>Width [dependent]</li>
+</ul>
+<p>This dataset is used just to illustrate the capability that
+<code>tidymodels</code> offers for model building and using
+<code>recipes</code> to construct a data pipeline.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>urchins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"https://tidymodels.org/start/models/urchins.csv"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/setNames.html'>setNames</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"food_regime"</span>, <span class='st'>"initial_volume"</span>, <span class='st'>"width"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>food_regime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>food_regime</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Initial"</span>, <span class='st'>"Low"</span>, <span class='st'>"High"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>urchins</span></span></code></pre>
+</div>
+<pre><code># A tibble: 72 x 3
+   food_regime initial_volume width
+   &lt;fct&gt;                &lt;dbl&gt; &lt;dbl&gt;
+ 1 Initial                3.5 0.01 
+ 2 Initial                5   0.02 
+ 3 Initial                8   0.061
+ 4 Initial               10   0.051
+ 5 Initial               13   0.041
+ 6 Initial               13   0.061
+ 7 Initial               15   0.041
+ 8 Initial               15   0.071
+ 9 Initial               16   0.092
+10 Initial               17   0.051
+# ... with 62 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<p>Below is a quick visual of the dataset with some trends within the
+<code>group=food_regime</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>urchins</span>,</span>
+<span>       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span> <span class='va'>initial_volume</span>,</span>
+<span>           y<span class='op'>=</span> <span class='va'>width</span>,</span>
+<span>           group <span class='op'>=</span> <span class='va'>food_regime</span>,</span>
+<span>           col <span class='op'>=</span> <span class='va'>food_regime</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='va'>lm</span>, formula <span class='op'>=</span> <span class='st'>"y~x"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_color_viridis_d</a></span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"plasma"</span>, end <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Urchins Food Regime Width"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<h3 id="build-and-fit-a-model">Build and fit a model</h3>
+<p>the <code>parsnip</code> package comes along with
+<code>tidymodels</code> and this contains a bunch of unified interfaces
+to models we know and love. Linear regression being
+<code>linear_reg()</code>. As usual, create the model, fit with a
+formula, then predict on new data. The <code>tidy</code> function is a
+dominant feature to this package. It trumps the historic
+<code>summary</code> and <code>coef</code> from the fit model object by
+outputting a clean table with estimates, errors, and p-values.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>lm_mod</span> <span class='op'>=</span> <span class='fu'>parsnip</span><span class='fu'>::</span><span class='fu'><a href='https://parsnip.tidymodels.org/reference/linear_reg.html'>linear_reg</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>lm_fit</span> <span class='op'>=</span> <span class='va'>lm_mod</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>fit</span><span class='op'>(</span><span class='va'>width</span> <span class='op'>~</span> <span class='va'>initial_volume</span> <span class='op'>*</span> <span class='va'>food_regime</span>, data <span class='op'>=</span> <span class='va'>urchins</span><span class='op'>)</span></span>
+<span><span class='fu'>broom.mixed</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lm_fit</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 5
+  term                            estimate std.error statistic p.value
+  &lt;chr&gt;                              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)                     0.0331    0.00962      3.44  1.00e-3
+2 initial_volume                  0.00155   0.000398     3.91  2.22e-4
+3 food_regimeLow                  0.0198    0.0130       1.52  1.33e-1
+4 food_regimeHigh                 0.0214    0.0145       1.47  1.45e-1
+5 initial_volume:food_regimeLow  -0.00126   0.000510    -2.47  1.62e-2
+6 initial_volume:food_regimeHigh  0.000525  0.000702     0.748 4.57e-1</code></pre>
+</div>
+<p>One can easily construct upper and lower confidence limits by
+<code>+- std.error</code> and view the ranges on the population (if the
+model assumptions are validated, i.e., errors normally distributed).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lm_fit</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>estimate_lower <span class='op'>=</span> <span class='va'>estimate</span> <span class='op'>-</span> <span class='fl'>2</span><span class='op'>*</span><span class='va'>std.error</span>,</span>
+<span>         estimate_upper <span class='op'>=</span> <span class='va'>estimate</span> <span class='op'>+</span> <span class='fl'>2</span><span class='op'>*</span><span class='va'>std.error</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>estimate</span>, y <span class='op'>=</span> <span class='va'>term</span>, color <span class='op'>=</span> <span class='va'>p.value</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_colour_gradient</a></span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"red"</span>, high <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_linerange.html'>geom_linerange</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='va'>estimate_lower</span>, xmax<span class='op'>=</span><span class='va'>estimate_upper</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept <span class='op'>=</span> <span class='fl'>0</span>, colour <span class='op'>=</span> <span class='st'>"grey50"</span>, linetype <span class='op'>=</span> <span class='st'>"dashed"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"Statistical p-value"</span>, x <span class='op'>=</span> <span class='st'>"Estimate"</span>, y <span class='op'>=</span> <span class='st'>"Term"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Urchin Coefficient Estimates"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<h3 id="using-a-model-to-predict">Using a model to predict</h3>
+<p>Predicting new points is super easy too. Simply construct a dataframe
+with the same columns as your trained data. For us it was
+<code>initial_volume</code> which was numeric and
+<code>food_regime</code> which was a factor with three levels. So we
+want to ultimately predict on <code>volume = 20</code>, but we will
+<code>expand.grid</code> that for each level supplied. The output of
+<code>expand.grid</code> is always the product of each list supplied
+(e.g.,
+<code>A = c(a1,a2,a3), B=c(b1,b2,b3,b4) will be |A|*|B|=3*4= 12 rows</code>,
+containing every possible tupple combination). In general this is,</p>
+<p><span class="math display">\[
+rows =\prod_{j=1}^{k}{|S_{j}|}
+\]</span></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>new_points</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>initial_volume<span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>,</span>
+<span>                         food_regime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Initial"</span>, <span class='st'>"Low"</span>, <span class='st'>"High"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>new_points</span></span></code></pre>
+</div>
+<pre><code>  initial_volume food_regime
+1             20     Initial
+2             20         Low
+3             20        High</code></pre>
+</div>
+<p>Predictions are made using a standard interface.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>mean_pred</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>lm_fit</span>, new_data <span class='op'>=</span> <span class='va'>new_points</span><span class='op'>)</span></span>
+<span><span class='va'>mean_pred</span></span></code></pre>
+</div>
+<pre><code># A tibble: 3 x 1
+   .pred
+   &lt;dbl&gt;
+1 0.0642
+2 0.0588
+3 0.0961</code></pre>
+</div>
+<p>Confidence intervals are a <code>type</code> option, which is nice
+for getting the above values without the computation.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>conf_int_pred</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>lm_fit</span>,</span>
+<span>                        new_data <span class='op'>=</span> <span class='va'>new_points</span>,</span>
+<span>                        type <span class='op'>=</span> <span class='st'>"conf_int"</span><span class='op'>)</span></span>
+<span><span class='va'>conf_int_pred</span></span></code></pre>
+</div>
+<pre><code># A tibble: 3 x 2
+  .pred_lower .pred_upper
+        &lt;dbl&gt;       &lt;dbl&gt;
+1      0.0555      0.0729
+2      0.0499      0.0678
+3      0.0870      0.105 </code></pre>
+</div>
+<p>Error plots on prediction intervals are now made pretty easy.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Combine</span></span>
+<span><span class='va'>plot_data</span> <span class='op'>=</span> <span class='va'>new_points</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span><span class='va'>mean_pred</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span><span class='va'>conf_int_pred</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># and plot:</span></span>
+<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>plot_data</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>food_regime</span>, col <span class='op'>=</span> <span class='va'>food_regime</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_color_viridis_d</a></span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"plasma"</span>, end <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span> <span class='op'>+</span> <span class='co'># for discrete color option</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>.pred</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_linerange.html'>geom_errorbar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>ymin <span class='op'>=</span> <span class='va'>.pred_lower</span>,</span>
+<span>                    ymax <span class='op'>=</span> <span class='va'>.pred_upper</span><span class='op'>)</span>,</span>
+<span>                width <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"Urchin size"</span>, x <span class='op'>=</span> <span class='st'>"Food Regime"</span>, col <span class='op'>=</span> <span class='st'>"Food Regime"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Urchin Width Prediction Interval"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+</div>
+<p>Now we can fit a bayesian model to this and see how the differences
+compare.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>prior_dist</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/priors.html'>student_t</a></span><span class='op'>(</span>df <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># make the parsnip model</span></span>
+<span><span class='va'>bayes_mod</span> <span class='op'>&lt;-</span>   </span>
+<span>  <span class='fu'>linear_reg</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"stan"</span>, </span>
+<span>             prior_intercept <span class='op'>=</span> <span class='va'>prior_dist</span>, </span>
+<span>             prior <span class='op'>=</span> <span class='va'>prior_dist</span><span class='op'>)</span> </span>
+<span></span>
+<span><span class='co'># train the model</span></span>
+<span><span class='va'>bayes_fit</span> <span class='op'>&lt;-</span> <span class='va'>bayes_mod</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>fit</span><span class='op'>(</span><span class='va'>width</span> <span class='op'>~</span> <span class='va'>initial_volume</span> <span class='op'>*</span> <span class='va'>food_regime</span>, data <span class='op'>=</span> <span class='va'>urchins</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>bayes_fit</span>, digits <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>parsnip model object
+
+stan_glm
+ family:       gaussian [identity]
+ formula:      width ~ initial_volume * food_regime
+ observations: 72
+ predictors:   6
+------
+                               Median   MAD_SD  
+(Intercept)                     0.03310  0.00943
+initial_volume                  0.00155  0.00040
+food_regimeLow                  0.01989  0.01326
+food_regimeHigh                 0.02159  0.01406
+initial_volume:food_regimeLow  -0.00126  0.00050
+initial_volume:food_regimeHigh  0.00053  0.00070
+
+Auxiliary parameter(s):
+      Median  MAD_SD 
+sigma 0.02120 0.00184
+
+------
+* For help interpreting the printed output see ?print.stanreg
+* For info on the priors used see ?prior_summary.stanreg</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>bayes_fit</span>, conf.int <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 5
+  term                            estimate std.error conf.low conf.h~1
+  &lt;chr&gt;                              &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)                     0.0331    0.00943   1.70e-2  4.93e-2
+2 initial_volume                  0.00155   0.000405  8.91e-4  2.21e-3
+3 food_regimeLow                  0.0199    0.0133   -2.62e-4  4.15e-2
+4 food_regimeHigh                 0.0216    0.0141   -2.59e-3  4.61e-2
+5 initial_volume:food_regimeLow  -0.00126   0.000503 -2.11e-3 -4.41e-4
+6 initial_volume:food_regimeHigh  0.000533  0.000700 -6.85e-4  1.67e-3
+# ... with abbreviated variable name 1: conf.high</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>bayes_plot_data</span> <span class='op'>&lt;-</span></span>
+<span>  <span class='va'>new_points</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>bind_cols</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>bayes_fit</span>, new_data <span class='op'>=</span> <span class='va'>new_points</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>bind_cols</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>bayes_fit</span>, new_data <span class='op'>=</span> <span class='va'>new_points</span>, type <span class='op'>=</span> <span class='st'>"conf_int"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>model <span class='op'>=</span> <span class='st'>"bayes"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>plot_data</span> <span class='op'>&lt;-</span> <span class='va'>plot_data</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>model <span class='op'>=</span> <span class='st'>"linear_reg"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>new_plot_data</span> <span class='op'>&lt;-</span> <span class='fu'>bind_rows</span><span class='op'>(</span><span class='va'>plot_data</span>, <span class='va'>bayes_plot_data</span><span class='op'>)</span> <span class='op'>%&gt;%</span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"linear_reg"</span>, <span class='st'>"bayes"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>new_plot_data</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>food_regime</span>, group<span class='op'>=</span><span class='va'>model</span>, col<span class='op'>=</span><span class='va'>food_regime</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span> y <span class='op'>=</span> <span class='va'>.pred</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_linerange.html'>geom_errorbar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>ymin <span class='op'>=</span> <span class='va'>.pred_lower</span>,</span>
+<span>                    ymax <span class='op'>=</span> <span class='va'>.pred_upper</span><span class='op'>)</span>,</span>
+<span>                width <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_colour_viridis_d</a></span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"plasma"</span>, end <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='st'>"Food Regime"</span>, x <span class='op'>=</span> <span class='st'>"Food Regime"</span>, y <span class='op'>=</span> <span class='st'>"Prediction"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Urchin Model Prediction Interval Comparison"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
+</div>
+<p>So far we’ve learned some pretty handy tricks from the tidymodels
+package. There is a unified interface for models and we explored the
+<code>linear_reg()</code> one today. This was as simple as fitting and
+predicting. We even explored putting in new data and getting predictions
+using the <code>expand.grid</code> function. A simple linar model
+comparison was done also to see how different models can be brought
+together using the <code>dplyr</code> package. The
+<code>type = "conf_int"</code> option from the tidymodel interface
+provided a <code>.pred_lower</code> and <code>.pred_upper</code> output,
+which was helpful to surround the estimate with error bars. Lastly, the
+<code>tidy</code> function was new and can be used in place of the
+existing <code>summary</code> option that most go to with the unweildy
+interface of getting information (i.e., using the <code>coef</code>
+function).</p>
+<h2 id="preprocess-your-data-with-recipes">Preprocess your data with
+recipes</h2>
+<h3 id="getting-data-1">Getting data</h3>
+<p>The NYC Flights data contains two data tables.</p>
+<ul>
+<li>Flights</li>
+<li>Weather</li>
+</ul>
+<p>The <code>flights</code> table contain information about
+<code>source</code>, <code>destination</code>, <code>time</code>,
+<code>carrier</code> and other useful aircraft related information. The
+important thing to note about this dataset is that it is <strong>not
+time series</strong> even though there <em>is date time attributes</em>
+attributes. This threw me off at first. Each row is a flight. The goal
+is to see if we can predict if a flight is late. We will define late as
+follows,</p>
+<p><span class="math display">\[
+late=delay\ge30\:mins
+\]</span> On time as,</p>
+<p><span class="math display">\[
+on \: time =delay &lt; 30 \: mins
+\]</span> The <code>weather</code> table contains a key which can be
+joined against to augment the flight information. This time stamp column
+will allow the flight to be observed with other, possibly useful,
+attributes such as temperature, windspeed, and others. One very
+impressive augmentation for dates (YYYY-MM-DD specifically) is the
+package <code>timeDate::listHolidays("US")</code>, which will create
+indicators for over 19 holidays and light them up with a <code>1</code>
+or <code>0</code> if it is found in the record. Pretty nifty to have in
+the tool kit.</p>
+<p>Let’s get moving!</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/skimr/'>skimr</a></span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>glimpse</span></span></code></pre>
+</div>
+<pre><code>Rows: 336,776
+Columns: 19
+$ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 201~
+$ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+$ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+$ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, ~
+$ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, ~
+$ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, ~
+$ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838,~
+$ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846,~
+$ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2,~
+$ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV~
+$ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, ~
+$ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668~
+$ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EW~
+$ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FL~
+$ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 1~
+$ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, ~
+$ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, ~
+$ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0~
+$ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 20~</code></pre>
+</div>
+<p>Remember, every row is just a flight :) The goal is to perform
+classification. Do we think a new flight will be <code>late</code> or
+not? Let’s decide on features to make this prediction.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>weather</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>glimpse</span></span></code></pre>
+</div>
+<pre><code>Rows: 26,115
+Columns: 15
+$ origin     &lt;chr&gt; &quot;EWR&quot;, &quot;EWR&quot;, &quot;EWR&quot;, &quot;EWR&quot;, &quot;EWR&quot;, &quot;EWR&quot;, &quot;EWR&quot;, ~
+$ year       &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2~
+$ month      &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
+$ day        &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
+$ hour       &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16~
+$ temp       &lt;dbl&gt; 39.02, 39.02, 39.02, 39.92, 39.02, 37.94, 39.02, ~
+$ dewp       &lt;dbl&gt; 26.06, 26.96, 28.04, 28.04, 28.04, 28.04, 28.04, ~
+$ humid      &lt;dbl&gt; 59.37, 61.63, 64.43, 62.21, 64.43, 67.21, 64.43, ~
+$ wind_dir   &lt;dbl&gt; 270, 250, 240, 250, 260, 240, 240, 250, 260, 260,~
+$ wind_speed &lt;dbl&gt; 10.35702, 8.05546, 11.50780, 12.65858, 12.65858, ~
+$ wind_gust  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N~
+$ precip     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+$ pressure   &lt;dbl&gt; 1012.0, 1012.3, 1012.5, 1012.2, 1011.9, 1012.4, 1~
+$ visib      &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 1~
+$ time_hour  &lt;dttm&gt; 2013-01-01 01:00:00, 2013-01-01 02:00:00, 2013-0~</code></pre>
+</div>
+<p>Notice the commonality, <code>time_hour</code>. We will also use this
+with <code>lubridate</code> to construct a convenient <code>date</code>
+column that can be used for our above-said feature engineering on
+holidays.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>flight_data</span> <span class='op'>&lt;-</span> </span>
+<span>  <span class='va'>flights</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span></span>
+<span>    <span class='co'># Resposne variable</span></span>
+<span>    arr_delay <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>arr_delay</span> <span class='op'>&gt;=</span> <span class='fl'>30</span>, <span class='st'>"late"</span>, <span class='st'>"on_time"</span><span class='op'>)</span>,</span>
+<span>    arr_delay <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>arr_delay</span><span class='op'>)</span>,</span>
+<span>    </span>
+<span>    <span class='co'># Handy date column</span></span>
+<span>    date <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='va'>time_hour</span><span class='op'>)</span></span>
+<span>  <span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class='co'># Weather info</span></span>
+<span>  <span class='fu'>inner_join</span><span class='op'>(</span><span class='va'>weather</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"origin"</span>, <span class='st'>"time_hour"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class='co'># Everything we want</span></span>
+<span>  <span class='fu'>select</span><span class='op'>(</span> <span class='co'># IDs</span></span>
+<span>          <span class='va'>time_hour</span>, <span class='va'>flight</span>,</span>
+<span>          </span>
+<span>          <span class='co'># To Be Engineered..</span></span>
+<span>          <span class='va'>date</span>, </span>
+<span>          </span>
+<span>          <span class='co'># Independent Variables</span></span>
+<span>          <span class='co'># Numeric/Nominal Flight Info.</span></span>
+<span>          <span class='va'>dep_time</span>, <span class='va'>origin</span>, <span class='va'>dest</span>, <span class='va'>air_time</span>, <span class='va'>distance</span>, <span class='va'>carrier</span>,</span>
+<span>          </span>
+<span>          <span class='co'># Numeric/Nominal Weather Info.</span></span>
+<span>          <span class='va'>temp</span>, <span class='va'>dewp</span>, <span class='va'>humid</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"wind_"</span><span class='op'>)</span>, <span class='va'>precip</span>, <span class='va'>pressure</span>, <span class='va'>visib</span>,</span>
+<span>          </span>
+<span>          <span class='co'>#Dependent Variables</span></span>
+<span>           <span class='va'>arr_delay</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>drop_na</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate_if</span><span class='op'>(</span><span class='va'>is.character</span>, <span class='va'>as.factor</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>flight_data</span></span></code></pre>
+</div>
+<pre><code># A tibble: 72,734 x 19
+   time_hour           flight date       dep_time origin dest  air_t~1
+   &lt;dttm&gt;               &lt;int&gt; &lt;date&gt;        &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;   &lt;dbl&gt;
+ 1 2013-01-01 05:00:00   1714 2013-01-01      533 LGA    IAH       227
+ 2 2013-01-01 06:00:00    461 2013-01-01      554 LGA    ATL       116
+ 3 2013-01-01 06:00:00   5708 2013-01-01      557 LGA    IAD        53
+ 4 2013-01-01 06:00:00    301 2013-01-01      558 LGA    ORD       138
+ 5 2013-01-01 06:00:00    707 2013-01-01      559 LGA    DFW       257
+ 6 2013-01-01 06:00:00    371 2013-01-01      600 LGA    FLL       152
+ 7 2013-01-01 06:00:00   4650 2013-01-01      600 LGA    ATL       134
+ 8 2013-01-01 06:00:00   1919 2013-01-01      602 LGA    MSP       170
+ 9 2013-01-01 06:00:00   4401 2013-01-01      602 LGA    DTW       105
+10 2013-01-01 06:00:00   1837 2013-01-01      623 LGA    MIA       153
+# ... with 72,724 more rows, 12 more variables: distance &lt;dbl&gt;,
+#   carrier &lt;fct&gt;, temp &lt;dbl&gt;, dewp &lt;dbl&gt;, humid &lt;dbl&gt;,
+#   wind_dir &lt;dbl&gt;, wind_speed &lt;dbl&gt;, wind_gust &lt;dbl&gt;, precip &lt;dbl&gt;,
+#   pressure &lt;dbl&gt;, visib &lt;dbl&gt;, arr_delay &lt;fct&gt;, and abbreviated
+#   variable name 1: air_time
+# i Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</code></pre>
+</div>
+<p>Using the <code>dplyr::count</code> function we can quickly seeh ow
+balanced our data is. About 2/10 were late. This would be class
+imbalance, something to consider when training our models.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flight_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>arr_delay</span><span class='op'>)</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>prop <span class='op'>=</span> <span class='va'>n</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 x 3
+  arr_delay     n  prop
+  &lt;fct&gt;     &lt;int&gt; &lt;dbl&gt;
+1 late      11695 0.161
+2 on_time   61039 0.839</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>flight_data</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>Rows: 72,734
+Columns: 19
+$ time_hour  &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 06:00:00, 2013-0~
+$ flight     &lt;int&gt; 1714, 461, 5708, 301, 707, 371, 4650, 1919, 4401,~
+$ date       &lt;date&gt; 2013-01-01, 2013-01-01, 2013-01-01, 2013-01-01, ~
+$ dep_time   &lt;int&gt; 533, 554, 557, 558, 559, 600, 600, 602, 602, 623,~
+$ origin     &lt;fct&gt; LGA, LGA, LGA, LGA, LGA, LGA, LGA, LGA, LGA, LGA,~
+$ dest       &lt;fct&gt; IAH, ATL, IAD, ORD, DFW, FLL, ATL, MSP, DTW, MIA,~
+$ air_time   &lt;dbl&gt; 227, 116, 53, 138, 257, 152, 134, 170, 105, 153, ~
+$ distance   &lt;dbl&gt; 1416, 762, 229, 733, 1389, 1076, 762, 1020, 502, ~
+$ carrier    &lt;fct&gt; UA, DL, EV, AA, AA, B6, MQ, DL, MQ, AA, UA, MQ, A~
+$ temp       &lt;dbl&gt; 39.92, 39.92, 39.92, 39.92, 39.92, 39.92, 39.92, ~
+$ dewp       &lt;dbl&gt; 24.98, 24.98, 24.98, 24.98, 24.98, 24.98, 24.98, ~
+$ humid      &lt;dbl&gt; 54.81, 54.81, 54.81, 54.81, 54.81, 54.81, 54.81, ~
+$ wind_dir   &lt;dbl&gt; 250, 260, 260, 260, 260, 260, 260, 260, 260, 260,~
+$ wind_speed &lt;dbl&gt; 14.96014, 16.11092, 16.11092, 16.11092, 16.11092,~
+$ wind_gust  &lt;dbl&gt; 21.86482, 23.01560, 23.01560, 23.01560, 23.01560,~
+$ precip     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+$ pressure   &lt;dbl&gt; 1011.4, 1011.7, 1011.7, 1011.7, 1011.7, 1011.7, 1~
+$ visib      &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 1~
+$ arr_delay  &lt;fct&gt; on_time, on_time, on_time, on_time, late, on_time~</code></pre>
+</div>
+<p>I had never heard of the <code>skimr</code> package, but it’s pretty
+slick. You pass in some variables you want it to skim over and it will
+return a data frame with tons of great information on it, like top
+counts, missing rows, etc. I really like the top_counts one.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tmp</span> <span class='op'>=</span> <span class='va'>flight_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>skimr</span><span class='fu'>::</span><span class='fu'><a href='https://docs.ropensci.org/skimr/reference/skim.html'>skim</a></span><span class='op'>(</span><span class='va'>dest</span>, <span class='va'>carrier</span><span class='op'>)</span></span>
+<span><span class='va'>tmp</span></span></code></pre>
+</div>
+<table>
+<caption><span id="tab:unnamed-chunk-18">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">Piped data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">72734</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">factor</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 8%" />
+<col style="width: 9%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">ordered</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: left;">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">dest</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: left;">ATL: 4043, ORD: 3823, LAX: 3180, BOS:
+3168</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">carrier</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: left;">UA: 13580, EV: 12310, DL: 10388, B6:
+10040</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can extract that information in different ways using
+<code>tidyr</code>. Be mindful, scales are different.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>worked</span> <span class='op'>=</span> <span class='va'>tmp</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>tidyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/separate.html'>separate</a></span><span class='op'>(</span><span class='va'>factor.top_counts</span>, sep <span class='op'>=</span> <span class='st'>", "</span>, into <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Top_"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>tidyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span><span class='op'>(</span><span class='va'>.</span>, key <span class='op'>=</span> <span class='st'>"Top_Rank"</span>, value <span class='op'>=</span> <span class='st'>"AirportAndQuantity"</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>skim_type</span>, <span class='va'>skim_variable</span>, <span class='va'>n_missing</span>, <span class='va'>complete_rate</span>, <span class='va'>factor.ordered</span>, <span class='va'>factor.n_unique</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>tidyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/separate.html'>separate</a></span><span class='op'>(</span><span class='va'>.</span>, col <span class='op'>=</span> <span class='va'>AirportAndQuantity</span>, sep <span class='op'>=</span> <span class='st'>": "</span>, into <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Source"</span>,<span class='st'>"Count"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Count <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Count</span><span class='op'>)</span>,</span>
+<span>                skim_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>skim_variable</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>worked</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>skim_variable</span> <span class='op'>==</span> <span class='st'>"dest"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span><span class='op'>(</span><span class='va'>Source</span>, <span class='op'>-</span><span class='va'>Count</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='va'>Count</span>, fill <span class='op'>=</span> <span class='va'>Count</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_fill_gradient</a></span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"green"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"Number of Flights"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Source"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Number of Flights"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Destination Airports Counts"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_light</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-19-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>worked</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>skim_variable</span> <span class='op'>==</span> <span class='st'>"carrier"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span><span class='op'>(</span><span class='va'>Source</span>, <span class='op'>-</span><span class='va'>Count</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='va'>Count</span>, fill <span class='op'>=</span> <span class='va'>Count</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_fill_gradient</a></span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"green"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"Number of Flights"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Source"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Number of Flights"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Airline Carrier Counts"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_light</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-19-2.png" width="624" /></p>
+</div>
+<h3 id="data-splitting">Data splitting</h3>
+<p>Using the built in ecosystem, <code>rsample</code> is used to get the
+train test split.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>222</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>data_split</span> <span class='op'>=</span> <span class='fu'>rsample</span><span class='fu'>::</span><span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>initial_split</a></span><span class='op'>(</span><span class='va'>flight_data</span>, prop <span class='op'>=</span> <span class='fl'>3</span><span class='op'>/</span><span class='fl'>4</span><span class='op'>)</span></span>
+<span><span class='va'>train_data</span> <span class='op'>=</span> <span class='fu'>rsample</span><span class='fu'>::</span><span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>training</a></span><span class='op'>(</span><span class='va'>data_split</span><span class='op'>)</span></span>
+<span><span class='va'>test_data</span> <span class='op'>=</span> <span class='fu'>rsample</span><span class='fu'>::</span><span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>testing</a></span><span class='op'>(</span><span class='va'>data_split</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<h3 id="create-recipe-and-roles">Create recipe and roles</h3>
+<p>Building up a recipe is easy. Now we can quickly throw a formula at
+the recipe and it can start to do work for us. As long as the recipe
+receives the same information as the model, all should be well. Tagging
+the ID variables is nice for debugging on the backend. It will not model
+those variables flagged as ID.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_rec</span> <span class='op'>=</span> </span>
+<span>  <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>arr_delay</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>train_data</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/roles.html'>update_role</a></span><span class='op'>(</span><span class='va'>flight</span>, <span class='va'>time_hour</span>, new_role <span class='op'>=</span> <span class='st'>"ID"</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>flights_rec</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 19 x 4
+   variable   type    role      source  
+   &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   
+ 1 time_hour  date    ID        original
+ 2 flight     numeric ID        original
+ 3 date       date    predictor original
+ 4 dep_time   numeric predictor original
+ 5 origin     nominal predictor original
+ 6 dest       nominal predictor original
+ 7 air_time   numeric predictor original
+ 8 distance   numeric predictor original
+ 9 carrier    nominal predictor original
+10 temp       numeric predictor original
+11 dewp       numeric predictor original
+12 humid      numeric predictor original
+13 wind_dir   numeric predictor original
+14 wind_speed numeric predictor original
+15 wind_gust  numeric predictor original
+16 precip     numeric predictor original
+17 pressure   numeric predictor original
+18 visib      numeric predictor original
+19 arr_delay  nominal outcome   original</code></pre>
+</div>
+<h3 id="create-features">Create features</h3>
+<p>This is probably the most magical of steps.</p>
+<ul>
+<li>Create the roles for ID variables</li>
+<li>Engineer the day of the week and month variables</li>
+<li>Engineer the holiday indicators</li>
+<li>Engineer dummies for every other feature (because some models
+require this, others don’t)</li>
+<li>Clean all features that have only one value (see nzv for those whose
+variation is so small we may want to drop them also).</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_rec</span> <span class='op'>&lt;-</span> </span>
+<span>  <span class='co'># Recipe for all variables in the table</span></span>
+<span>  <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>arr_delay</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>train_data</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class='co'># Make ID variables explit (not modeled)</span></span>
+<span>  <span class='fu'>update_role</span><span class='op'>(</span><span class='va'>flight</span>, <span class='va'>time_hour</span>, new_role <span class='op'>=</span> <span class='st'>"ID"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  </span>
+<span>  <span class='co'># Create features from the `lubridate` column, explore what options exist</span></span>
+<span>  <span class='fu'>step_date</span><span class='op'>(</span><span class='va'>date</span>, features <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dow"</span>, <span class='st'>"month"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>               </span>
+<span>  </span>
+<span>  <span class='co'># Create holiday indicator for `lubdridate` column</span></span>
+<span>  <span class='fu'>step_holiday</span><span class='op'>(</span><span class='va'>date</span>, </span>
+<span>               holidays <span class='op'>=</span> <span class='fu'>timeDate</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/timeDate/man/holiday-Listing.html'>listHolidays</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>, </span>
+<span>               keep_original_cols <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='co'># Create dummy variables for `nominal` columns</span></span>
+<span>  <span class='fu'>step_dummy</span><span class='op'>(</span><span class='fu'>all_nominal_predictors</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class='co'># Remove zero-variance values; i.e., only 1 value in the column</span></span>
+<span>  <span class='fu'>step_zv</span><span class='op'>(</span><span class='fu'>all_numeric_predictors</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>flights_rec</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 19 x 4
+   variable   type    role      source  
+   &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   
+ 1 time_hour  date    ID        original
+ 2 flight     numeric ID        original
+ 3 date       date    predictor original
+ 4 dep_time   numeric predictor original
+ 5 origin     nominal predictor original
+ 6 dest       nominal predictor original
+ 7 air_time   numeric predictor original
+ 8 distance   numeric predictor original
+ 9 carrier    nominal predictor original
+10 temp       numeric predictor original
+11 dewp       numeric predictor original
+12 humid      numeric predictor original
+13 wind_dir   numeric predictor original
+14 wind_speed numeric predictor original
+15 wind_gust  numeric predictor original
+16 precip     numeric predictor original
+17 pressure   numeric predictor original
+18 visib      numeric predictor original
+19 arr_delay  nominal outcome   original</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># This will make sure that all of the test data `dest` have the same levels as the train data.</span></span>
+<span><span class='co'># test_data %&gt;% </span></span>
+<span><span class='co'>#   distinct(dest) %&gt;% </span></span>
+<span><span class='co'>#   anti_join(train_data)</span></span></code></pre>
+</div>
+</div>
+<h3 id="fit-a-model-with-recipe">Fit a model with recipe</h3>
+<p>We can now build a logistic regression model. We first create a
+<code>workflow</code>, then pass in our model, and our recipe, which has
+several steps. The workflow will show us each of them.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>lr_mod</span> <span class='op'>&lt;-</span> <span class='fu'>logistic_reg</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"glm"</span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>flights_workflow</span> <span class='op'>=</span> <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org/reference/workflow.html'>workflow</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org/reference/add_model.html'>add_model</a></span><span class='op'>(</span><span class='va'>lr_mod</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org/reference/add_recipe.html'>add_recipe</a></span><span class='op'>(</span><span class='va'>flights_rec</span><span class='op'>)</span></span>
+<span><span class='va'>flights_workflow</span></span></code></pre>
+</div>
+<pre><code>== Workflow ==========================================================
+Preprocessor: Recipe
+Model: logistic_reg()
+
+-- Preprocessor ------------------------------------------------------
+4 Recipe Steps
+
+* step_date()
+* step_holiday()
+* step_dummy()
+* step_zv()
+
+-- Model -------------------------------------------------------------
+Logistic Regression Model Specification (classification)
+
+Computational engine: glm </code></pre>
+</div>
+Now we can build a
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_fit</span> <span class='op'>=</span> <span class='va'>flights_workflow</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>fit</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>train_data</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>flights_fit</span></span></code></pre>
+</div>
+<pre><code>== Workflow [trained] ================================================
+Preprocessor: Recipe
+Model: logistic_reg()
+
+-- Preprocessor ------------------------------------------------------
+4 Recipe Steps
+
+* step_date()
+* step_holiday()
+* step_dummy()
+* step_zv()
+
+-- Model -------------------------------------------------------------
+
+Call:  stats::glm(formula = ..y ~ ., family = stats::binomial, data = data)
+
+Coefficients:
+                 (Intercept)                      dep_time  
+                  -2.269e+01                    -2.134e-03  
+                    air_time                      distance  
+                  -4.247e-02                     1.367e-02  
+                        temp                          dewp  
+                   3.478e-02                    -4.644e-02  
+                       humid                      wind_dir  
+                   9.772e-03                     7.221e-04  
+                  wind_speed                     wind_gust  
+                  -1.301e-02                    -1.279e-02  
+                      precip                      pressure  
+                  -1.911e+00                     1.229e-02  
+                       visib           date_USChristmasDay  
+                   1.499e-01                    -2.031e+00  
+    date_USCPulaskisBirthday  date_USDecorationMemorialDay  
+                   8.748e-01                     3.103e-01  
+          date_USElectionDay             date_USGoodFriday  
+                  -2.106e+00                     1.168e+00  
+      date_USInaugurationDay        date_USIndependenceDay  
+                   2.807e-02                     3.249e+00  
+     date_USLincolnsBirthday            date_USMemorialDay  
+                   3.487e-01                     1.025e+00  
+      date_USMLKingsBirthday            date_USNewYearsDay  
+                   4.201e-01                     5.512e-01  
+        date_USPresidentsDay        date_USThanksgivingDay  
+                  -5.196e-01                    -6.331e-01  
+          date_USVeteransDay                    origin_JFK  
+                   1.172e+00                     6.691e-02  
+                  origin_LGA                      dest_ACK  
+                  -1.200e-01                     1.358e+01  
+                    dest_ALB                      dest_ANC  
+                   1.336e+01                    -4.113e+00  
+                    dest_ATL                      dest_AUS  
+                   8.015e+00                     2.170e+00  
+                    dest_AVL                      dest_BDL  
+                   9.514e+00                     1.344e+01  
+                    dest_BGR                      dest_BHM  
+                   1.170e+01                     7.628e+00  
+                    dest_BNA                      dest_BOS  
+                   8.237e+00                     1.292e+01  
+                    dest_BQN                      dest_BTV  
+                   1.497e+00                     1.196e+01  
+                    dest_BUF                      dest_BUR  
+                   1.189e+01                    -5.157e+00  
+                    dest_BWI                      dest_BZN  
+                   1.273e+01                    -3.337e+00  
+
+...
+and 122 more lines.</code></pre>
+</div>
+<p>The final model contains the recipe and the model, so we <em>can</em>
+extract them out individually, but do not have to.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_fit</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'># not needed, but useful to know</span></span>
+<span>  <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 164 x 5
+   term          estimate std.error statistic   p.value
+   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1 (Intercept) -22.7      6.76          -3.36 7.85e-  4
+ 2 dep_time     -0.00213  0.0000380    -56.2  0        
+ 3 air_time     -0.0425   0.00129      -33.0  3.06e-238
+ 4 distance      0.0137   0.00346        3.95 7.96e-  5
+ 5 temp          0.0348   0.00857        4.06 4.98e-  5
+ 6 dewp         -0.0464   0.00928       -5.00 5.66e-  7
+ 7 humid         0.00977  0.00505        1.93 5.31e-  2
+ 8 wind_dir      0.000722 0.000200       3.62 2.96e-  4
+ 9 wind_speed   -0.0130   0.00546       -2.38 1.72e-  2
+10 wind_gust    -0.0128   0.00464       -2.76 5.85e-  3
+# ... with 154 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>flights_fit</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>p.value</span> <span class='op'>&lt;=</span> <span class='fl'>0.00001</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>fill<span class='op'>=</span><span class='va'>p.value</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>term</span>, y<span class='op'>=</span><span class='va'>estimate</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_gradient.html'>scale_fill_gradient</a></span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"green"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"Statistical p-value"</span>, x <span class='op'>=</span> <span class='st'>"Term"</span>, y <span class='op'>=</span> <span class='st'>"Estimate"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"NYC Flights Signifiant Coeffients"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-26-1.png" width="624" /></p>
+</div>
+<h3 id="use-a-trained-workflow-to-predict">Use a trained workflow to
+predict</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>flights_fit</span>, <span class='va'>test_data</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 18,184 x 1
+   .pred_class
+   &lt;fct&gt;      
+ 1 on_time    
+ 2 on_time    
+ 3 on_time    
+ 4 on_time    
+ 5 on_time    
+ 6 on_time    
+ 7 on_time    
+ 8 on_time    
+ 9 on_time    
+10 on_time    
+# ... with 18,174 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<p>This amazing little function will give us not only our predictions,
+but the probability presented from the model, and all of the original
+row data from the fit (pre-receipe). This will be useful for
+plotting.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_aug</span> <span class='op'>=</span> <span class='fu'>broom.mixed</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='va'>flights_fit</span>, <span class='va'>test_data</span><span class='op'>)</span></span>
+<span><span class='va'>flights_aug</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 22
+  time_hour           flight date       dep_time origin dest  air_time
+  &lt;dttm&gt;               &lt;int&gt; &lt;date&gt;        &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;    &lt;dbl&gt;
+1 2013-01-01 06:00:00   4650 2013-01-01      600 LGA    ATL        134
+2 2013-01-01 06:00:00   4401 2013-01-01      602 LGA    DTW        105
+3 2013-01-01 06:00:00   4599 2013-01-01      624 LGA    MSP        166
+4 2013-01-01 06:00:00    303 2013-01-01      629 LGA    ORD        140
+5 2013-01-01 06:00:00   4646 2013-01-01      629 LGA    BWI         40
+6 2013-01-01 07:00:00    305 2013-01-01      656 LGA    ORD        143
+# ... with 15 more variables: distance &lt;dbl&gt;, carrier &lt;fct&gt;,
+#   temp &lt;dbl&gt;, dewp &lt;dbl&gt;, humid &lt;dbl&gt;, wind_dir &lt;dbl&gt;,
+#   wind_speed &lt;dbl&gt;, wind_gust &lt;dbl&gt;, precip &lt;dbl&gt;, pressure &lt;dbl&gt;,
+#   visib &lt;dbl&gt;, arr_delay &lt;fct&gt;, .pred_class &lt;fct&gt;,
+#   .pred_late &lt;dbl&gt;, .pred_on_time &lt;dbl&gt;
+# i Use `colnames()` to see all variable names</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_aug</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>arr_delay</span> <span class='op'>:</span> <span class='va'>.pred_on_time</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 18,184 x 4
+   arr_delay .pred_class .pred_late .pred_on_time
+   &lt;fct&gt;     &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;
+ 1 on_time   on_time         0.0376         0.962
+ 2 on_time   on_time         0.0296         0.970
+ 3 on_time   on_time         0.0333         0.967
+ 4 on_time   on_time         0.0302         0.970
+ 5 on_time   on_time         0.0177         0.982
+ 6 on_time   on_time         0.0378         0.962
+ 7 on_time   on_time         0.0183         0.982
+ 8 on_time   on_time         0.0350         0.965
+ 9 on_time   on_time         0.0374         0.963
+10 on_time   on_time         0.0559         0.944
+# ... with 18,174 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_aug</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>roc_curve</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>arr_delay</span>, <span class='va'>.pred_late</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 18,186 x 3
+      .threshold specificity sensitivity
+           &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1 -Inf            0                   1
+ 2    0.00000102   0                   1
+ 3    0.00000282   0.0000656           1
+ 4    0.000678     0.000131            1
+ 5    0.000697     0.000197            1
+ 6    0.00158      0.000262            1
+ 7    0.00174      0.000328            1
+ 8    0.00199      0.000393            1
+ 9    0.00208      0.000459            1
+10    0.00223      0.000525            1
+# ... with 18,176 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>flights_aug</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>roc_curve</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>arr_delay</span>, <span class='va'>.pred_late</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-29-1.png" width="624" /></p>
+</div>
+<p>As a reminder</p>
+<ul>
+<li><strong>Sensitivity</strong> = TP / (TP + FN)</li>
+<li><strong>Specificity</strong> = TN / (TN + FP)</li>
+</ul>
+<p>Sensitivity is goodness against the first row of the confusion
+matrix. Specificity is goodness against the second row of the confusion
+matrix.</p>
+<h2 id="evaluate-your-model-with-resampling">Evaluate your model with
+resampling</h2>
+<h3 id="getting-data-2">Getting data</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://modeldata.tidymodels.org'>modeldata</a></span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>cells</span>, package <span class='op'>=</span> <span class='st'>"modeldata"</span><span class='op'>)</span></span>
+<span><span class='va'>cells</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>glimpse</span></span></code></pre>
+</div>
+<pre><code>Rows: 2,019
+Columns: 58
+$ case                         &lt;fct&gt; Test, Train, Train, Train, Test~
+$ class                        &lt;fct&gt; PS, PS, WS, PS, PS, WS, WS, PS,~
+$ angle_ch_1                   &lt;dbl&gt; 143.247705, 133.752037, 106.646~
+$ area_ch_1                    &lt;int&gt; 185, 819, 431, 298, 285, 172, 1~
+$ avg_inten_ch_1               &lt;dbl&gt; 15.71186, 31.92327, 28.03883, 1~
+$ avg_inten_ch_2               &lt;dbl&gt; 4.954802, 206.878517, 116.31553~
+$ avg_inten_ch_3               &lt;dbl&gt; 9.548023, 69.916880, 63.941748,~
+$ avg_inten_ch_4               &lt;dbl&gt; 2.214689, 164.153453, 106.69660~
+$ convex_hull_area_ratio_ch_1  &lt;dbl&gt; 1.124509, 1.263158, 1.053310, 1~
+$ convex_hull_perim_ratio_ch_1 &lt;dbl&gt; 0.9196827, 0.7970801, 0.9354750~
+$ diff_inten_density_ch_1      &lt;dbl&gt; 29.51923, 31.87500, 32.48771, 2~
+$ diff_inten_density_ch_3      &lt;dbl&gt; 13.77564, 43.12228, 35.98577, 2~
+$ diff_inten_density_ch_4      &lt;dbl&gt; 6.826923, 79.308424, 51.357050,~
+$ entropy_inten_ch_1           &lt;dbl&gt; 4.969781, 6.087592, 5.883557, 5~
+$ entropy_inten_ch_3           &lt;dbl&gt; 4.371017, 6.642761, 6.683000, 5~
+$ entropy_inten_ch_4           &lt;dbl&gt; 2.718884, 7.880155, 7.144601, 5~
+$ eq_circ_diam_ch_1            &lt;dbl&gt; 15.36954, 32.30558, 23.44892, 1~
+$ eq_ellipse_lwr_ch_1          &lt;dbl&gt; 3.060676, 1.558394, 1.375386, 3~
+$ eq_ellipse_oblate_vol_ch_1   &lt;dbl&gt; 336.9691, 2232.9055, 802.1945, ~
+$ eq_ellipse_prolate_vol_ch_1  &lt;dbl&gt; 110.0963, 1432.8246, 583.2504, ~
+$ eq_sphere_area_ch_1          &lt;dbl&gt; 742.1156, 3278.7256, 1727.4104,~
+$ eq_sphere_vol_ch_1           &lt;dbl&gt; 1900.996, 17653.525, 6750.985, ~
+$ fiber_align_2_ch_3           &lt;dbl&gt; 1.000000, 1.487935, 1.300522, 1~
+$ fiber_align_2_ch_4           &lt;dbl&gt; 1.000000, 1.352374, 1.522316, 1~
+$ fiber_length_ch_1            &lt;dbl&gt; 26.98132, 64.28230, 21.14115, 4~
+$ fiber_width_ch_1             &lt;dbl&gt; 7.410365, 13.167079, 21.141150,~
+$ inten_cooc_asm_ch_3          &lt;dbl&gt; 0.011183899, 0.028051061, 0.006~
+$ inten_cooc_asm_ch_4          &lt;dbl&gt; 0.050448005, 0.012594975, 0.006~
+$ inten_cooc_contrast_ch_3     &lt;dbl&gt; 40.751777, 8.227953, 14.446074,~
+$ inten_cooc_contrast_ch_4     &lt;dbl&gt; 13.895439, 6.984046, 16.700843,~
+$ inten_cooc_entropy_ch_3      &lt;dbl&gt; 7.199458, 6.822138, 7.580100, 6~
+$ inten_cooc_entropy_ch_4      &lt;dbl&gt; 5.249744, 7.098988, 7.671478, 7~
+$ inten_cooc_max_ch_3          &lt;dbl&gt; 0.07741935, 0.15321477, 0.02835~
+$ inten_cooc_max_ch_4          &lt;dbl&gt; 0.17197452, 0.07387141, 0.02319~
+$ kurt_inten_ch_1              &lt;dbl&gt; -0.656744087, -0.248769067, -0.~
+$ kurt_inten_ch_3              &lt;dbl&gt; -0.608058268, -0.330783900, 1.0~
+$ kurt_inten_ch_4              &lt;dbl&gt; 0.7258145, -0.2652638, 0.150614~
+$ length_ch_1                  &lt;dbl&gt; 26.20779, 47.21855, 28.14303, 3~
+$ neighbor_avg_dist_ch_1       &lt;dbl&gt; 370.4543, 174.4442, 158.4774, 2~
+$ neighbor_min_dist_ch_1       &lt;dbl&gt; 99.10349, 30.11114, 34.94477, 3~
+$ neighbor_var_dist_ch_1       &lt;dbl&gt; 127.96080, 81.38063, 90.43768, ~
+$ perim_ch_1                   &lt;dbl&gt; 68.78338, 154.89876, 84.56460, ~
+$ shape_bfr_ch_1               &lt;dbl&gt; 0.6651480, 0.5397584, 0.7243116~
+$ shape_lwr_ch_1               &lt;dbl&gt; 2.462450, 1.468181, 1.328408, 2~
+$ shape_p_2_a_ch_1             &lt;dbl&gt; 1.883006, 2.255810, 1.272193, 2~
+$ skew_inten_ch_1              &lt;dbl&gt; 0.45450484, 0.39870467, 0.47248~
+$ skew_inten_ch_3              &lt;dbl&gt; 0.46039340, 0.61973079, 0.97137~
+$ skew_inten_ch_4              &lt;dbl&gt; 1.2327736, 0.5272631, 0.3247065~
+$ spot_fiber_count_ch_3        &lt;int&gt; 1, 4, 2, 4, 1, 1, 0, 2, 1, 1, 1~
+$ spot_fiber_count_ch_4        &lt;dbl&gt; 5, 12, 7, 8, 8, 5, 5, 8, 12, 8,~
+$ total_inten_ch_1             &lt;int&gt; 2781, 24964, 11552, 5545, 6603,~
+$ total_inten_ch_2             &lt;dbl&gt; 701, 160998, 47511, 28870, 3030~
+$ total_inten_ch_3             &lt;int&gt; 1690, 54675, 26344, 8042, 5569,~
+$ total_inten_ch_4             &lt;int&gt; 392, 128368, 43959, 8843, 11037~
+$ var_inten_ch_1               &lt;dbl&gt; 12.47468, 18.80923, 17.29564, 1~
+$ var_inten_ch_3               &lt;dbl&gt; 7.609035, 56.715352, 37.671053,~
+$ var_inten_ch_4               &lt;dbl&gt; 2.714100, 118.388139, 49.470524~
+$ width_ch_1                   &lt;dbl&gt; 10.64297, 32.16126, 21.18553, 1~</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>cells</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>count</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>prop <span class='op'>=</span> <span class='va'>n</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 x 3
+  class     n  prop
+  &lt;fct&gt; &lt;int&gt; &lt;dbl&gt;
+1 PS     1300 0.644
+2 WS      719 0.356</code></pre>
+</div>
+<h3 id="data-splitting-1">Data splitting</h3>
+<p>The <code>rsample</code> package is used to preserve splits for a
+future date. The seed guarentees we can reproduce the same random
+numbers if we should choose to return to this step.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span></span>
+<span><span class='va'>cell_split</span> <span class='op'>=</span> <span class='fu'>rsample</span><span class='fu'>::</span><span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>initial_split</a></span><span class='op'>(</span><span class='va'>cells</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>case</span><span class='op'>)</span>,</span>
+<span>                                    strata <span class='op'>=</span> <span class='va'>class</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>The <code>strata</code> argument keeps the class proportion balanced
+in the train and test split.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>cell_train</span> <span class='op'>=</span> <span class='fu'>rsample</span><span class='fu'>::</span><span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>training</a></span><span class='op'>(</span><span class='va'>cell_split</span><span class='op'>)</span></span>
+<span><span class='va'>cell_test</span> <span class='op'>=</span> <span class='fu'>rsample</span><span class='fu'>::</span><span class='fu'><a href='https://rsample.tidymodels.org/reference/initial_split.html'>testing</a></span><span class='op'>(</span><span class='va'>cell_split</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cell_train</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 1514</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cell_train</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cells</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 0.7498762</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cell_test</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 505</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cell_test</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cells</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 0.2501238</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>cell_train</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>count</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>prop <span class='op'>=</span> <span class='va'>n</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 x 3
+  class     n  prop
+  &lt;fct&gt; &lt;int&gt; &lt;dbl&gt;
+1 PS      975 0.644
+2 WS      539 0.356</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>cell_test</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>count</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>prop <span class='op'>=</span> <span class='va'>n</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 x 3
+  class     n  prop
+  &lt;fct&gt; &lt;int&gt; &lt;dbl&gt;
+1 PS      325 0.644
+2 WS      180 0.356</code></pre>
+</div>
+<h3 id="modeling">Modeling</h3>
+<p>Time to build a random forest model. We won’t be building a
+<code>recipe</code> because very little pre-processing is needed for
+random forests and decision trees to be useful out of the box.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_mod</span> <span class='op'>=</span></span>
+<span>  <span class='fu'>rand_forest</span><span class='op'>(</span>trees <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"ranger"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>234</span><span class='op'>)</span></span>
+<span><span class='va'>rf_fit</span> <span class='op'>=</span></span>
+<span>  <span class='va'>rf_mod</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>fit</span><span class='op'>(</span><span class='va'>class</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>cell_train</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>rf_fit</span></span></code></pre>
+</div>
+<pre><code>parsnip model object
+
+Ranger result
+
+Call:
+ ranger::ranger(x = maybe_data_frame(x), y = y, num.trees = ~1000,      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1), probability = TRUE) 
+
+Type:                             Probability estimation 
+Number of trees:                  1000 
+Sample size:                      1514 
+Number of independent variables:  56 
+Mtry:                             7 
+Target node size:                 10 
+Variable importance mode:         none 
+Splitrule:                        gini 
+OOB prediction error (Brier s.):  0.1187479 </code></pre>
+</div>
+<h3 id="estimating-performance">Estimating performance</h3>
+<p>The <code>yardstick</code> package can be used to measure the
+<code>roc_auc()</code> to see how our model performs</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_training_pred</span> <span class='op'>=</span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>rf_fit</span>, <span class='va'>cell_train</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>rf_fit</span>, <span class='va'>cell_train</span>, type<span class='op'>=</span><span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span><span class='va'>cell_train</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>rf_training_pred</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1,514 x 4
+   .pred_class .pred_PS .pred_WS class
+   &lt;fct&gt;          &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;
+ 1 PS             0.740  0.260   PS   
+ 2 PS             0.940  0.0597  PS   
+ 3 PS             0.929  0.0707  PS   
+ 4 PS             0.959  0.0406  PS   
+ 5 PS             0.926  0.0738  PS   
+ 6 PS             0.681  0.319   PS   
+ 7 PS             0.991  0.00861 PS   
+ 8 PS             0.769  0.231   PS   
+ 9 PS             0.860  0.140   PS   
+10 PS             0.751  0.249   PS   
+# ... with 1,504 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_training_pred</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>roc_auc</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>class</span>, <span class='va'>.pred_PS</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary          1.00</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#auc = 0.99 - lol</span></span>
+<span></span>
+<span><span class='va'>rf_training_pred</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>accuracy</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>class</span>, <span class='va'>.pred_class</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.990</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># acc = 0.99 - lol</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_testing_pred</span> <span class='op'>=</span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>rf_fit</span>, <span class='va'>cell_test</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>rf_fit</span>, <span class='va'>cell_test</span>, type<span class='op'>=</span><span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span><span class='va'>cell_test</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>rf_testing_pred</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 4
+  .pred_class .pred_PS .pred_WS class
+  &lt;fct&gt;          &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;
+1 PS            0.893    0.107  PS   
+2 PS            0.920    0.0797 PS   
+3 WS            0.0801   0.920  WS   
+4 PS            0.817    0.183  WS   
+5 PS            0.752    0.248  PS   
+6 WS            0.279    0.721  WS   </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_testing_pred</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>roc_auc</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>class</span>, <span class='va'>.pred_PS</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary         0.891</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_testing_pred</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>accuracy</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>class</span>, <span class='va'>.pred_class</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.814</code></pre>
+</div>
+<p>This shows that predicting on the training set only shows what the
+model actually knows. It essentially memorizes the data it has seen.</p>
+<h3 id="resampling">Resampling</h3>
+<p>Cross-validation, bootstrap, and empirical simulations can remedy
+this!</p>
+<p>These create a series of data sets that can be used to measure
+performance against numerous <code>folds</code> of data, giving a much
+better indicator of performance.</p>
+<p>We will use 10-fold cross validation. This essential chunks the data
+up into 10 slices (remember, only the training data), then for 10
+iterations loops through it with 9/10 of the chunks as training and 1/10
+for testing. You can repeat this process multiple times since it is
+stochastic in nature (chunks can be the same if resampled). This is a
+very robust approach as it uses your data as a representative sample
+from the population.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>345</span><span class='op'>)</span></span>
+<span><span class='va'>folds</span> <span class='op'>=</span> <span class='fu'>vfold_cv</span><span class='op'>(</span><span class='va'>cell_train</span>, v <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span><span class='va'>folds</span></span></code></pre>
+</div>
+<pre><code>#  10-fold cross-validation 
+# A tibble: 10 x 2
+   splits             id    
+   &lt;list&gt;             &lt;chr&gt; 
+ 1 &lt;split [1362/152]&gt; Fold01
+ 2 &lt;split [1362/152]&gt; Fold02
+ 3 &lt;split [1362/152]&gt; Fold03
+ 4 &lt;split [1362/152]&gt; Fold04
+ 5 &lt;split [1363/151]&gt; Fold05
+ 6 &lt;split [1363/151]&gt; Fold06
+ 7 &lt;split [1363/151]&gt; Fold07
+ 8 &lt;split [1363/151]&gt; Fold08
+ 9 &lt;split [1363/151]&gt; Fold09
+10 &lt;split [1363/151]&gt; Fold10</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>split</span> <span class='op'>=</span> <span class='va'>folds</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>splits</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'>row_number</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>pull</span><span class='op'>(</span><span class='va'>splits</span><span class='op'>)</span></span>
+<span><span class='va'>split_1_analysis_set</span> <span class='op'>=</span> <span class='va'>split</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>analysis</span></span>
+<span><span class='va'>split_1_analysis_set</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 57
+  class angle_ch_1 area_ch_1 avg_int~1 avg_i~2 avg_i~3 avg_i~4 conve~5
+  &lt;fct&gt;      &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1 PS         134.        819      31.9  207.      69.9  164.      1.26
+2 PS          69.2       298      19.5  102.      28.2   31.0     1.20
+3 PS         180.        251      18.3    5.73    17.2    1.55    1.20
+4 PS          52.2       236      18.2    6.33    17.1    1.91    1.29
+5 PS         104.        258      17.6  125.      22.5   71.2     1.08
+6 PS          78.0       358      42.3  218.      42.3   67.5     1.04
+# ... with 49 more variables: convex_hull_perim_ratio_ch_1 &lt;dbl&gt;,
+#   diff_inten_density_ch_1 &lt;dbl&gt;, diff_inten_density_ch_3 &lt;dbl&gt;,
+#   diff_inten_density_ch_4 &lt;dbl&gt;, entropy_inten_ch_1 &lt;dbl&gt;,
+#   entropy_inten_ch_3 &lt;dbl&gt;, entropy_inten_ch_4 &lt;dbl&gt;,
+#   eq_circ_diam_ch_1 &lt;dbl&gt;, eq_ellipse_lwr_ch_1 &lt;dbl&gt;,
+#   eq_ellipse_oblate_vol_ch_1 &lt;dbl&gt;,
+#   eq_ellipse_prolate_vol_ch_1 &lt;dbl&gt;, eq_sphere_area_ch_1 &lt;dbl&gt;, ...
+# i Use `colnames()` to see all variable names</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>split_1_assessment_set</span> <span class='op'>=</span> <span class='va'>split</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>assessment</span></span>
+<span><span class='va'>split_1_assessment_set</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 57
+  class angle_ch_1 area_ch_1 avg_int~1 avg_i~2 avg_i~3 avg_i~4 conve~5
+  &lt;fct&gt;      &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1 PS         139.        771      21.0    22.5  40.4     142.     1.44
+2 PS          31.2       166      95.0   345.   41.5     188.     1.15
+3 PS          22.6       221     129.    127.  284.       62.0    1.12
+4 PS          65.4       295      19.9   193.    0.560    29.6    1.21
+5 PS          99.1       253      24.4    33.3  48.8      56.2    1.62
+6 PS          85.6       645      61.9   282.   73.1     232.     1.20
+# ... with 49 more variables: convex_hull_perim_ratio_ch_1 &lt;dbl&gt;,
+#   diff_inten_density_ch_1 &lt;dbl&gt;, diff_inten_density_ch_3 &lt;dbl&gt;,
+#   diff_inten_density_ch_4 &lt;dbl&gt;, entropy_inten_ch_1 &lt;dbl&gt;,
+#   entropy_inten_ch_3 &lt;dbl&gt;, entropy_inten_ch_4 &lt;dbl&gt;,
+#   eq_circ_diam_ch_1 &lt;dbl&gt;, eq_ellipse_lwr_ch_1 &lt;dbl&gt;,
+#   eq_ellipse_oblate_vol_ch_1 &lt;dbl&gt;,
+#   eq_ellipse_prolate_vol_ch_1 &lt;dbl&gt;, eq_sphere_area_ch_1 &lt;dbl&gt;, ...
+# i Use `colnames()` to see all variable names</code></pre>
+</div>
+<h3 id="fit-a-model-with-resampling">Fit a model with resampling</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rf_wf</span> <span class='op'>=</span></span>
+<span>  <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>rf_mod</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>add_formula</span><span class='op'>(</span><span class='va'>class</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>456</span><span class='op'>)</span></span>
+<span><span class='va'>rf_fit_rs</span> <span class='op'>=</span> </span>
+<span>  <span class='va'>rf_wf</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>fit_resamples</span><span class='op'>(</span><span class='va'>folds</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>rf_fit_rs</span></span></code></pre>
+</div>
+<pre><code># Resampling results
+# 10-fold cross-validation 
+# A tibble: 10 x 4
+   splits             id     .metrics         .notes          
+   &lt;list&gt;             &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;          
+ 1 &lt;split [1362/152]&gt; Fold01 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 2 &lt;split [1362/152]&gt; Fold02 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 3 &lt;split [1362/152]&gt; Fold03 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 4 &lt;split [1362/152]&gt; Fold04 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 5 &lt;split [1363/151]&gt; Fold05 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 6 &lt;split [1363/151]&gt; Fold06 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 7 &lt;split [1363/151]&gt; Fold07 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 8 &lt;split [1363/151]&gt; Fold08 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+ 9 &lt;split [1363/151]&gt; Fold09 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;
+10 &lt;split [1363/151]&gt; Fold10 &lt;tibble [2 x 4]&gt; &lt;tibble [0 x 3]&gt;</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>rf_fit_rs</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 x 6
+  .metric  .estimator  mean     n std_err .config             
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary     0.833    10 0.00876 Preprocessor1_Model1
+2 roc_auc  binary     0.905    10 0.00627 Preprocessor1_Model1</code></pre>
+</div>
+<p>This is a much better representation than the original metrics
+produced from testing on our training data. This is always
+over-optimistic. Using cross-validation, we can simulate how well our
+model will perform on actual test data. Then finally once we are done we
+can use our test set as the final unbiased check for the model’s
+performance.</p>
+<h2 id="tune-model-parameters">Tune model parameters</h2>
+<p>Lastly, we can explore how to tune the model parameters to make our
+models even better.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.milbo.org/rpart-plot/index.html'>rpart.plot</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/koalaverse/vip/'>vip</a></span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<h3 id="getting-data-3">Getting data</h3>
+<h3 id="data-splitting-2">Data splitting</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span></span>
+<span><span class='va'>cell_split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>cells</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>case</span><span class='op'>)</span>, </span>
+<span>                            strata <span class='op'>=</span> <span class='va'>class</span><span class='op'>)</span></span>
+<span><span class='va'>cell_train</span> <span class='op'>&lt;-</span> <span class='fu'>training</span><span class='op'>(</span><span class='va'>cell_split</span><span class='op'>)</span></span>
+<span><span class='va'>cell_test</span>  <span class='op'>&lt;-</span> <span class='fu'>testing</span><span class='op'>(</span><span class='va'>cell_split</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<h3 id="tuning-hyperparameters">Tuning hyperparameters</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># model with tunings specifications</span></span>
+<span><span class='va'>tune_spec</span> <span class='op'>=</span></span>
+<span>  <span class='fu'>decision_tree</span><span class='op'>(</span></span>
+<span>    cost_complexity <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='op'>)</span>, </span>
+<span>    tree_depth <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='op'>)</span></span>
+<span>  <span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"rpart"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>tune_spec</span></span></code></pre>
+</div>
+<pre><code>Decision Tree Model Specification (classification)
+
+Main Arguments:
+  cost_complexity = tune()
+  tree_depth = tune()
+
+Computational engine: rpart </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_grid</span> <span class='op'>=</span> <span class='fu'>grid_regular</span><span class='op'>(</span><span class='fu'>cost_complexity</span><span class='op'>(</span><span class='op'>)</span>, </span>
+<span>                         <span class='fu'>tree_depth</span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span>                         levels <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span><span class='va'>tree_grid</span></span></code></pre>
+</div>
+<pre><code># A tibble: 25 x 2
+   cost_complexity tree_depth
+             &lt;dbl&gt;      &lt;int&gt;
+ 1    0.0000000001          1
+ 2    0.0000000178          1
+ 3    0.00000316            1
+ 4    0.000562              1
+ 5    0.1                   1
+ 6    0.0000000001          4
+ 7    0.0000000178          4
+ 8    0.00000316            4
+ 9    0.000562              4
+10    0.1                   4
+# ... with 15 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_grid</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>count</span><span class='op'>(</span><span class='va'>tree_depth</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 5 x 2
+  tree_depth     n
+       &lt;int&gt; &lt;int&gt;
+1          1     5
+2          4     5
+3          8     5
+4         11     5
+5         15     5</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>234</span><span class='op'>)</span></span>
+<span><span class='va'>cell_folds</span> <span class='op'>=</span> <span class='fu'>vfold_cv</span><span class='op'>(</span><span class='va'>cell_train</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<h3 id="model-tuning-with-a-grid">Model tuning with a grid</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>345</span><span class='op'>)</span></span>
+<span><span class='va'>tree_wf</span> <span class='op'>=</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>tune_spec</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>add_formula</span><span class='op'>(</span><span class='va'>class</span> <span class='op'>~</span> <span class='va'>.</span><span class='op'>)</span></span>
+<span><span class='va'>tree_wf</span></span></code></pre>
+</div>
+<pre><code>== Workflow ==========================================================
+Preprocessor: Formula
+Model: decision_tree()
+
+-- Preprocessor ------------------------------------------------------
+class ~ .
+
+-- Model -------------------------------------------------------------
+Decision Tree Model Specification (classification)
+
+Main Arguments:
+  cost_complexity = tune()
+  tree_depth = tune()
+
+Computational engine: rpart </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_res</span> <span class='op'>=</span></span>
+<span>  <span class='va'>tree_wf</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>tune_grid</span><span class='op'>(</span></span>
+<span>    resamples <span class='op'>=</span> <span class='va'>cell_folds</span>,</span>
+<span>    grid <span class='op'>=</span> <span class='va'>tree_grid</span></span>
+<span>  <span class='op'>)</span></span>
+<span><span class='va'>tree_res</span></span></code></pre>
+</div>
+<pre><code># Tuning results
+# 10-fold cross-validation 
+# A tibble: 10 x 4
+   splits             id     .metrics          .notes          
+   &lt;list&gt;             &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;          
+ 1 &lt;split [1362/152]&gt; Fold01 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 2 &lt;split [1362/152]&gt; Fold02 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 3 &lt;split [1362/152]&gt; Fold03 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 4 &lt;split [1362/152]&gt; Fold04 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 5 &lt;split [1363/151]&gt; Fold05 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 6 &lt;split [1363/151]&gt; Fold06 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 7 &lt;split [1363/151]&gt; Fold07 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 8 &lt;split [1363/151]&gt; Fold08 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+ 9 &lt;split [1363/151]&gt; Fold09 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;
+10 &lt;split [1363/151]&gt; Fold10 &lt;tibble [50 x 6]&gt; &lt;tibble [0 x 3]&gt;</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_res</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 50 x 8
+   cost_complexity tree_~1 .metric .esti~2  mean     n std_err .config
+             &lt;dbl&gt;   &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+ 1    0.0000000001       1 accura~ binary  0.732    10  0.0148 Prepro~
+ 2    0.0000000001       1 roc_auc binary  0.777    10  0.0107 Prepro~
+ 3    0.0000000178       1 accura~ binary  0.732    10  0.0148 Prepro~
+ 4    0.0000000178       1 roc_auc binary  0.777    10  0.0107 Prepro~
+ 5    0.00000316         1 accura~ binary  0.732    10  0.0148 Prepro~
+ 6    0.00000316         1 roc_auc binary  0.777    10  0.0107 Prepro~
+ 7    0.000562           1 accura~ binary  0.732    10  0.0148 Prepro~
+ 8    0.000562           1 roc_auc binary  0.777    10  0.0107 Prepro~
+ 9    0.1                1 accura~ binary  0.732    10  0.0148 Prepro~
+10    0.1                1 roc_auc binary  0.777    10  0.0107 Prepro~
+# ... with 40 more rows, and abbreviated variable names
+#   1: tree_depth, 2: .estimator
+# i Use `print(n = ...)` to see more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_res</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>tree_depth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>tree_depth</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>cost_complexity</span>, y<span class='op'>=</span><span class='va'>mean</span>, color<span class='op'>=</span><span class='va'>tree_depth</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1.5</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.metric</span>, scales <span class='op'>=</span> <span class='st'>"free"</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_log10</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/label_number.html'>label_number</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_color_viridis_d</a></span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"plasma"</span>, begin <span class='op'>=</span> <span class='fl'>0.9</span>, end <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-49-1.png" width="624" /></p>
+</div>
+<p>We can quickly identify the best best parameter configuration as
+<code>tree_depth=4</code> on any <code>cost_complexity</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_res</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>show_best</span><span class='op'>(</span><span class='st'>"roc_auc"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 5 x 8
+  cost_complexity tree_d~1 .metric .esti~2  mean     n std_err .config
+            &lt;dbl&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+1    0.000562           11 roc_auc binary  0.855    10  0.0147 Prepro~
+2    0.0000000001       11 roc_auc binary  0.854    10  0.0146 Prepro~
+3    0.0000000178       11 roc_auc binary  0.854    10  0.0146 Prepro~
+4    0.00000316         11 roc_auc binary  0.854    10  0.0146 Prepro~
+5    0.000562            8 roc_auc binary  0.854    10  0.0145 Prepro~
+# ... with abbreviated variable names 1: tree_depth, 2: .estimator</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>tree_res</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>show_best</span><span class='op'>(</span><span class='st'>"accuracy"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 5 x 8
+  cost_complexity tree_d~1 .metric .esti~2  mean     n std_err .config
+            &lt;dbl&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+1    0.0000000001        4 accura~ binary  0.807    10  0.0119 Prepro~
+2    0.0000000178        4 accura~ binary  0.807    10  0.0119 Prepro~
+3    0.00000316          4 accura~ binary  0.807    10  0.0119 Prepro~
+4    0.000562            4 accura~ binary  0.807    10  0.0119 Prepro~
+5    0.1                 4 accura~ binary  0.786    10  0.0124 Prepro~
+# ... with abbreviated variable names 1: tree_depth, 2: .estimator</code></pre>
+</div>
+<p>The <code>show_best</code> is pretty sweet. It gives us just the
+parameter configurations that performed the best at the top.
+<code>select_best()</code> will actually get that model
+configuration.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>best_tree</span> <span class='op'>&lt;-</span> <span class='va'>tree_res</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'>select_best</span><span class='op'>(</span><span class='st'>"accuracy"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>best_tree</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  cost_complexity tree_depth .config              
+            &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;                
+1    0.0000000001          4 Preprocessor1_Model06</code></pre>
+</div>
+<h3 id="finalizing-our-model">Finalizing our model</h3>
+<p>The <code>finalize_workflow()</code> will accept the optimal
+parameter, pluck it out, and save our best model for us in the final
+workflow object. Now we just need one last fit with that excellent final
+model.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>final_wf</span> <span class='op'>=</span></span>
+<span>  <span class='va'>tree_wf</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>finalize_workflow</span><span class='op'>(</span><span class='va'>best_tree</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>final_wf</span></span></code></pre>
+</div>
+<pre><code>== Workflow ==========================================================
+Preprocessor: Formula
+Model: decision_tree()
+
+-- Preprocessor ------------------------------------------------------
+class ~ .
+
+-- Model -------------------------------------------------------------
+Decision Tree Model Specification (classification)
+
+Main Arguments:
+  cost_complexity = 1e-10
+  tree_depth = 4
+
+Computational engine: rpart </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>final_fit</span> <span class='op'>=</span></span>
+<span>  <span class='va'>final_wf</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>last_fit</span><span class='op'>(</span><span class='va'>cell_split</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>final_fit</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 x 4
+  .metric  .estimator .estimate .config             
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary         0.802 Preprocessor1_Model1
+2 roc_auc  binary         0.840 Preprocessor1_Model1</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>final_fit</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>collect_predictions</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>roc_curve</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>class</span>, <span class='va'>.pred_PS</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-53-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>final_tree</span> <span class='op'>&lt;-</span> <span class='fu'>extract_workflow</span><span class='op'>(</span><span class='va'>final_fit</span><span class='op'>)</span></span>
+<span><span class='va'>final_tree</span></span></code></pre>
+</div>
+<pre><code>== Workflow [trained] ================================================
+Preprocessor: Formula
+Model: decision_tree()
+
+-- Preprocessor ------------------------------------------------------
+class ~ .
+
+-- Model -------------------------------------------------------------
+n= 1514 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+ 1) root 1514 539 PS (0.64398943 0.35601057)  
+   2) total_inten_ch_2&lt; 41732.5 642  33 PS (0.94859813 0.05140187)  
+     4) shape_p_2_a_ch_1&gt;=1.251801 631  27 PS (0.95721078 0.04278922) *
+     5) shape_p_2_a_ch_1&lt; 1.251801 11   5 WS (0.45454545 0.54545455) *
+   3) total_inten_ch_2&gt;=41732.5 872 366 WS (0.41972477 0.58027523)  
+     6) fiber_width_ch_1&lt; 11.37318 406 160 PS (0.60591133 0.39408867)  
+      12) avg_inten_ch_1&lt; 145.4883 293  85 PS (0.70989761 0.29010239) *
+      13) avg_inten_ch_1&gt;=145.4883 113  38 WS (0.33628319 0.66371681)  
+        26) total_inten_ch_3&gt;=57919.5 33  10 PS (0.69696970 0.30303030) *
+        27) total_inten_ch_3&lt; 57919.5 80  15 WS (0.18750000 0.81250000) *
+     7) fiber_width_ch_1&gt;=11.37318 466 120 WS (0.25751073 0.74248927)  
+      14) eq_ellipse_oblate_vol_ch_1&gt;=1673.942 30   8 PS (0.73333333 0.26666667)  
+        28) var_inten_ch_3&gt;=41.10858 20   2 PS (0.90000000 0.10000000) *
+        29) var_inten_ch_3&lt; 41.10858 10   4 WS (0.40000000 0.60000000) *
+      15) eq_ellipse_oblate_vol_ch_1&lt; 1673.942 436  98 WS (0.22477064 0.77522936) *</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.milbo.org/rpart-plot/index.html'>rpart.plot</a></span><span class='op'>)</span></span>
+<span><span class='va'>final_tree</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'>extract_fit_engine</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html'>rpart.plot</a></span><span class='op'>(</span>roundint <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-55-1.png" width="624" data-distill-preview=1 /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/koalaverse/vip/'>vip</a></span><span class='op'>)</span></span>
+<span><span class='va'>final_tree</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/pkg/vip/man/vip.html'>vip</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="tidymodels-in-r_files/figure-html5/unnamed-chunk-56-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/args.html'>args</a></span><span class='op'>(</span><span class='va'>decision_tree</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>function (mode = &quot;unknown&quot;, engine = &quot;rpart&quot;, cost_complexity = NULL, 
+    tree_depth = NULL, min_n = NULL) 
+NULL</code></pre>
+</div>
+<h1 id="summary">Summary</h1>
+<p>In summary, a typical <code>tidymodels</code> workflow will look like
+this:</p>
+<ol type="1">
+<li>Create an <code>initial_split</code> for your data</li>
+<li>Create a <code>vfold_cv()</code> with the number of folds to pull
+from the training data.</li>
+<li>Create a <code>model</code> object, <code>set_engine</code> and
+<code>set_mode</code>.</li>
+</ol>
+<ul>
+<li>add the <code>tune()</code> argument to the model parameters if
+tuning desired.</li>
+<li>add a <code>grid_regular</code> with the amount of parameters to
+tune for.</li>
+</ul>
+<ol start="4" type="1">
+<li><code>fit</code> the model object on your data using a formula.</li>
+<li>Create a <code>workflow()</code></li>
+</ol>
+<ul>
+<li><code>add_recipe</code> (with formula in recipe) OR
+<code>add_formula</code></li>
+<li>pass the workflow into <code>tune_grid()</code> with the
+<code>resamples=folds</code> and <code>grid=grid_regular()</code>.</li>
+</ul>
+<ol start="6" type="1">
+<li><code>collect_metrics()</code></li>
+<li><code>show_best()</code></li>
+<li><code>select_best()</code></li>
+<li><code>finalize_workflow()</code></li>
+<li><code>last_fit()</code></li>
+<li><code>collect_prediction</code></li>
+<li><code>roc_curve()</code></li>
+<li><code>extrac_workflow()</code></li>
+<li><code>extract_fit_engine()</code> or
+<code>extract_fit_parsnip()</code> and plot if needed.</li>
+</ol>
+<h1 id="references">References</h1>
+<p><cite><a href="https://www.tidymodels.org"
+class="uri">https://www.tidymodels.org</a></cite></p>
+<div class="sourceCode" id="cb55"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
