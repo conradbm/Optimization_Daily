@@ -1,0 +1,364 @@
+---
+title: "Recipes in R"
+description: |
+  In this post we will discuss how to use recipes to build effective machine learning pipelines in R.
+categories:
+  - machine learning
+  - data pipeline
+  - data cleaning
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-24
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Introduction
+
+`recipes` is a built in package I found within `tidymodels`. We actually wrote a section on this in our [last post](https://optimization-daily.netlify.app/posts/2022-07-21-tidymodels-in-r/#create-recipe-and-roles) showing how to 1) add roles, 2) create features, and 3) add recipes to model workflows. In [another post]() we will go through the `rsample` package which I discovered through the same means. However for `recipes`, it offers a very clean `dplyr`-like syntax to pass data through before modeling takes place. This helps for a variety of reasons:
+
+- data pre-processing,
+- data cleaning,
+- feature engineering,
+- reproducibility, and
+- streamlining
+
+Enough chit chat, let's dive in and discuss what's going on.
+
+## Gentle overview
+
+### Geting data
+
+```{r}
+library(recipes)
+
+data(ad_data, package="modeldata")
+
+ad_data %>% glimpse
+```
+
+This data is entirely `numeric` with a response variable that is binary. We can also see it is a `factor.`
+
+```{r}
+ad_data %>% count(Class) %>% mutate(prop = n/sum(n))
+```
+
+### Simple recipe
+
+```{r}
+ad_recipe = 
+  recipe(Class ~ tau + VEGF, data = ad_data) %>% 
+  step_normalize(all_numeric_predictors())
+
+ad_recipe
+
+```
+
+With the recipes package, you create a standard `recipe` for the model itself. This will contain `outcomes` and `predictors`. These are synonymous with dependent and independent variables.
+
+Then once you create the recipe formula, each `step` will do some type of work against it. For example, this `step` normalized all predictors. Pretty slick! And easy..
+
+
+## An Example
+
+### Getting data
+
+I really like this modeldata package. The developers often use it and it has a rich spread of unique data. For this example it is credit card information, which is very interesting, and contains enough nominal information to be as practical as it gets out there in the real world.
+
+
+```{r}
+library(recipes)
+library(rsample)
+library(modeldata)
+
+data("credit_data")
+set.seed(55)
+
+credit_data %>% glimpse
+
+```
+
+It looks like our `outcome` is the `Status` with several other `numeric` and `nominal` `predictors.`
+
+```{r}
+credit_data %>% count(Status) %>% mutate(prop = n/sum(n))
+```
+
+
+```{r}
+
+train_test_split = credit_data %>% initial_split(prop = 3/4, strata = Status)
+credit_train = training(train_test_split)
+credit_test = testing(train_test_split)
+
+credit_train %>% glimpse
+credit_test %>% glimpse
+```
+Notice that we have a nice 3/4 split. Also that there are some nasty `NAs` in our data.
+
+```{r}
+vapply(credit_train, FUN = function(x){ mean(!is.na(x))}, FUN.VALUE = numeric(1))
+```
+We can use recipes to impute this missing data instead of dropping it.
+
+### An initial recipe
+
+This does no justice to the examples to follow, but gives a feel for how this will start to look as we create recipes, add steps, then prep, then bake it it all together for a model (or analysis).
+
+```{r}
+
+rec_obj = recipe(Status ~ ., data = credit_train)
+rec_obj
+```
+
+### Processing Steps
+
+There are so many options for pre-processing steps. The manual page `?selections` will provide them all. I headed over that way and collected a few I found:
+
+- `step_pca`
+- `step_center`
+- `step_dummy` (allows for `step_interact` to be effective)
+- `step_interact`
+- `step_log`
+- `step_rm`
+
+A way to explore even more steps is below,
+
+```{r}
+grep("step_", ls("package:recipes"), value = TRUE)
+
+```
+
+And then finally, you call the `prep()` function at the end of the chain and this will cook it up and return your final dataset.
+
+You can also select variables using some build in functions and the typical `dplyr` and `tidyselect` syntax. 
+
+- `contains()`
+- `ends_with()`
+- `everything()`
+- `matches()`
+- `num_range()`
+- `starts_with()`
+- `one_of()`
+- `all_of()`
+- `all_outcomes()`
+- `any_of()`
+- `all_predictions()`
+- `has_role()` - useful if you set the role IDs in a setup step
+- `all_nominal()`
+- `all_numeric()`
+- `has_type()`
+- `all_nominal_predictors()` - useful with `step_dummies`
+- `all_numeric_predictors()` - useful with `step_center` and `step_pca`
+
+```{r}
+
+imputed = rec_obj %>% 
+  step_impute_knn(all_predictors())
+imputed
+
+
+```
+```{r}
+
+ind_vars = imputed %>% 
+  step_dummy(all_nominal_predictors())
+ind_vars
+```
+
+```{r}
+
+standardized = ind_vars %>% 
+  step_center(all_numeric_predictors()) %>% 
+  step_scale(all_numeric_predictors())
+standardized
+```
+
+```{r}
+
+trained_rec = prep(standardized, training = credit_train)
+trained_rec
+```
+
+```{r}
+
+train_data = bake(trained_rec, new_data = credit_train)
+test_data = bake(trained_rec, new_data = credit_test)
+
+train_data %>% glimpse
+test_data %>% glimpse
+```
+```{r}
+vapply(train_data, function(x) mean(!is.na(x)), numeric(1))
+vapply(test_data, function(x) mean(!is.na(x)), numeric(1))
+```
+### Checks
+
+```{r}
+trained_rec <- trained_rec %>%
+  check_missing(contains("Marital"))
+trained_rec
+```
+
+## Full example
+
+It's always easier for me to view everything all at once. So here is the full example chained together in the `dplyr` syntax.
+
+```{r}
+# Get the data
+data("credit_data")
+credit_data %>% glimpse
+
+# Create train-test split
+train_test_split = credit_data %>% initial_split(prop = 3/4, strata = Status)
+credit_train = training(train_test_split)
+credit_test = testing(train_test_split)
+
+# Create a recipe w/ formula
+credit_recipe = 
+  recipe(Status ~ ., data = credit_train) %>% 
+  step_impute_knn(all_predictors()) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_center(all_numeric_predictors()) %>% 
+  step_scale(all_numeric_predictors()) %>% 
+  prep(training = credit_train)
+
+
+train_data = 
+  credit_recipe %>% 
+  bake(new_data = credit_train)
+
+test_data =
+  credit_recipe %>% 
+  bake(new_data = credit_test)
+
+train_data %>% head
+test_data %>% head
+```
+## Getting creative
+
+What if we wanted to do PCA on just our categorical columns after imputation? Then get those as numeric, united with the rest of the numeric variables, center, scale, prep, and bake as usual?
+
+```{r}
+# Create a recipe w/ formula
+credit_pca_recipe = 
+  
+  # Formula
+  recipe(Status ~ ., data = credit_train) %>% 
+  
+  # Add ID roles, if rows have unique identifiers
+  # update_role(flight, time_hour, new_role = "ID") %>%
+  
+  # Impute missing data
+  step_impute_knn(all_predictors()) %>% 
+  
+  # Make dummies for factors
+  step_dummy(all_nominal_predictors()) %>% 
+  
+  # Drop those dummies using PCA
+  step_pca(contains("_"), threshold = .90) %>%
+  
+  # Center&Scale
+  step_center(all_numeric_predictors()) %>% 
+  step_scale(all_numeric_predictors()) %>% 
+  
+  # Drop zero variance columns
+  step_zv(all_numeric_predictors()) %>% 
+  
+  # Prep from the training data
+  prep(training = credit_train)
+
+train_data_pca = 
+  credit_pca_recipe %>% 
+  bake(new_data = credit_train)
+
+test_data_pca =
+  credit_pca_recipe %>% 
+  bake(new_data = credit_test)
+
+train_data_pca %>% head
+test_data_pca %>% head
+```
+
+Absolutely ridiculous. You can just specify what columns you want, then it will drop the dimensions on them for you and keep moving. Let's table this `credit_recipe_pca` for now.
+
+## Make a model
+
+### Cross-validation and Model performance
+
+It's only natural now to build a classification model. We will be referencing our example from the [tidymodels post](https://optimization-daily.netlify.app/posts/2022-07-21-tidymodels-in-r/#estimating-performance).
+
+```{r}
+library(tidymodels)
+
+lr_mod <- logistic_reg() %>% 
+  set_engine("glm")
+
+# Cross validation set from train
+folds = vfold_cv(credit_train, v = 10)
+
+# Workflow to incorporate folds
+credit_workflow_rs = 
+  workflows::workflow() %>% 
+  workflows::add_model(lr_mod) %>% 
+  workflows::add_recipe(credit_recipe) %>% 
+  tune::fit_resamples(folds)
+
+# See performance
+collect_metrics(credit_workflow_rs)
+  
+```
+This could be done kind of manually by building the model, predicting out values, then seeing how probabilities stack against the `roc_auc` and labels against `accuracy`. We will leave this for another dya.
+
+### Fit the whole model
+
+```{r}
+# Workflow for whole train set
+credit_workflow = 
+  workflows::workflow() %>% 
+  workflows::add_model(lr_mod) %>% 
+  workflows::add_recipe(credit_recipe)
+
+# Train on the whole now
+credit_fit =
+  credit_workflow %>%
+  fit(data = credit_train)
+
+tidy(credit_fit)
+```
+
+What was our response?
+
+```{r}
+credit_data %>% glimpse
+credit_data %>% select(Status) %>% str
+```
+
+Right, good and bad credit. The levels start with bad, then go to good.
+
+### Recipe visualization
+
+```{r}
+tidy(credit_fit) %>% filter(p.value <= 0.25) %>% 
+  ggplot(., aes(fill=p.value)) +
+  geom_col(aes(x=reorder(term, -estimate), y=estimate)) +
+  geom_hline(yintercept=0, linetype="longdash", color = "black") +
+  coord_flip() +
+  scale_fill_gradient(low = "green", high = "red") +
+  theme_bw() +
+  labs(fill = "Statistical p-value", x = "Term", y = "Estimate") +
+  ggtitle("Credit Signifiant Coeffients")
+```
+
+
+
+# References
+
+<cite> https://recipes.tidymodels.org/ </cite>
+

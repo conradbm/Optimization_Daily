@@ -414,7 +414,8 @@ flights_workflow
 
 ```
 
-Now we can build a 
+Now we can build a pipeline
+
 ```{r}
 flights_fit = flights_workflow %>% 
   fit(data = train_data)
