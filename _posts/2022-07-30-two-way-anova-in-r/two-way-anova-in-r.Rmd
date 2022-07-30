@@ -1,0 +1,155 @@
+---
+title: "Two-way ANOVA in R"
+description: |
+  In this post we will reference an interaction plot post that uses two-way anova in R.
+categories:
+  - statistics
+  - anova
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-30
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+# Bottom Line Up Front
+
+It's called a *Two-way ANOVA*, because we are exploring **two independent factor variables** difference in means (variance) against **a single response variable**.
+
+If an `interaction.plot` shows crossing lines for a `two-way` analysis, it is likely to have an effect on the response in concert.
+
+# Overview
+In the [original post on this](https://www.r-bloggers.com/2022/07/how-to-create-an-interaction-plot-in-r/) the author walks through how to create an interaction plot using ANOVA in R. I wanted to re-post this as it falls under statistical and optimization concerns in the case of `n variables` and to curate this information accordingly.
+
+<blockquote>
+"To find out if the means of three or more independent groups that have been divided based on two factors differ, a two-way ANOVA is performed.
+
+When we want to determine whether two distinct factors have an impact on a certain response variable, we employ a two-way ANOVA."
+</blockquote>
+
+## Data
+
+```{r}
+set.seed(123)
+
+# Two independent variables: Factors
+# One response variable: Numeric
+#
+# 60 observations, 30 for gender duplication, 20 for exercise duplication. 
+#
+data <- data.frame(gender = rep(c("Male", "Female"), 
+                                each = 30, times = 1),
+                   exercise = rep(c("None", "Light", "Intense"),
+                                  each = 10, times = 2),
+                   weight_loss = c(runif(10, -3, 3),
+                                   runif(10, 0, 5),
+                                   runif(10, 5, 9),
+                                   runif(10, -4, 2),
+                                   runif(10, 0, 3), 
+                                   runif(10, 3, 8)))
+
+# Sample from our data
+head(data)
+
+e.grid = expand.grid(gender = c("Male", "Female"),
+            exercise = c("None", "Light", "Intense"))
+
+# All independent factor combinations
+e.grid
+
+# Number of groups
+nrow(e.grid)
+```
+
+
+# Fit ANOVA
+
+For our experiment, we are interested in how gender *and* exercise impact weight loss.
+
+<blockquote>
+
+"Let’s say researchers want to know if gender and activity volume affect weight loss.
+
+They enlist 30 men and 30 women to take part in an experiment where 10 of each gender are *randomly assigned* to follow a program of either no activity, light exercise, or severe exercise for one month in order to test this.
+
+To see the interaction impact between exercise and gender, use the following procedures to generate a data frame in R, run a two-way ANOVA, and create an interactive graphic."
+
+</blockquote>
+
+```{r}
+model <- aov(weight_loss ~ gender*exercise, data = data)
+summary(model)
+```
+
+At a glance, we can see that independently, `gender` or `exercise` are significant, that is one or the other. However, together there is no significant variance in weight loss. So we can see that gender as an individual factor is significant toward weight loss (up or down, will require regression or interaction plots). Same goes for exericse. However together, the influence is not strong, that is they don't **together** influence weight loss significantly. Another way to think about it is that their product doesn't offer any additional information. Let's take a look at the interaction plot to see if this can validate the things the model discovered.
+
+## ANOVA Assumptions
+
+This is just a little gotcha when using ANOVA.
+
+1. *Independence of variables**: The two variables for testing should be independent of each other. One should not affect the other, or else it could result in skewness
+. This means that one cannot use the two-way ANOVA test in settings with categorical variables.
+2. **Homoscedasticity**:  In a two-way ANOVA test, the variance should be homogeneous. The variation around the mean for each set of data should not vary significantly for all the groups.
+3. **Normal distribution of variables**: The two variables in a two-way ANOVA test should have a normal distribution
+. When plotted individually, each should have a bell curve
+. If the data does not meet this criterion, one could attempt statistical data transformation to achieve the desired result.
+
+```{r}
+library(ggplot2)
+ggplot(data = data) +
+  geom_histogram(aes(x = weight_loss, fill=gender)) +
+  facet_grid(gender ~ exercise, scales="free") + 
+  xlab("Weight Loss (Centered and Scaled)") + 
+  ylab("Count") + ggtitle("Glance for Weight Loss Normality") +
+  theme_bw()
+```
+
+
+# Interaction Plot
+
+Now let's take a look and see
+
+<blockquote>
+
+"**An interaction plot is the most effective tool for spotting and comprehending the effects of interactions between two variables.**
+
+This particular plot style shows the values of the first factor on the x-axis and the fitted values of the response variable on the y-axis.
+
+The values of the second component of interest are depicted by the lines in the plot."
+
+</blockquote>
+
+```{r preview=TRUE}
+interaction.plot(x.factor = data$exercise, #x-axis variable 
+                 trace.factor = data$gender, #variable for lines
+                 response = data$weight_loss, #y-axis variable
+                 fun = median, #metric to plot
+                 main = "Weight Loss Two-way ANOVA Interaction",
+                 ylab = "Weight Loss",
+                 xlab = "Exercise Intensity",
+                 col = c("pink", "blue"),
+                 lty = 1, #line type
+                 lwd = 2, #line width
+                 trace.label = "Gender"
+)
+                 
+```
+
+
+<blockquote> 
+"In general, there is no interaction effect if the two lines on the interaction plot are parallel. **However, there will probably be an interaction effect if the lines cross.**
+
+As we can see in this plot, there is no intersection between the lines for men and women, suggesting that there is no interaction between the variables of exercise intensity and gender.
+
+This is consistent with the p-value in the ANOVA table’s output, **which indicated that the interaction term in the ANOVA model was not statistically significant.**"
+
+</blockquote>
+
+# Referneces
+
+<cite>https://www.r-bloggers.com/2022/07/how-to-create-an-interaction-plot-in-r/</cite>
