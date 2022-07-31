@@ -1,0 +1,257 @@
+---
+title: "GNI Per Capita and Plastic Pollution Analyss in R"
+description: |
+  In this post we will reference analysis done on 20 countries that produce and most mismanaged waste based on their GNI income status in R.
+categories:
+  - web scraping
+  - economics
+  - data cleaning
+  - linear regression
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-07-31
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Introduction
+
+In this post we will be working through some analysis posted [here](https://www.r-bloggers.com/2022/07/comparing-plastic-pollution-modeling-with-tidymodels-and-variable-importance/) analyzing 20 different countries that produce mismanaged waste based on their GNI income status.
+
+## Getting the data
+
+First we want to get a list of dataframes from the wikipedia website for `Gross National Income`. After some recon, one can readily identify that each table has the class `table` and subclass `wikitable`, which is ad-joined to become `table.wikitable` in CSS language.
+
+The data is available [here](https://en.wikipedia.org/wiki/List_of_countries_by_GNI_(nominal)_per_capita).
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(janitor)
+library(rvest)
+library(scales)
+# library(bbplot)
+library(vip)
+
+
+#Scraping the GNI data set
+url <- "https://en.wikipedia.org/wiki/List_of_countries_by_GNI_(nominal)_per_capita"
+list_html <-
+  read_html(url) %>% #scraping the interested web page
+  rvest::html_elements("table.wikitable") %>% # takes the tables we want
+  rvest::html_table() 
+
+
+list_html
+
+```
+
+Next we will use the magic of the `purrr` package to flow our categories through each dataframe using the `map` function. Then we will flow the list of updated datafarmes into the `rbind` function with a `do.call`. Finally we *"consistentize"* the columns using `janitor`'s `clean_names` function. Last we will select, rename, and mutate columns as needed to get a nice clean wiki scraped data frame. 
+
+```{r}
+
+#gni income levels vector
+status <- c("high","high","upper_middle","upper_middle",
+            "lower_middle","lower_middle","low","low")
+
+#Building and tidying GNI dataframe
+df_gni = 
+  #assigning the gni income levels to the corresponding countries
+  purrr::map(1:8, function(x){
+    list_html[[x]] %>% 
+      dplyr::mutate(gni_status=status[x])
+  }) %>% 
+  do.call(what=rbind) %>% 
+  janitor::clean_names() %>%
+  dplyr::mutate(gni_status = forcats::as_factor(gni_status)) %>% 
+  dplyr::select(country, 
+                gni_metric=gni_per_capita_us_1, # renames
+                gni_status) %>% 
+  dplyr::mutate(gni_metric = stringr::str_remove(gni_metric,",") %>% as.numeric()) 
+df_gni
+```
+
+How many countries do we know GNI on?
+
+```{r}
+df_gni %>% 
+  select(country) %>% 
+  unique %>% count()
+```
+
+
+At this point we know information about about 206 countries, their gross national income, and their gni_status of high, mid, or low. Now we want to collect data on waste by country. This is available [here](https://raw.githubusercontent.com/mesdi/plastic-pollution/main/plastic-waste-mismanaged.csv).
+
+First we get the raw dataframe using the consistentcy of `readr::read_csv`. Next we *"consistentize"* the column names, drop missing rows, and rename to match our GNI dataframe.
+
+```{r}
+#Building and tidying waste dataframe
+df_waste <- readr::read_csv("https://raw.githubusercontent.com/mesdi/plastic-pollution/main/plastic-waste-mismanaged.csv")
+
+df_waste =
+  df_waste %>%  
+  janitor::clean_names() %>% 
+  tidyr::drop_na() %>% 
+  select(country=entity,
+         waste_metric=mismanaged_plastic_waste_metric_tons_year_1)
+
+df_waste
+```
+
+How many countries do we have waste info on?
+
+```{r}
+df_waste %>% 
+  select(country) %>% 
+  count
+```
+
+
+Now we want to unify the data to speak about GNI *and* waste. First we will `left_join` the `df_waste` with the `df_gni`. Then only keep unique countries (equivalent to remove_duplicates in dplyr), filter out the world country, and drop missing rows again that the `df_gni` had as country names, but `df_waste` did not. This implicitly gives precendence to the `df_waste` data. This is no different than doing an `inner_join` where it will just drop those non-matches anyway. The `left_join` provides the benefit of axamining which, and how many, rows were not matched in the join. Not a bad idea to just do, then filter.
+
+```{r}
+#Binding waste and gni dataframes by country
+df_tidy =
+  df_waste %>% 
+  dplyr::left_join(df_gni) %>% 
+  dplyr::distinct(country, .keep_all = TRUE) %>% # remove duplicate countries
+  dplyr::filter(!country == "World") %>% 
+  tidyr::drop_na()
+
+df_tidy
+```
+
+Next identify the 6 worst counties with *mismanaged_plastic_waste_metric_tons_year_1*, which we renamed `waste_metric`. The `slice_max` function is incredible here. It will take your dataframe, let you select a column to order by, then do a max operation and cut it off by some `n`, effectively leaving you with the `top_k` or the `slice_max` of the column ordered by something you care about. This is great for quick assessments like:
+
+1. What are the top 6 countries by GNI?
+2. What are the top 6 countries w.r.t income to waste?
+3. What are the top 6 countries by mismanaged plastic waste metric tons per year?
+
+
+```{r}
+df_tidy %>% 
+  dplyr::slice_max(order_by = gni_metric, n = 6) %>% 
+  dplyr::select(country, gni_metric) %>% 
+  dplyr::mutate(gni_metric_label = paste0(round(gni_metric/1000, 2), " thousand"))
+```
+```{r}
+df_tidy %>% 
+  dplyr::mutate(gni_to_waste = gni_metric / waste_metric) %>% 
+  dplyr::slice_max(order_by = gni_to_waste, n=20) %>% 
+    dplyr::select(country, gni_to_waste)
+```
+
+
+```{r}
+#Top 6 countries in terms of the amounts of mismanaged plastic waste 
+df_6 =
+  df_tidy %>% 
+  dplyr::slice_max(order_by = waste_metric, n=6) %>% 
+  dplyr::mutate(waste = paste0(round(waste_metric/10^6, 2), " million t"))
+
+df_6
+```
+## Visualizing the data
+
+```{r}
+df_tidy %>% 
+  
+  # Top 20 waste countries
+  dplyr::slice_max(order_by = waste_metric, n=20) %>% 
+  
+  # X,Y, and color variables
+  ggplot(aes(x=gni_metric, y=waste_metric, color=gni_status)) +
+  
+  # Country names
+  geom_text(aes(label = country),
+            hjust= 0, vjust= -0.5, size=4, key_glyph= "rect") +
+  
+  # Top 6 waste labels
+  geom_text(data = df_6, aes(x = gni_metric, y = waste_metric, label = waste),
+            hjust = 0, vjust=1.2) +
+  
+  scale_x_log10(labels = scales::label_dollar(accuracy = 2)) +
+  scale_y_log10(labels = scales::label_number(scale_cut = cut_si("t"))) +
+  scale_color_discrete(labels = c("Upper-Middle", "Lower-Middle", "Low")) +
+  labs(title = "Mismanaged Plastic Waste (2019) vs. GNI Income.",
+       y = "Plastic Waste (Metric Tons/year)",
+       x = "Gross National Income ($)") +
+  coord_fixed(ratio = 0.5, clip = "off") +
+  theme_minimal()
+  
+
+```
+
+
+## Modeling with tidymodels
+
+```{r}
+
+# Remember what we're modeling
+df_tidy %>% head
+
+
+# Build a receipe
+#   1. log(y)
+#   2. dummies(x)
+#
+df_rec =
+  df_tidy %>% 
+  recipes::recipe(waste_metric ~ gni_status) %>% 
+  recipes::step_log(waste_metric, base = 10) %>% 
+  recipes::step_dummy(gni_status)
+
+df_rec
+
+# Build a model
+#   1. Linear regression
+#
+lm_model =
+  linear_reg() %>% 
+  set_engine("lm")
+
+lm_model
+
+
+# Build workflow
+# 1. Add model
+# 2. Add recipe
+#
+lm_wflow =
+  workflow() %>% 
+  add_model(lm_model) %>% 
+  add_recipe(df_rec)
+
+lm_wflow
+
+# Fit the workflow with some data
+lm_fit = fit(lm_wflow, df_tidy)
+
+# Descriptive and inferential statistics
+lm_fit %>% 
+  extract_fit_engine() %>% 
+  summary()
+
+# ... OR ...
+
+tidy(lm_fit)
+
+
+```
+
+## Variable importance
+
+```{r}
+#variable importance  
+lm_fit %>% 
+  extract_fit_parsnip() %>%
+  vip(aesthetics = list(color = "lightblue", fill = "lightblue")) + 
+  theme_minimal() +
+  ggtitle("Variable Importance", subtitle = "Lower Middle Status Indicates Higher Waste")
+```
+

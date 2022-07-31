@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { color: #00769e; background-color: #f1f3f5; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #00769e; } /* Normal */
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #657422; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #00769e; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #00769e; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #00769e; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+
+  <!--radix_placeholder_meta_tags-->
+  <title>GNI Per Capita and Plastic Pollution Analyss in R</title>
+
+  <meta property="description" itemprop="description" content="In this post we will reference analysis done on 20 countries that produce and most mismanaged waste based on their GNI income status in R."/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2022-07-31"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-07-31"/>
+  <meta name="article:author" content="Blake Conrad"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="GNI Per Capita and Plastic Pollution Analyss in R"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="In this post we will reference analysis done on 20 countries that produce and most mismanaged waste based on their GNI income status in R."/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="GNI Per Capita and Plastic Pollution Analyss in R"/>
+  <meta property="twitter:description" content="In this post we will reference analysis done on 20 countries that produce and most mismanaged waste based on their GNI income status in R."/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","categories","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["GNI Per Capita and Plastic Pollution Analyss in R"]},{"type":"character","attributes":{},"value":["In this post we will reference analysis done on 20 countries that produce and most mismanaged waste based on their GNI income status in R.\n"]},{"type":"character","attributes":{},"value":["web scraping","economics","data cleaning","linear regression"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Blake Conrad"]},{"type":"character","attributes":{},"value":["https://github.com/conradbm"]}]}]},{"type":"character","attributes":{},"value":["2022-07-31"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["gni-per-capita-and-plastic-pollution-analyss-in-r_files/figure-html5/unnamed-chunk-10-1.png","gni-per-capita-and-plastic-pollution-analyss-in-r_files/figure-html5/unnamed-chunk-12-1.png"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          return "<p>" + $('#ref-' + ref).html() + "</p>";
+        }).join("\n");
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/header-attrs-2.14/header-attrs.js"></script>
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/popper-2.6.0/popper.min.js"></script>
+  <link href="gni-per-capita-and-plastic-pollution-analyss-in-r_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="gni-per-capita-and-plastic-pollution-analyss-in-r_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"GNI Per Capita and Plastic Pollution Analyss in R","description":"In this post we will reference analysis done on 20 countries that produce and most mismanaged waste based on their GNI income status in R.","authors":[{"author":"Blake Conrad","authorURL":"https://github.com/conradbm","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-07-31T00:00:00.000-04:00","citationText":"Conrad, 2022"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>GNI Per Capita and Plastic Pollution Analyss in R</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt-tag">web scraping</div>
+<div class="dt-tag">economics</div>
+<div class="dt-tag">data cleaning</div>
+<div class="dt-tag">linear regression</div>
+</div>
+<!--/radix_placeholder_categories-->
+<p><p>In this post we will reference analysis done on 20 countries that
+produce and most mismanaged waste based on their GNI income status in
+R.</p></p>
+</div>
+
+<div class="d-byline">
+  Blake Conrad <a href="https://github.com/conradbm"
+class="uri">https://github.com/conradbm</a> 
+  
+<br/>2022-07-31
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#getting-the-data">Getting the data</a></li>
+<li><a href="#visualizing-the-data">Visualizing the data</a></li>
+<li><a href="#modeling-with-tidymodels">Modeling with
+tidymodels</a></li>
+<li><a href="#variable-importance">Variable importance</a></li>
+</ul></li>
+</ul>
+</nav>
+</div>
+<h1 id="introduction">Introduction</h1>
+<p>In this post we will be working through some analysis posted <a
+href="https://www.r-bloggers.com/2022/07/comparing-plastic-pollution-modeling-with-tidymodels-and-variable-importance/">here</a>
+analyzing 20 different countries that produce mismanaged waste based on
+their GNI income status.</p>
+<h2 id="getting-the-data">Getting the data</h2>
+<p>First we want to get a list of dataframes from the wikipedia website
+for <code>Gross National Income</code>. After some recon, one can
+readily identify that each table has the class <code>table</code> and
+subclass <code>wikitable</code>, which is ad-joined to become
+<code>table.wikitable</code> in CSS language.</p>
+<p>The data is available <a
+href="https://en.wikipedia.org/wiki/List_of_countries_by_GNI_(nominal)_per_capita">here</a>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/sfirke/janitor'>janitor</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rvest.tidyverse.org/'>rvest</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://scales.r-lib.org'>scales</a></span><span class='op'>)</span></span>
+<span><span class='co'># library(bbplot)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/koalaverse/vip/'>vip</a></span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='co'>#Scraping the GNI data set</span></span>
+<span><span class='va'>url</span> <span class='op'>&lt;-</span> <span class='st'>"https://en.wikipedia.org/wiki/List_of_countries_by_GNI_(nominal)_per_capita"</span></span>
+<span><span class='va'>list_html</span> <span class='op'>&lt;-</span></span>
+<span>  <span class='fu'><a href='http://xml2.r-lib.org/reference/read_xml.html'>read_html</a></span><span class='op'>(</span><span class='va'>url</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#scraping the interested web page</span></span>
+<span>  <span class='fu'>rvest</span><span class='fu'>::</span><span class='fu'><a href='https://rvest.tidyverse.org/reference/html_element.html'>html_elements</a></span><span class='op'>(</span><span class='st'>"table.wikitable"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'># takes the tables we want</span></span>
+<span>  <span class='fu'>rvest</span><span class='fu'>::</span><span class='fu'><a href='https://rvest.tidyverse.org/reference/html_table.html'>html_table</a></span><span class='op'>(</span><span class='op'>)</span> </span>
+<span></span>
+<span></span>
+<span><span class='va'>list_html</span></span></code></pre>
+</div>
+<pre><code>[[1]]
+# A tibble: 36 x 4
+   Rank  Country              `GNI per capita (US$)[1]`  Year
+   &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;                     &lt;int&gt;
+ 1 —     Bermuda (UK)         116,540                    2021
+ 2 1     Liechtenstein        116,440                    2009
+ 3 2     Switzerland          90,360                     2021
+ 4 3     Norway               84,090                     2021
+ 5 —     Isle of Man (UK)     83,920                     2019
+ 6 4     Luxembourg           81,110                     2020
+ 7 5     Ireland              74,520                     2021
+ 8 6     United States        70,430                     2021
+ 9 7     Denmark              68,110                     2021
+10 —     Channel Islands (UK) 66,220                     2007
+# ... with 26 more rows
+# i Use `print(n = ...)` to see more rows
+
+[[2]]
+# A tibble: 36 x 4
+   Rank  Country                       `GNI per capita (US$)[1]`  Year
+   &lt;chr&gt; &lt;chr&gt;                         &lt;chr&gt;                     &lt;int&gt;
+ 1 30    Malta                         30,560                     2021
+ 2 31    Spain                         29,740                     2021
+ 3 32    Slovenia                      28,240                     2021
+ 4 33    Cyprus                        28,130                     2021
+ 5 —     Sint Maarten (Netherlands)    27,510                     2018
+ 6 34    Bahamas                       27,220                     2021
+ 7 35    Estonia                       25,920                     2021
+ 8 36    Czech Republic                24,070                     2021
+ 9 37    Portugal                      23,730                     2021
+10 —     Turks and Caicos Islands (UK) 23,600                     2021
+# ... with 26 more rows
+# i Use `print(n = ...)` to see more rows
+
+[[3]]
+# A tibble: 26 x 4
+   Rank  Country     `GNI per capita (US$)[1]`  Year
+   &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;                     &lt;int&gt;
+ 1 59    Costa Rica  12,310                     2021
+ 2 —     World       12,070                     2021
+ 3 60    China       11,890                     2021
+ 4 61    Russia      11,600                     2021
+ 5 62    Malaysia    10,930                     2021
+ 6 63    Mauritius   10,860                     2021
+ 7 64    Bulgaria    10,720                     2021
+ 8 65    Argentina   10,050                     2021
+ 9 66    Turkey      9,830                      2021
+10 67    Saint Lucia 9,680                      2021
+# ... with 16 more rows
+# i Use `print(n = ...)` to see more rows
+
+[[4]]
+# A tibble: 27 x 4
+    Rank Country                `GNI per capita (US$)[1]`  Year
+   &lt;int&gt; &lt;chr&gt;                  &lt;chr&gt;                     &lt;int&gt;
+ 1    84 Belarus                6,950                      2021
+ 2    85 Botswana               6,940                      2021
+ 3    86 Bosnia and Herzegovina 6,770                      2021
+ 4    87 Tuvalu                 6,760                      2021
+ 5    88 Peru                   6,520                      2021
+ 6    89 South Africa           6,440                      2021
+ 7    90 Colombia               6,160                      2021
+ 8    91 North Macedonia        6,130                      2021
+ 9    92 Albania                6,110                      2021
+10    93 Ecuador                5,930                      2021
+# ... with 17 more rows
+# i Use `print(n = ...)` to see more rows
+
+[[5]]
+# A tibble: 26 x 4
+    Rank Country                        GNI per capita (US$)[1~1  Year
+   &lt;int&gt; &lt;chr&gt;                          &lt;chr&gt;                    &lt;int&gt;
+ 1   111 Palestine                      4,220                     2021
+ 2   112 El Salvador                    4,140                     2021
+ 3   112 Indonesia                      4,140                     2021
+ 4   114 Ukraine                        4,120                     2021
+ 5   115 Federated States of Micronesia 3,880                     2021
+ 6   116 Samoa                          3,860                     2021
+ 7   117 Sri Lanka                      3,820                     2021
+ 8   118 Mongolia                       3,760                     2021
+ 9   119 Eswatini                       3,680                     2021
+10   120 Algeria                        3,660                     2021
+# ... with 16 more rows, and abbreviated variable name
+#   1: `GNI per capita (US$)[1]`
+# i Use `print(n = ...)` to see more rows
+
+[[6]]
+# A tibble: 28 x 4
+    Rank Country               `GNI per capita (US$)[1]`  Year
+   &lt;int&gt; &lt;chr&gt;                 &lt;chr&gt;                     &lt;int&gt;
+ 1   137 Laos                  2,520                      2021
+ 2   138 Ivory Coast           2,450                      2021
+ 3   139 Ghana                 2,360                      2021
+ 4   140 Solomon Islands       2,300                      2021
+ 5   141 Sao Tome and Principe 2,280                      2021
+ 6   142 India                 2,170                      2021
+ 7   143 Nigeria               2,100                      2021
+ 8   144 Nicaragua             2,010                      2021
+ 9   144 Kenya                 2,010                      2021
+10   146 Uzbekistan            1,960                      2021
+# ... with 18 more rows
+# i Use `print(n = ...)` to see more rows
+
+[[7]]
+# A tibble: 13 x 4
+    Rank Country       `GNI per capita (US$)[1]`  Year
+   &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;                     &lt;int&gt;
+ 1   165 South Sudan   1,090                      2015
+ 2   166 Zambia        1,040                      2021
+ 3   167 Guinea        1,010                      2021
+ 4   168 Togo          980                        2021
+ 5   169 Ethiopia      960                        2021
+ 6   170 Syria         930                        2018
+ 7   171 Mali          870                        2021
+ 8   172 Burkina Faso  860                        2021
+ 9   173 Rwanda        850                        2021
+10   174 Uganda        840                        2021
+11   175 The Gambia    800                        2021
+12   176 Guinea-Bissau 780                        2021
+13   177 Yemen         670                        2020
+
+[[8]]
+# A tibble: 14 x 4
+    Rank Country                          GNI per capita (US$)~1  Year
+   &lt;int&gt; &lt;chr&gt;                                             &lt;int&gt; &lt;int&gt;
+ 1   177 Sudan                                               670  2021
+ 2   179 Chad                                                650  2021
+ 3   180 Malawi                                              630  2021
+ 4   181 Liberia                                             620  2021
+ 5   182 Eritrea                                             600  2011
+ 6   183 Niger                                               590  2021
+ 7   184 Democratic Republic of the Congo                    580  2021
+ 8   185 Central African Republic                            530  2021
+ 9   186 Sierra Leone                                        510  2021
+10   187 Madagascar                                          500  2021
+11   187 Afghanistan                                         500  2020
+12   189 Mozambique                                          480  2021
+13   190 Somalia                                             450  2021
+14   191 Burundi                                             240  2021
+# ... with abbreviated variable name 1: `GNI per capita (US$)[1]`
+
+[[9]]
+# A tibble: 16 x 5
+   `High-income group`           High-income~1 High-~2 High-~3 High-~4
+   &lt;chr&gt;                         &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+ 1 British Virgin Islands (UK)   &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 2 Cook Islands (New Zealand)    &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 3 Faroe Islands (Denmark)       &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 4 Gibraltar (UK)                &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 5 Guam (US)                     &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 6 Monaco                        &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 7 Northern Mariana Islands (US) &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 8 Saint Martin (France)         &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+ 9 San Marino                    &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+10 Taiwan                        &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+11 U.S. Virgin Islands (US)      &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+12 Upper-middle-income group     Upper-middle~ Upper-~ Upper-~ Upper-~
+13 American Samoa (US)           &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+14 Venezuela                     &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+15 Low-income group              Low-income g~ Low-in~ Low-in~ Low-in~
+16 North Korea                   &lt;NA&gt;          &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+# ... with abbreviated variable names 1: `High-income group`,
+#   2: `High-income group`, 3: `High-income group`,
+#   4: `High-income group`</code></pre>
+</div>
+<p>Next we will use the magic of the <code>purrr</code> package to flow
+our categories through each dataframe using the <code>map</code>
+function. Then we will flow the list of updated datafarmes into the
+<code>rbind</code> function with a <code>do.call</code>. Finally we
+<em>“consistentize”</em> the columns using <code>janitor</code>’s
+<code>clean_names</code> function. Last we will select, rename, and
+mutate columns as needed to get a nice clean wiki scraped data
+frame.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#gni income levels vector</span></span>
+<span><span class='va'>status</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"high"</span>,<span class='st'>"high"</span>,<span class='st'>"upper_middle"</span>,<span class='st'>"upper_middle"</span>,</span>
+<span>            <span class='st'>"lower_middle"</span>,<span class='st'>"lower_middle"</span>,<span class='st'>"low"</span>,<span class='st'>"low"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Building and tidying GNI dataframe</span></span>
+<span><span class='va'>df_gni</span> <span class='op'>=</span> </span>
+<span>  <span class='co'>#assigning the gni income levels to the corresponding countries</span></span>
+<span>  <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>    <span class='va'>list_html</span><span class='op'>[[</span><span class='va'>x</span><span class='op'>]</span><span class='op'>]</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>      <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>gni_status<span class='op'>=</span><span class='va'>status</span><span class='op'>[</span><span class='va'>x</span><span class='op'>]</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span>what<span class='op'>=</span><span class='va'>rbind</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>gni_status <span class='op'>=</span> <span class='fu'>forcats</span><span class='fu'>::</span><span class='fu'><a href='https://forcats.tidyverse.org/reference/as_factor.html'>as_factor</a></span><span class='op'>(</span><span class='va'>gni_status</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>country</span>, </span>
+<span>                gni_metric<span class='op'>=</span><span class='va'>gni_per_capita_us_1</span>, <span class='co'># renames</span></span>
+<span>                <span class='va'>gni_status</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>gni_metric <span class='op'>=</span> <span class='fu'>stringr</span><span class='fu'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_remove.html'>str_remove</a></span><span class='op'>(</span><span class='va'>gni_metric</span>,<span class='st'>","</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> </span>
+<span><span class='va'>df_gni</span></span></code></pre>
+</div>
+<pre><code># A tibble: 206 x 3
+   country              gni_metric gni_status
+   &lt;chr&gt;                     &lt;dbl&gt; &lt;fct&gt;     
+ 1 Bermuda (UK)             116540 high      
+ 2 Liechtenstein            116440 high      
+ 3 Switzerland               90360 high      
+ 4 Norway                    84090 high      
+ 5 Isle of Man (UK)          83920 high      
+ 6 Luxembourg                81110 high      
+ 7 Ireland                   74520 high      
+ 8 United States             70430 high      
+ 9 Denmark                   68110 high      
+10 Channel Islands (UK)      66220 high      
+# ... with 196 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<p>How many countries do we know GNI on?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df_gni</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>country</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='va'>unique</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 1
+      n
+  &lt;int&gt;
+1   206</code></pre>
+</div>
+<p>At this point we know information about about 206 countries, their
+gross national income, and their gni_status of high, mid, or low. Now we
+want to collect data on waste by country. This is available <a
+href="https://raw.githubusercontent.com/mesdi/plastic-pollution/main/plastic-waste-mismanaged.csv">here</a>.</p>
+<p>First we get the raw dataframe using the consistentcy of
+<code>readr::read_csv</code>. Next we <em>“consistentize”</em> the
+column names, drop missing rows, and rename to match our GNI
+dataframe.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Building and tidying waste dataframe</span></span>
+<span><span class='va'>df_waste</span> <span class='op'>&lt;-</span> <span class='fu'>readr</span><span class='fu'>::</span><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"https://raw.githubusercontent.com/mesdi/plastic-pollution/main/plastic-waste-mismanaged.csv"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df_waste</span> <span class='op'>=</span></span>
+<span>  <span class='va'>df_waste</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  </span>
+<span>  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>tidyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>country<span class='op'>=</span><span class='va'>entity</span>,</span>
+<span>         waste_metric<span class='op'>=</span><span class='va'>mismanaged_plastic_waste_metric_tons_year_1</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df_waste</span></span></code></pre>
+</div>
+<pre><code># A tibble: 160 x 2
+   country             waste_metric
+   &lt;chr&gt;                      &lt;dbl&gt;
+ 1 Albania                    69833
+ 2 Algeria                   764578
+ 3 Angola                    236946
+ 4 Antigua and Barbuda          627
+ 5 Argentina                 465808
+ 6 Australia                   5266
+ 7 Bahamas                     2212
+ 8 Bahrain                     1043
+ 9 Bangladesh               1021990
+10 Barbados                     872
+# ... with 150 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<p>How many countries do we have waste info on?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df_waste</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>country</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='va'>count</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 1
+      n
+  &lt;int&gt;
+1   160</code></pre>
+</div>
+<p>Now we want to unify the data to speak about GNI <em>and</em> waste.
+First we will <code>left_join</code> the <code>df_waste</code> with the
+<code>df_gni</code>. Then only keep unique countries (equivalent to
+remove_duplicates in dplyr), filter out the world country, and drop
+missing rows again that the <code>df_gni</code> had as country names,
+but <code>df_waste</code> did not. This implicitly gives precendence to
+the <code>df_waste</code> data. This is no different than doing an
+<code>inner_join</code> where it will just drop those non-matches
+anyway. The <code>left_join</code> provides the benefit of axamining
+which, and how many, rows were not matched in the join. Not a bad idea
+to just do, then filter.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Binding waste and gni dataframes by country</span></span>
+<span><span class='va'>df_tidy</span> <span class='op'>=</span></span>
+<span>  <span class='va'>df_waste</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>df_gni</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='va'>country</span>, .keep_all <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'># remove duplicate countries</span></span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='va'>country</span> <span class='op'>==</span> <span class='st'>"World"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>tidyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df_tidy</span></span></code></pre>
+</div>
+<pre><code># A tibble: 142 x 4
+   country             waste_metric gni_metric gni_status  
+   &lt;chr&gt;                      &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;       
+ 1 Albania                    69833       6110 upper_middle
+ 2 Algeria                   764578       3660 lower_middle
+ 3 Angola                    236946       1770 lower_middle
+ 4 Antigua and Barbuda          627      14900 high        
+ 5 Argentina                 465808      10050 upper_middle
+ 6 Australia                   5266      56760 high        
+ 7 Bahamas                     2212      27220 high        
+ 8 Bahrain                     1043      19930 high        
+ 9 Bangladesh               1021990       2620 lower_middle
+10 Barbados                     872      16720 high        
+# ... with 132 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+</div>
+<p>Next identify the 6 worst counties with
+<em>mismanaged_plastic_waste_metric_tons_year_1</em>, which we renamed
+<code>waste_metric</code>. The <code>slice_max</code> function is
+incredible here. It will take your dataframe, let you select a column to
+order by, then do a max operation and cut it off by some <code>n</code>,
+effectively leaving you with the <code>top_k</code> or the
+<code>slice_max</code> of the column ordered by something you care
+about. This is great for quick assessments like:</p>
+<ol type="1">
+<li>What are the top 6 countries by GNI?</li>
+<li>What are the top 6 countries w.r.t income to waste?</li>
+<li>What are the top 6 countries by mismanaged plastic waste metric tons
+per year?</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df_tidy</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice_max</a></span><span class='op'>(</span>order_by <span class='op'>=</span> <span class='va'>gni_metric</span>, n <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>country</span>, <span class='va'>gni_metric</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>gni_metric_label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>gni_metric</span><span class='op'>/</span><span class='fl'>1000</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='st'>" thousand"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 3
+  country       gni_metric gni_metric_label
+  &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;           
+1 Norway             84090 84.09 thousand  
+2 Ireland            74520 74.52 thousand  
+3 United States      70430 70.43 thousand  
+4 Denmark            68110 68.11 thousand  
+5 Iceland            64410 64.41 thousand  
+6 Singapore          64010 64.01 thousand  </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df_tidy</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>gni_to_waste <span class='op'>=</span> <span class='va'>gni_metric</span> <span class='op'>/</span> <span class='va'>waste_metric</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice_max</a></span><span class='op'>(</span>order_by <span class='op'>=</span> <span class='va'>gni_to_waste</span>, n<span class='op'>=</span><span class='fl'>20</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>country</span>, <span class='va'>gni_to_waste</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 20 x 2
+   country               gni_to_waste
+   &lt;chr&gt;                        &lt;dbl&gt;
+ 1 Montenegro                   581. 
+ 2 Iceland                      427. 
+ 3 Seychelles                   402. 
+ 4 Marshall Islands             316. 
+ 5 Saint Kitts and Nevis        191. 
+ 6 Denmark                      175. 
+ 7 Maldives                     140  
+ 8 Palau                        124. 
+ 9 Malta                        118. 
+10 Norway                        56.3
+11 Brunei                        45.5
+12 Estonia                       43.2
+13 Kiribati                      39.3
+14 Qatar                         37.3
+15 Mauritius                     36.3
+16 Cyprus                        33.6
+17 Slovenia                      33.5
+18 Ireland                       27.9
+19 New Zealand                   26.5
+20 Singapore                     25.9</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Top 6 countries in terms of the amounts of mismanaged plastic waste </span></span>
+<span><span class='va'>df_6</span> <span class='op'>=</span></span>
+<span>  <span class='va'>df_tidy</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice_max</a></span><span class='op'>(</span>order_by <span class='op'>=</span> <span class='va'>waste_metric</span>, n<span class='op'>=</span><span class='fl'>6</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>waste <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>waste_metric</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>^</span><span class='fl'>6</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='st'>" million t"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df_6</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 5
+  country     waste_metric gni_metric gni_status   waste          
+  &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;        &lt;chr&gt;          
+1 India           12994100       2170 lower_middle 12.99 million t
+2 China           12272200      11890 upper_middle 12.27 million t
+3 Philippines      4025300       3640 lower_middle 4.03 million t 
+4 Brazil           3296700       7720 upper_middle 3.3 million t  
+5 Nigeria          1948950       2100 lower_middle 1.95 million t 
+6 Tanzania         1716400       1140 lower_middle 1.72 million t </code></pre>
+</div>
+<h2 id="visualizing-the-data">Visualizing the data</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df_tidy</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class='co'># Top 20 waste countries</span></span>
+<span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice_max</a></span><span class='op'>(</span>order_by <span class='op'>=</span> <span class='va'>waste_metric</span>, n<span class='op'>=</span><span class='fl'>20</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class='co'># X,Y, and color variables</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>gni_metric</span>, y<span class='op'>=</span><span class='va'>waste_metric</span>, color<span class='op'>=</span><span class='va'>gni_status</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  </span>
+<span>  <span class='co'># Country names</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>country</span><span class='op'>)</span>,</span>
+<span>            hjust<span class='op'>=</span> <span class='fl'>0</span>, vjust<span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.5</span>, size<span class='op'>=</span><span class='fl'>4</span>, key_glyph<span class='op'>=</span> <span class='st'>"rect"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  </span>
+<span>  <span class='co'># Top 6 waste labels</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>df_6</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>gni_metric</span>, y <span class='op'>=</span> <span class='va'>waste_metric</span>, label <span class='op'>=</span> <span class='va'>waste</span><span class='op'>)</span>,</span>
+<span>            hjust <span class='op'>=</span> <span class='fl'>0</span>, vjust<span class='op'>=</span><span class='fl'>1.2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_log10</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/label_dollar.html'>label_dollar</a></span><span class='op'>(</span>accuracy <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/label_number.html'>label_number</a></span><span class='op'>(</span>scale_cut <span class='op'>=</span> <span class='fu'><a href='https://scales.r-lib.org/reference/number.html'>cut_si</a></span><span class='op'>(</span><span class='st'>"t"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html'>scale_color_discrete</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Upper-Middle"</span>, <span class='st'>"Lower-Middle"</span>, <span class='st'>"Low"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Mismanaged Plastic Waste (2019) vs. GNI Income."</span>,</span>
+<span>       y <span class='op'>=</span> <span class='st'>"Plastic Waste (Metric Tons/year)"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"Gross National Income ($)"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_fixed.html'>coord_fixed</a></span><span class='op'>(</span>ratio <span class='op'>=</span> <span class='fl'>0.5</span>, clip <span class='op'>=</span> <span class='st'>"off"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<h2 id="modeling-with-tidymodels">Modeling with tidymodels</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Remember what we're modeling</span></span>
+<span><span class='va'>df_tidy</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>head</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 x 4
+  country             waste_metric gni_metric gni_status  
+  &lt;chr&gt;                      &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;       
+1 Albania                    69833       6110 upper_middle
+2 Algeria                   764578       3660 lower_middle
+3 Angola                    236946       1770 lower_middle
+4 Antigua and Barbuda          627      14900 high        
+5 Argentina                 465808      10050 upper_middle
+6 Australia                   5266      56760 high        </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Build a receipe</span></span>
+<span><span class='co'>#   1. log(y)</span></span>
+<span><span class='co'>#   2. dummies(x)</span></span>
+<span><span class='co'>#</span></span>
+<span><span class='va'>df_rec</span> <span class='op'>=</span></span>
+<span>  <span class='va'>df_tidy</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>waste_metric</span> <span class='op'>~</span> <span class='va'>gni_status</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/step_log.html'>step_log</a></span><span class='op'>(</span><span class='va'>waste_metric</span>, base <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/step_dummy.html'>step_dummy</a></span><span class='op'>(</span><span class='va'>gni_status</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df_rec</span></span></code></pre>
+</div>
+<pre><code>Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          1
+
+Operations:
+
+Log transformation on waste_metric
+Dummy variables from gni_status</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Build a model</span></span>
+<span><span class='co'>#   1. Linear regression</span></span>
+<span><span class='co'>#</span></span>
+<span><span class='va'>lm_model</span> <span class='op'>=</span></span>
+<span>  <span class='fu'>linear_reg</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"lm"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>lm_model</span></span></code></pre>
+</div>
+<pre><code>Linear Regression Model Specification (regression)
+
+Computational engine: lm </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Build workflow</span></span>
+<span><span class='co'># 1. Add model</span></span>
+<span><span class='co'># 2. Add recipe</span></span>
+<span><span class='co'>#</span></span>
+<span><span class='va'>lm_wflow</span> <span class='op'>=</span></span>
+<span>  <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>lm_model</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>df_rec</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>lm_wflow</span></span></code></pre>
+</div>
+<pre><code>== Workflow ==========================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ------------------------------------------------------
+2 Recipe Steps
+
+* step_log()
+* step_dummy()
+
+-- Model -------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Computational engine: lm </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Fit the workflow with some data</span></span>
+<span><span class='va'>lm_fit</span> <span class='op'>=</span> <span class='fu'>fit</span><span class='op'>(</span><span class='va'>lm_wflow</span>, <span class='va'>df_tidy</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Descriptive and inferential statistics</span></span>
+<span><span class='va'>lm_fit</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>extract_fit_engine</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>
+Call:
+stats::lm(formula = ..y ~ ., data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.2939 -0.6246  0.1494  0.8228  2.6911 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               3.5666     0.1595  22.359  &lt; 2e-16 ***
+gni_status_upper_middle   0.8313     0.2393   3.474 0.000685 ***
+gni_status_lower_middle   1.5965     0.2410   6.625 7.15e-10 ***
+gni_status_low            1.0701     0.3512   3.047 0.002768 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.128 on 138 degrees of freedom
+Multiple R-squared:  0.2471,    Adjusted R-squared:  0.2307 
+F-statistic: 15.09 on 3 and 138 DF,  p-value: 1.501e-08</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># ... OR ...</span></span>
+<span></span>
+<span><span class='fu'>tidy</span><span class='op'>(</span><span class='va'>lm_fit</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 4 x 5
+  term                    estimate std.error statistic  p.value
+  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)                3.57      0.160     22.4  1.01e-47
+2 gni_status_upper_middle    0.831     0.239      3.47 6.85e- 4
+3 gni_status_lower_middle    1.60      0.241      6.63 7.15e-10
+4 gni_status_low             1.07      0.351      3.05 2.77e- 3</code></pre>
+</div>
+<h2 id="variable-importance">Variable importance</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#variable importance  </span></span>
+<span><span class='va'>lm_fit</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/pkg/vip/man/vip.html'>vip</a></span><span class='op'>(</span>aesthetics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"lightblue"</span>, fill <span class='op'>=</span> <span class='st'>"lightblue"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Variable Importance"</span>, subtitle <span class='op'>=</span> <span class='st'>"Lower Middle Status Indicates Higher Waste"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="gni-per-capita-and-plastic-pollution-analyss-in-r_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
