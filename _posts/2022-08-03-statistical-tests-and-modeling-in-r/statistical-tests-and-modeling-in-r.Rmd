@@ -1,0 +1,288 @@
+---
+title: "Statistical Tests and Modeling in R"
+description: |
+  In this post we will explore a few statistical tests and plots that are built into R.
+categories:
+  - statistics
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-08-03
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Introduction
+
+Statistical tests are common-place for detecting significant differences among data fields. In [the original article](https://stats.oarc.ucla.edu/stat/data/intro_r/intro_r_interactive_flat.html#chi-square-test-of-indepedence) there are several of these, among other statistical techniques introduced. I want to emphesize a few of these and some simple modeling plots in this article. These include:
+
+- Chi-squared test
+
+- T-test
+
+- Paired T-test
+
+- Linear regression
+
+- ANOVA
+
+## Getting the data
+
+```{r}
+bloodtest <- data.frame(id = 1:10,
+                        gender = c("female", "male", "female", "female", "female", "male", "male", "female", "male", "female"),
+                        hospital = c("CLH", "MH", "MH", "MH", "CLH", "MH", "MDH", "MDH", "CLH", "MH"),
+                        doc_id = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 3),
+                        insured = c(0, 1, 1, 1, 0, 1, 1, 0, 1, 1),
+                        age = c(23, 45, 37, 49, 51, 55, 56, 37, 26, 40),
+                        test1  = c(47, 67, 41, 65, 60, 52, 68, 37, 44, 44),
+                        test2 = c(46, 57, 47, 65, 62, 51 ,62 ,44 ,46, 61),
+                        test3 = c(49, 73, 50, 64, 77, 57, 75, 55, 62, 55),
+                        test4 = c(61, 61, 51, 71, 56, 57, 61, 46, 46, 46))
+bloodtest
+```
+
+```{r}
+
+mean(bloodtest$age)
+
+median(bloodtest$age)
+
+var(bloodtest$age)
+
+summary(bloodtest$test1)
+```
+
+### Frequency Tables
+```{r}
+
+# Counts of gender by category
+table(bloodtest$gender)
+
+# Counts of hoppital by category
+table(bloodtest$hospital)
+
+# Proportions of hospital by category - should always sum to 1
+prop.table(table(bloodtest$hospital))
+```
+
+### Crosstabs
+
+You can look at proportions over two or more variables by extending the table function to include multiple variables. We include three here,
+
+- gender
+
+- hospital
+
+- insured
+
+```{r}
+my2way <- table(bloodtest$gender, bloodtest$hospital, bloodtest$insured)
+my2way
+
+# row proportions - prop of gender that fall into hospitals
+prop.table(my2way, margin=1)
+
+# column proportions - prop of hospital that fall into genders
+prop.table(my2way, margin=2)
+```
+
+It looks like the for the non-insurred visitors accross the hospitals the majority proportion (2/3) goes to `CLH`, and they happen to be mostly `females`. Could this be do to some other cause, such:
+
+- Births?
+
+- Abortions?
+
+- Special female treatments/operations?
+
+That said, there are no females who were insurred at this hospital. But close behind is `MDH` with the same issue, but on less a severse scale only with a 1/2 split of insurred females to insurred males (as oppose to our 2/3 to 1/3 previous situation at `CLH`). For `MH` we have a nice porportional split of insurred male and female patients, with slightly more females (6/10 to 4/10).
+
+
+## Chi-squared test
+
+The chi-squared test is an interesting one I needed to brush up on. It tests two categorical variables. The test will identify if they are different. Pretty nifty. How does it do this? It will examine the ratio of proportions. So point by point, the proportion of observations that fall into the same classes will provide a low chi-square distribution value. That is, if the observations time and time again share the same categories, low chi-square values will yield. If they, however, do not share the same values over all observations, but show variance, the chi-squared distribution value will be higher, resulting in a lower p-value (or in the tail), whih will identify statistical significant, and a difference detected.
+
+```{r}
+
+# Pretty independent categories
+chisq.test(bloodtest$hospital, bloodtest$insured)
+
+```
+
+`hospital` and `insured` look pretty independent.
+
+What about between insurance and gender?
+
+```{r}
+
+# Pretty independent categories
+chisq.test(bloodtest$gender, bloodtest$insured)
+
+```
+
+These do not look as independent, but `0.3` to me is still pretty low. And based on our frequency analysis, might be something worth looking into later!
+
+## T-test
+
+The `t-test` is not paired, so we do not suspect a correlation between the variables. This will test whether the difference between the test1 and gender is significantly different. 
+
+```{r}
+t.test(test1 ~ gender, data=bloodtest)
+```
+
+With such a high p-value, we do not suspect the first test to differ much across genders.
+
+Are the results for test1 significantly different accross hospitals? The t-test will only check between categorical variables with two levels or two numeric variables. The ANOVA will expand this to factors of many levels. But the essence is still the same. The f-distribution will detect a strong different of total mean squared to sum of square ratios, and if it is high it may indicate key differences across the categorical variable.
+
+```{r}
+summary(aov(test1 ~ hospital, data=bloodtest))
+
+```
+
+With such a high p-value, we do not suspect this category to be very different accross the first test results.
+
+What about 
+
+```{r}
+t.test(test1 ~ insured, data=bloodtest)
+```
+
+Insurance indication does not appear to be very different for the first blood test.
+
+## Paired T-test
+
+The paired t-test is when we suspect correlation, but the question posed is always the same: Are these two things different? Low p-values provide evidence that their mean difference is non-zero (they're pretty different, in statistical speak).
+
+We test here the difference between the blood tests themselves. Were their values pretty different (after centered, scaled, etc..)?
+
+```{r}
+t.test(bloodtest$test1, bloodtest$test3, paired=TRUE)
+```
+
+They were significantly different. It is important to remember the assumptions of such a test. This assumes normality of your response variables under consideration.
+
+## Linear Regression
+
+This has largely been updated by the `tidymodels` package, using the `engine("lm")` method, but the engine is still the same, so it is important to know how to use it for statistical testing and more sophisticated data optimization if required.
+
+```{r}
+m1 <- lm(test1 ~ age + gender, data=bloodtest)
+m1
+```
+
+### Residual Diagnostics
+
+There are for plots produced for the `lm` object. These produce:
+
+- residual vs fitted
+- normal q-q-plot of residuals
+- scale-location
+- residuals vs leverage
+
+```{r}
+# plots all 4 plots at once (otherwise one at a time)
+layout(matrix(c(1,2,3,4),2,2))
+
+# 4 diagnostic plots
+plot(m1)
+```
+
+
+Some important functions to look at your regression model:
+
+- `summary()`
+
+- `coef()`
+
+- `residuals()`
+
+- `predict()`
+
+- `confint()`
+
+
+```{r}
+coef(m1)
+
+confint(m1)
+
+df = as.data.frame(cbind(bloodtest$test1, predict(m1), residuals(m1)))
+names(df) = c("test1", "prediction", "residuals")
+df
+```
+
+
+## ANOVA
+
+We can now supply the `lm` model into the `anova()` function to produce an anova table for our linear model and the formula provided.
+
+```{r}
+anova(m1)
+```
+
+From the author,
+
+<blockquote>
+"The anova() function is often used to conduct a likelihood ratio test, that compares the fit of nested models to the data. This test allows one to assess whether the addition of several predictors improves the fit of the model.
+
+Simply specify two nested models to anova() to conduct the likelihood ratio test:"
+</blockquote>
+
+```{r}
+m2 <- lm(test1 ~ age + gender + hospital, data = bloodtest)
+
+anova.results = anova(m2, m1)
+
+anova.results
+
+anova.results$`Pr(>F)`[[2]]
+```
+
+This will see if the second model offers any improvement by adding in a new variable. This will test the ratio of residual sum of squares (total error accross all observations) against one another, then map it onto the f-distribution to discern if it is in the tail. A low p-value will indicate that the second model (first argument) is *low* **OR** the first model (second argument) is *high* (or both in concurrence). If this is the case, the f-distribution will yield a very high value, and the p-value will be very low (i.e., low probability of this value being observed). This will issue to us that there is a statistical difference in models, and your added variable is important information!
+
+In our case, this is not so. So we will not add hospital to the mix. We could experiment and see if adding any other variables might help.
+
+```{r}
+
+# Let's start with age and see if we can incrementally add valuable information in, only if it improves based on the anova test.
+
+base_model = lm(test1 ~ age, data=bloodtest)
+selected_variables = c("age")
+
+for(name in names(bloodtest)){
+  if(!(name %in% selected_variables) && name != "test1"){
+    # alternative_model = lm()
+    hyp_updated_variables = c(selected_variables, name)
+    formulaString = paste("test1 ~ ", paste(hyp_updated_variables, collapse = "+"))
+    alternate_model = lm(as.formula(formulaString), data=bloodtest)
+    alternate_model
+    
+    anova.results = anova(alternate_model, base_model)
+    p = anova.results$`Pr(>F)`[[2]]
+    
+    # print("Testing base against alternate")
+    # print(formulaString)
+    # print(p)
+    if(p <= 0.05){
+      print(paste("*** UPDATING MODEL TO INCLUDE ", name, "***", sep="") )
+      print(paste("p.value = ", p))
+      selected_variables <- c(selected_variables, name)
+      newFormula = paste("test1 ~", paste(selected_variables, collapse="+"))
+      base_model = lm(newFormula, data=bloodtest)
+    }
+  }
+}
+
+summary(base_model)
+```
+It looks like no other single variable added any important enough information to decrease residual sum of squares, but the other test results were helpful to know with age. An exercise would be to do this forward, and backward removing some variables also. One could also add pairs, and interactions to see if they are significant. One could even do random sampling of higher order information to see. This anova test to compare if new model variables are important is pretty significant in the statistical toolkit. Hopefully you enjoyed learning a little bit more about it today and how optimization can here be used to learn more about your data as related to statistical distributions and testing.
+
+# References
+
+<cite>https://stats.oarc.ucla.edu/stat/data/intro_r/intro_r_interactive_flat.html#chi-square-test-of-indepedence</cite>
+
+
