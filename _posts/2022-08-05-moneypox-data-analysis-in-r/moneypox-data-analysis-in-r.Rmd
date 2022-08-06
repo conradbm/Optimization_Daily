@@ -1,0 +1,218 @@
+---
+title: "Moneypox Data Analysis in R"
+description: |
+  In this post we will explore a reference to the latest GitHub Monkeybox data and how to visualize in R.
+categories:
+  - data cleaning
+  - data fusion
+  - geospacial
+  - r
+  - medicine
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-08-05
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+
+# Introduction
+
+Moneybox outbreaks have been on the global forefront as cases rise world-wide. This [original post](https://www.r-bloggers.com/2022/07/access-and-map-the-latest-monkeypox-case-data-in-r/) describes where to access the data and how to visualize it using `maps` and other useful packages. I will explore how this could be extended to a dashboard for real time data analysis, along with a few additional visualizations.
+
+## Packages
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(maps)
+library(viridis)
+library(lubridate)
+library(forcats)
+
+```
+
+
+## Getting the data
+
+```{r}
+# Read worldwide case data
+case_series <- read.csv("https://raw.githubusercontent.com/globaldothealth/monkeypox/main/timeseries-country-confirmed.csv")
+head(case_series)
+
+```
+
+### World map data
+
+To obtain a data frame of locations of different maps, there are three options:
+
+- world
+
+- usa
+  
+- state
+
+- county
+
+
+We can quickly observe that the regions might not match our case data above. They also don't share the same name. We will resolve this when we do some joining and data fusion.
+
+```{r}
+df_world <- map_data("world")
+# df_usa <- map_data("usa")
+# df_state <- map_data("state")
+# df_county <- map_data("county")
+
+head(df_world)
+
+# df_world %>% group_by(region) %>% count()
+
+```
+
+### Data cleaning
+
+```{r}
+case_map = case_series
+
+case_map =
+  case_map %>% 
+  mutate(Country = fct_recode(Country, 
+                               "USA" = "United States",
+                               "UK" = "United Kingdom",
+                               "Democratic Republic of the Congo" = "Democratic Republic Of The Congo",
+                               "Bosnia and Herzegovina" = "Bosnia And Herzegovina")) %>% 
+  filter(Country != "Gibraltar") %>% 
+  rename(region = Country) %>% 
+  mutate(Cumulative_cases = as.numeric(Cumulative_cases))
+
+case_map %>% head
+```
+
+### Data fusing
+
+```{r}
+cases_joined = case_map %>% inner_join(df_world, by = "region")
+cases_joined %>% tail
+```
+
+### Data visualization
+
+```{r, preview = TRUE}
+
+plot_cases = function(date, xlim, ylim, title){
+  cases_joined %>% filter(Date == date) %>% 
+  ggplot(., aes(long, lat, group = group)) + 
+  geom_polygon(aes(fill = Cumulative_cases), color = "white", size = 0.2) +
+  scale_fill_viridis() +
+  theme_linedraw() +
+  theme(legend.position = "right",
+        legend.direction = "vertical") +
+  labs(fill = "Cumulative Cases") +
+  ggtitle(label = title, subtitle = paste("As of ", date)) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  coord_map(xlim = xlim, ylim = ylim) 
+}
+
+plot_cases("2022-08-05", c(-180, 180), c(-55, 90), "Global Monkeypox Cases")
+
+```
+
+```{r}
+plot_cases("2022-08-05", c(-22, 38), c(35, 64), "Europe Monkeypox Cases")
+```
+
+## Other data
+
+The [CDC](https://www.cdc.gov/poxvirus/monkeypox/response/2022/us-map.html) also has a CSV file you can download to get the latest just in the US. I downloaded that and load it in here.
+
+```{r}
+cases_usa = 
+  read.csv("C:\\Users\\blake\\Desktop\\blog_data\\2022 U.S. Map & Case Count.csv") %>% 
+  rename(region = State) %>% 
+  mutate(region = tolower(region))
+
+
+map_usa = map_data("state")
+
+usa_joined = cases_usa %>% inner_join(map_usa, by = "region")
+usa_joined %>% head
+
+```
+
+### USA Visualization
+
+```{r}
+ggplot(usa_joined, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = Cases)) +
+  scale_fill_viridis() +
+  theme_linedraw() +
+  theme(legend.position = "right",
+        legend.direction = "vertical") +
+  labs(fill = "Cases") +
+  ggtitle(label = "USA Monkeybox Cases") +
+  xlab("Longitude") +
+  ylab("Latitude")
+```
+
+
+```{r}
+case_series =
+  case_series %>% 
+  mutate(Date = as_date(Date),
+         Country = as.factor(Country))
+
+plot_stats = function(country){
+  case_series %>% filter(Country == country) %>% 
+  ggplot(., aes(x = Date)) +
+  geom_line(aes(y = Cumulative_cases, color = "Cumulative_cases")) +
+  geom_line(aes(y = Cases, color = "Cases")) +
+  scale_x_date(breaks = scales::breaks_pretty(10)) +
+  labs(color = "Category") +
+  ggtitle(paste(country, "Monkeypox Cases")) +
+  xlab("Date") +
+  ylab("Number of Cases") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+}
+
+plot_stats("United States")
+plot_stats("Canada")
+
+```
+
+
+```{r}
+
+
+top10 =
+  case_series %>% 
+  arrange(-desc(Date)) %>%
+  group_by(Country) %>% 
+  summarise(Last_Total_Cases = last(Cumulative_cases)) %>% 
+  arrange(desc(Last_Total_Cases)) %>% 
+  filter(row_number() <= 12)
+
+case_series %>% filter(Country %in% top10$Country) %>% 
+  ggplot(., aes(x = Date)) +
+  geom_line(aes(y = Cumulative_cases, color = "Cumulative_cases")) +
+  geom_line(aes(y = Cases, color = "Cases")) +
+  facet_wrap(~Country) +
+  scale_x_date(breaks = scales::breaks_pretty(10)) +
+  labs(color = "Category") +
+  ggtitle(paste("Top 12 Countries Monkeypox Cases")) +
+  xlab("Date") +
+  ylab("Number of Cases") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+# References
+
+<cite>https://www.r-bloggers.com/2022/07/access-and-map-the-latest-monkeypox-case-data-in-r/</cite>
+
