@@ -1,0 +1,274 @@
+---
+title: "Systems Thinking in R"
+description: |
+  In this post we will explore how to utilize systems thinking tools in R and network flows with the goal of increasing understanding of a system.
+categories:
+  - systems thinking
+  - causal loop diagram
+  - network flows
+  - r
+author:
+  - name: Blake Conrad
+    url: https://github.com/conradbm
+date: 2022-09-02
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_float: true
+---
+
+# Introduction
+
+In this post we will explore how to effectively draw out `Causal Loop Diagrams` after a system has been designed. The plan is to:
+
+1. Obtain a system
+2. Extend the system with goals
+3. Flow through the system
+4. Analyze the flow
+
+We will be leveraging the [Systems Thinker post](https://thesystemsthinker.com/causal-loop-construction-the-basics/) to obtain a thought out system, and we will add a couple `Goal` nodes and flow `Positive` or `Negative` directions to them. Once we flow through some positive and negative energy we will see how the system responds to achieving it's goal. This is **not system dynamics**. The purpose of this post is to loosely extend systems thinking and systems causal loop diagramming with network flows and utility theory to see how a goal is accomplished within a system's structure. The end-state for this will be a clear understanding of which system components are 1) primary drivers to the goal, 2) enablers to the goal, 3) edifying the system from it's goals (in the given structure), 4) deterring the system from it's goals (in the given structure).
+
+## Obtain a system
+
+We will be using a very simple system for this post. Training causing activities, causing threat perception from managers, limiting those activities. We will extend this by adding a simple goal **Employee Skill Development**.
+
+### Visualize the system
+
+
+```{r}
+#library(remotes)
+#remotes::install_github("jarrod-dalton/causalloop")
+```
+
+```{r}
+library("causalloop")
+L <- CLD(from=c("TQM Training", 
+                "TQM Activities",
+                "TQM Activities",
+                "Perceived Threat",
+                "Resistence by Middle Managers",
+                "TQM Activities"),
+         to=c("TQM Activities",
+              "TQM Training",
+              "Perceived Threat",
+              "Resistence by Middle Managers",
+              "TQM Activities",
+              "Goal: Employee Skill Development"), 
+         polarity = c(1,
+                      1,
+                      1,
+                      1,
+                      -1,
+                      1
+           
+         )
+         )
+# L$edges
+plot(L)
+```
+Clearly we can see that increasing training will increase activities and increase the goal. But a side effect occurs with a perceived threat and action by middle managers. Let's see if we can better identify this through a network flow algorithm.
+
+## Flow through the system
+
+If we simulate 1000 units flowing through the system, how does it balance with the negative feedback loop from middle managers? How does it affect  the goal of the system?
+
+```{r}
+
+L$nodes$score = 0
+
+for(sim in 1:1000){
+  for(i in 1:nrow(L$edges)){
+    # print(i)
+    edge <- L$edges[i, ]
+    
+    # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
+    idx = which(L$nodes$node == edge$to)
+    L$nodes$score[idx] = L$nodes$score[idx] + edge$polarity
+  }
+}
+
+L$nodes
+
+```
+
+## Analyze the flow
+
+Once can see TQM Activities are being heavily balanced by the feedback. Things are getting done (i.e.,g Employee Skill Development)
+
+```{r}
+library(ggplot2)
+
+L$nodes$score = L$nodes$score / sum(L$nodes$score)
+ggplot(L$nodes) + 
+  geom_col(aes(x=reorder(node, -score), y=score, fill=score)) +
+  scale_fill_viridis_c() + 
+  coord_flip() +
+  theme_bw() +
+  labs(x = "Component", y = "Score", fill = "Score") +
+  ggtitle("System Components Accomplishing Functions")
+
+```
+
+## More Complex System
+
+Let's consider some more realistic dynamics and see how this method weathers.
+
+```{r}
+library("causalloop")
+
+L <- CLD(from=c("TQM Training", 
+                "TQM Activities",
+                "TQM Activities",
+                "Perceived Threat",
+                "Resistence by Middle Managers",
+                "TQM Activities",
+                "TQM Activities",
+                "Labor Expended on Activities"),
+         to=c("TQM Activities",
+              "TQM Training",
+              "Perceived Threat",
+              "Resistence by Middle Managers",
+              "TQM Activities",
+              "Goal: Employee Skill Development",
+              "Labor Expended on Activities",
+              "TQM Training"), 
+         polarity = c(1,
+                      1,
+                      1,
+                      1,
+                      -1,
+                      1,
+                      1,
+                      -1
+           
+         )
+         )
+# L$edges
+plot(L)
+```
+
+Notice we now have several feedback loops. Two balancing, one reinforcing.
+
+```{r}
+library(dplyr)
+getLoops(L, S = 100, nsteps = 6)
+
+```
+
+```{r}
+L$nodes$score = 0
+
+for(sim in 1:1000){
+  for(i in 1:nrow(L$edges)){
+    # print(i)
+    edge <- L$edges[i, ]
+    
+    # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
+    idx = which(L$nodes$node == edge$to)
+    L$nodes$score[idx] = L$nodes$score[idx] + edge$polarity
+  }
+}
+
+L$nodes
+```
+Notice by adding the realistic consideration of labor expended on activities (plus the psychological affects of middle management resisting) it will balance the activities. Since the activities are already being balanced by middle management, this further balances the training themselves, because like all things, the system is connected.
+
+```{r}
+library(ggplot2)
+
+L$nodes$score = L$nodes$score / sum(L$nodes$score)
+ggplot(L$nodes) + 
+  geom_col(aes(x=reorder(node, -score), y=score, fill=score)) +
+  scale_fill_viridis_c() + 
+  coord_flip() +
+  theme_bw() +
+  labs(x = "Component", y = "Score", fill = "Score") +
+  ggtitle("System Components Accomplishing Functions")
+```
+
+## Final Scenario
+
+What if the goal itself reinforced the training? what if the resistance from managers started to increase labor on the training themselves?
+
+```{r}
+library("causalloop")
+
+L <- CLD(from=c("TQM Training", 
+                "TQM Activities",
+                "TQM Activities",
+                "Perceived Threat",
+                "Resistence by Middle Managers",
+                "TQM Activities",
+                "TQM Activities",
+                "Labor Expended on Activities",
+                "Goal: Employee Skill Development",
+                "Resistence by Middle Managers"),
+         to=c("TQM Activities",
+              "TQM Training",
+              "Perceived Threat",
+              "Resistence by Middle Managers",
+              "TQM Activities",
+              "Goal: Employee Skill Development",
+              "Labor Expended on Activities",
+              "TQM Training",
+              "TQM Training",
+              "Labor Expended on Activities"), 
+         polarity = c(1,
+                      1,
+                      1,
+                      1,
+                      -1,
+                      1,
+                      1,
+                      -1,
+                      1,
+                      1
+           
+         )
+         )
+# L$edges
+plot(L)
+
+
+```
+```{r}
+L$nodes$score = 0
+
+for(sim in 1:1000){
+  for(i in 1:nrow(L$edges)){
+    # print(i)
+    edge <- L$edges[i, ]
+    
+    # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
+    idx = which(L$nodes$node == edge$to)
+    L$nodes$score[idx] = L$nodes$score[idx] + edge$polarity
+  }
+}
+
+L$nodes
+
+L$nodes$score = L$nodes$score / sum(L$nodes$score)
+ggplot(L$nodes) + 
+  geom_col(aes(x=reorder(node, -score), y=score, fill=score)) +
+  scale_fill_viridis_c() + 
+  coord_flip() +
+  theme_bw() +
+  labs(x = "Component", y = "Score", fill = "Score") +
+  ggtitle("System Components Accomplishing Functions")
+```
+
+Two critical things are revealed from this method. 
+
+1. TQM Activities may increase the goal of skill development, but many other costs are dynamics occur. It is also heavily balanced and isn't in an environment to thrive at it's principle function.
+2. The main expense in this system is labor. The psychological and physical toll on the training are just being shed off with resistance. This could cause burnout for those on the program and make us re-think a system design.
+
+
+# References
+
+[1] https://thesystemsthinker.com/causal-loop-construction-the-basics/
+
+[2] https://rdrr.io/github/jarrod-dalton/causalloop/man/plot.CLD.html
+
+
+
