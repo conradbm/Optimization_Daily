@@ -33,6 +33,11 @@ We will be leveraging the [Systems Thinker post](https://thesystemsthinker.com/c
 
 We will be using a very simple system for this post. Training causing activities, causing threat perception from managers, limiting those activities. We will extend this by adding a simple goal **Employee Skill Development**.
 
+```{r, echo=FALSE}
+knitr::include_graphics("system.png")
+```
+
+
 ### Visualize the system
 
 
@@ -75,40 +80,77 @@ If we simulate 1000 units flowing through the system, how does it balance with t
 
 ```{r}
 
-L$nodes$score = 0
+library(ggplot2)
 
-for(sim in 1:1000){
-  for(i in 1:nrow(L$edges)){
-    # print(i)
-    edge <- L$edges[i, ]
-    
-    # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
-    idx = which(L$nodes$node == edge$to)
-    L$nodes$score[idx] = L$nodes$score[idx] + edge$polarity
+simulate_flow <- function(L, n = 1000, normalize = TRUE, plot = TRUE){
+  L$nodes$score = 1
+  for(sim in 1:n){
+    for(i in 1:nrow(L$edges)){
+      # print(i)
+      edge <- L$edges[i, ]
+      
+      # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
+      tgt_idx = which(L$nodes$node == edge$to)
+      src_idx = which(L$nodes$node == edge$from)
+      L$nodes$score[tgt_idx] = L$nodes$score[tgt_idx] + 
+                                  L$nodes$score[src_idx] * edge$polarity
+    }
   }
+  
+  if(normalize){
+    # L$nodes$score = L$nodes$score / n
+    L$nodes$score = L$nodes$score / sum(L$nodes$score)
+  }
+  
+  if(plot){
+    plt <- ggplot(L$nodes) +
+            geom_col(aes(x=reorder(node, -score),y=score, fill=score))+
+            scale_fill_gradient(low = "red", high = "green") +
+            coord_flip() +
+            theme_bw() +
+            ggtitle("Systemic Behavior (Desire) Polarity Chart",
+                    subtitle = "Red = Desire to Decay | Green = Desire to Grow") +
+            labs(fill = "Score", x="Score", y = "Node")
+    
+  }
+  else{
+    plt <- ggplot()
+  }
+  
+  list(nodes = L$nodes,
+       plt = plt)
 }
 
-L$nodes
-
+nodes <- simulate_flow(L, n = 1000, normalize = TRUE, plot=TRUE)
+nodes$nodes
 ```
+
+Okay, let's take a step back. What did we just do? With the following formula:
+
+$$
+balance(node_j) = \sum_{n=1}^{N}{\sum_{a=(i,j)\in N}{balance(node_j) + flow(i,j)}*polarity(i,j)} \: \forall j \in J\:nodes
+$$
+Note: The `j` is fixed, so the inner sum will only trigger for this specific node, then for all nodes.
+
+This gives us a way to see how the flows are going to naturally navigate through the system. So once we accrue a flow balance for each node, we should normalize so all are compared equally. 
+
+$$
+balance(node_j) =  \frac{balance(node_j)}{\sum_{i=1}{balance(node_i)}} \:forall j \in J \: nodes 
+$$
 
 ## Analyze the flow
 
-Once can see TQM Activities are being heavily balanced by the feedback. Things are getting done (i.e.,g Employee Skill Development)
-
 ```{r}
-library(ggplot2)
-
-L$nodes$score = L$nodes$score / sum(L$nodes$score)
-ggplot(L$nodes) + 
-  geom_col(aes(x=reorder(node, -score), y=score, fill=score)) +
-  scale_fill_viridis_c() + 
-  coord_flip() +
-  theme_bw() +
-  labs(x = "Component", y = "Score", fill = "Score") +
-  ggtitle("System Components Accomplishing Functions")
-
+nodes$plt
 ```
+
+A few remarks. 
+
+1. TQM Activities desire to be decreased in favor of all the non-zero value nodes.
+2. The goal is attained, but with 1/4 the cost/benefit due to the training being over 4x greater in value.
+3. The real driver/desire is the resistance by middle managers.
+
+This system isn't horrible, because the goal will eventually be attained with more effort; but it certainly isn't optimal.
 
 ## More Complex System
 
@@ -157,39 +199,24 @@ getLoops(L, S = 100, nsteps = 6)
 ```
 
 ```{r}
-L$nodes$score = 0
 
-for(sim in 1:1000){
-  for(i in 1:nrow(L$edges)){
-    # print(i)
-    edge <- L$edges[i, ]
-    
-    # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
-    idx = which(L$nodes$node == edge$to)
-    L$nodes$score[idx] = L$nodes$score[idx] + edge$polarity
-  }
-}
+nodes <- simulate_flow(L, n = 600, normalize = TRUE, plot=TRUE)
 
-L$nodes
+
+nodes$nodes
+
 ```
 Notice by adding the realistic consideration of labor expended on activities (plus the psychological affects of middle management resisting) it will balance the activities. Since the activities are already being balanced by middle management, this further balances the training themselves, because like all things, the system is connected.
 
 ```{r}
-library(ggplot2)
-
-L$nodes$score = L$nodes$score / sum(L$nodes$score)
-ggplot(L$nodes) + 
-  geom_col(aes(x=reorder(node, -score), y=score, fill=score)) +
-  scale_fill_viridis_c() + 
-  coord_flip() +
-  theme_bw() +
-  labs(x = "Component", y = "Score", fill = "Score") +
-  ggtitle("System Components Accomplishing Functions")
+nodes$plt
 ```
+
+This system is toxic. The goal is never attained, activities go down, but there is an interesting desire within the system to decrease labor and increase  training. However, through resistance the main efforts of the system are not accomplished. 
 
 ## Final Scenario
 
-What if the goal itself reinforced the training? what if the resistance from managers started to increase labor on the training themselves?
+What if the goal itself reinforced the training (after all, good work does pay off with rewards)? what if the resistance from managers started to increase labor on the training themselves (after a while, people get tired)?
 
 ```{r}
 library("causalloop")
@@ -232,36 +259,17 @@ plot(L)
 
 
 ```
+
+Now we have a reward signal from the goal back into training. Let's see how this changes things.
+
 ```{r}
-L$nodes$score = 0
-
-for(sim in 1:1000){
-  for(i in 1:nrow(L$edges)){
-    # print(i)
-    edge <- L$edges[i, ]
-    
-    # cat("Adding ", edge$polarity, " from ", edge$from, " to ",edge$to, ".\n")
-    idx = which(L$nodes$node == edge$to)
-    L$nodes$score[idx] = L$nodes$score[idx] + edge$polarity
-  }
-}
-
-L$nodes
-
-L$nodes$score = L$nodes$score / sum(L$nodes$score)
-ggplot(L$nodes) + 
-  geom_col(aes(x=reorder(node, -score), y=score, fill=score)) +
-  scale_fill_viridis_c() + 
-  coord_flip() +
-  theme_bw() +
-  labs(x = "Component", y = "Score", fill = "Score") +
-  ggtitle("System Components Accomplishing Functions")
+nodes <- simulate_flow(L, n = 500, normalize = TRUE, plot=TRUE)
+nodes$plt
 ```
 
-Two critical things are revealed from this method. 
+Again this system is not constructive. The goal will diminish over time. The desire to decrease activities and increase training is outweighed by threats, labor, and resistance.
 
-1. TQM Activities may increase the goal of skill development, but many other costs are dynamics occur. It is also heavily balanced and isn't in an environment to thrive at it's principle function.
-2. The main expense in this system is labor. The psychological and physical toll on the training are just being shed off with resistance. This could cause burnout for those on the program and make us re-think a system design.
+This is Systems Thinking and provides a framework to redesign our systems w/o any need for Systems Dynamics.
 
 
 # References
