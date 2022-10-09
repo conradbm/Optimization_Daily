@@ -189,6 +189,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1261,15 +1262,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
           $(this).html(fn.shadowRoot.querySelector("sup"))
           $(this).id = fn.id
           fn.remove()
         }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -1468,7 +1475,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="systems-thinking-in-r_files/header-attrs-2.14/header-attrs.js"></script>
+  <script src="systems-thinking-in-r_files/header-attrs-2.16/header-attrs.js"></script>
   <script src="systems-thinking-in-r_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
   <script src="systems-thinking-in-r_files/viz-1.8.2/viz.js"></script>
   <link href="systems-thinking-in-r_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
@@ -1512,14 +1519,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="dt-tag">r</div>
 </div>
 <!--/radix_placeholder_categories-->
-<p><p>In this post we will explore how to utilize systems thinking tools
-in R and network flows with the goal of increasing understanding of a
-system.</p></p>
+<p><p>In this post we will explore how to utilize systems thinking tools in R and network flows with the goal of increasing understanding of a system.</p></p>
 </div>
 
 <div class="d-byline">
-  Blake Conrad <a href="https://github.com/conradbm"
-class="uri">https://github.com/conradbm</a> 
+  Blake Conrad <a href="https://github.com/conradbm" class="uri">https://github.com/conradbm</a> 
   
 <br/>2022-09-02
 </div>
@@ -1529,50 +1533,32 @@ class="uri">https://github.com/conradbm</a>
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#introduction">Introduction</a>
+<li><a href="#introduction" id="toc-introduction">Introduction</a>
 <ul>
-<li><a href="#obtain-a-system">Obtain a system</a>
+<li><a href="#obtain-a-system" id="toc-obtain-a-system">Obtain a system</a>
 <ul>
-<li><a href="#visualize-the-system">Visualize the system</a></li>
+<li><a href="#visualize-the-system" id="toc-visualize-the-system">Visualize the system</a></li>
 </ul></li>
-<li><a href="#flow-through-the-system">Flow through the system</a></li>
-<li><a href="#analyze-the-flow">Analyze the flow</a></li>
-<li><a href="#more-complex-system">More Complex System</a></li>
-<li><a href="#final-scenario">Final Scenario</a></li>
+<li><a href="#flow-through-the-system" id="toc-flow-through-the-system">Flow through the system</a></li>
+<li><a href="#analyze-the-flow" id="toc-analyze-the-flow">Analyze the flow</a></li>
+<li><a href="#more-complex-system" id="toc-more-complex-system">More Complex System</a></li>
+<li><a href="#final-scenario" id="toc-final-scenario">Final Scenario</a></li>
 </ul></li>
-<li><a href="#references">References</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
 </ul>
 </nav>
 </div>
 <h1 id="introduction">Introduction</h1>
-<p>In this post we will explore how to effectively draw out
-<code>Causal Loop Diagrams</code> after a system has been designed. The
-plan is to:</p>
+<p>In this post we will explore how to effectively draw out <code>Causal Loop Diagrams</code> after a system has been designed. The plan is to:</p>
 <ol type="1">
 <li>Obtain a system</li>
 <li>Extend the system with goals</li>
 <li>Flow through the system</li>
 <li>Analyze the flow</li>
 </ol>
-<p>We will be leveraging the <a
-href="https://thesystemsthinker.com/causal-loop-construction-the-basics/">Systems
-Thinker post</a> to obtain a thought out system, and we will add a
-couple <code>Goal</code> nodes and flow <code>Positive</code> or
-<code>Negative</code> directions to them. Once we flow through some
-positive and negative energy we will see how the system responds to
-achieving it’s goal. This is <strong>not system dynamics</strong>. The
-purpose of this post is to loosely extend systems thinking and systems
-causal loop diagramming with network flows and utility theory to see how
-a goal is accomplished within a system’s structure. The end-state for
-this will be a clear understanding of which system components are 1)
-primary drivers to the goal, 2) enablers to the goal, 3) edifying the
-system from it’s goals (in the given structure), 4) deterring the system
-from it’s goals (in the given structure).</p>
+<p>We will be leveraging the <a href="https://thesystemsthinker.com/causal-loop-construction-the-basics/">Systems Thinker post</a> to obtain a thought out system, and we will add a couple <code>Goal</code> nodes and flow <code>Positive</code> or <code>Negative</code> directions to them. Once we flow through some positive and negative energy we will see how the system responds to achieving it’s goal. This is <strong>not system dynamics</strong>. The purpose of this post is to loosely extend systems thinking and systems causal loop diagramming with network flows and utility theory to see how a goal is accomplished within a system’s structure. The end-state for this will be a clear understanding of which system components are 1) primary drivers to the goal, 2) enablers to the goal, 3) edifying the system from it’s goals (in the given structure), 4) deterring the system from it’s goals (in the given structure).</p>
 <h2 id="obtain-a-system">Obtain a system</h2>
-<p>We will be using a very simple system for this post. Training causing
-activities, causing threat perception from managers, limiting those
-activities. We will extend this by adding a simple goal <strong>Employee
-Skill Development</strong>.</p>
+<p>We will be using a very simple system for this post. Training causing activities, causing threat perception from managers, limiting those activities. We will extend this by adding a simple goal <strong>Employee Skill Development</strong>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="system.png" width="244" /></p>
 </div>
@@ -1610,17 +1596,12 @@ Skill Development</strong>.</p>
 <span><span class='co'># L$edges</span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span></span></code></pre>
 </div>
-<div id="htmlwidget-d8dfbdf4c5c6234ea563" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d8dfbdf4c5c6234ea563">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       overlap = \"false\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Goal:\nEmployee\nSkill\nDevelopment\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"2\" [label = \"Perceived\nThreat\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"3\" [label = \"Resistence\nby Middle\nManagers\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"4\" [label = \"TQM\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"5\" [label = \"TQM\nTraining\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n\"5\"->\"4\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"5\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"2\"->\"3\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"3\"->\"4\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"4\"->\"1\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-7bc8e4aa26d26c78ac20" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7bc8e4aa26d26c78ac20">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       overlap = \"false\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Goal:\nEmployee\nSkill\nDevelopment\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"2\" [label = \"Perceived\nThreat\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"3\" [label = \"Resistence\nby Middle\nManagers\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"4\" [label = \"TQM\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"5\" [label = \"TQM\nTraining\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n\"5\"->\"4\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"5\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"2\"->\"3\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"3\"->\"4\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"4\"->\"1\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>Clearly we can see that increasing training will increase activities
-and increase the goal. But a side effect occurs with a perceived threat
-and action by middle managers. Let’s see if we can better identify this
-through a network flow algorithm.</p>
+<p>Clearly we can see that increasing training will increase activities and increase the goal. But a side effect occurs with a perceived threat and action by middle managers. Let’s see if we can better identify this through a network flow algorithm.</p>
 <h2 id="flow-through-the-system">Flow through the system</h2>
-<p>If we simulate 1000 units flowing through the system, how does it
-balance with the negative feedback loop from middle managers? How does
-it affect the goal of the system?</p>
+<p>If we simulate 1000 units flowing through the system, how does it balance with the negative feedback loop from middle managers? How does it affect the goal of the system?</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
@@ -1667,7 +1648,7 @@ it affect the goal of the system?</p>
 <span><span class='va'>nodes</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_flow</span><span class='op'>(</span><span class='va'>L</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, normalize <span class='op'>=</span> <span class='cn'>TRUE</span>, plot<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
 <span><span class='va'>nodes</span><span class='op'>$</span><span class='va'>nodes</span></span></code></pre>
 </div>
-<pre><code># A tibble: 5 x 3
+<pre><code># A tibble: 5 × 3
   node                             group       score
   &lt;chr&gt;                            &lt;chr&gt;       &lt;dbl&gt;
 1 Goal: Employee Skill Development &lt;default&gt;  0.0834
@@ -1676,19 +1657,14 @@ it affect the goal of the system?</p>
 4 TQM Activities                   &lt;default&gt; -0.206 
 5 TQM Training                     &lt;default&gt;  0.353 </code></pre>
 </div>
-<p>Okay, let’s take a step back. What did we just do? With the following
-formula:</p>
+<p>Okay, let’s take a step back. What did we just do? With the following formula:</p>
 <p><span class="math display">\[
-balance(node_j) = \sum_{n=1}^{N}{\sum_{a=(i,j)\in N}{balance(node_j) +
-flow(i,j)}*polarity(i,j)} \: \forall j \in J\:nodes
-\]</span> Note: The <code>j</code> is fixed, so the inner sum will only
-trigger for this specific node, then for all nodes.</p>
-<p>This gives us a way to see how the flows are going to naturally
-navigate through the system. So once we accrue a flow balance for each
-node, we should normalize so all are compared equally.</p>
+balance(node_j) = \sum_{n=1}^{N}{\sum_{a=(i,j)\in N}{balance(node_j) + flow(i,j)}*polarity(i,j)} \: \forall j \in J\:nodes
+\]</span>
+Note: The <code>j</code> is fixed, so the inner sum will only trigger for this specific node, then for all nodes.</p>
+<p>This gives us a way to see how the flows are going to naturally navigate through the system. So once we accrue a flow balance for each node, we should normalize so all are compared equally.</p>
 <p><span class="math display">\[
-balance(node_j) =  \frac{balance(node_j)}{\sum_{i=1}{balance(node_i)}}
-\:forall j \in J \: nodes
+balance(node_j) =  \frac{balance(node_j)}{\sum_{i=1}{balance(node_i)}} \:forall j \in J \: nodes
 \]</span></p>
 <h2 id="analyze-the-flow">Analyze the flow</h2>
 <div class="layout-chunk" data-layout="l-body">
@@ -1699,17 +1675,13 @@ balance(node_j) =  \frac{balance(node_j)}{\sum_{i=1}{balance(node_i)}}
 </div>
 <p>A few remarks.</p>
 <ol type="1">
-<li>TQM Activities desire to be decreased in favor of all the non-zero
-value nodes.</li>
-<li>The goal is attained, but with 1/4 the cost/benefit due to the
-training being over 4x greater in value.</li>
+<li>TQM Activities desire to be decreased in favor of all the non-zero value nodes.</li>
+<li>The goal is attained, but with 1/4 the cost/benefit due to the training being over 4x greater in value.</li>
 <li>The real driver/desire is the resistance by middle managers.</li>
 </ol>
-<p>This system isn’t horrible, because the goal will eventually be
-attained with more effort; but it certainly isn’t optimal.</p>
+<p>This system isn’t horrible, because the goal will eventually be attained with more effort; but it certainly isn’t optimal.</p>
 <h2 id="more-complex-system">More Complex System</h2>
-<p>Let’s consider some more realistic dynamics and see how this method
-weathers.</p>
+<p>Let’s consider some more realistic dynamics and see how this method weathers.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'>"causalloop"</span><span class='op'>)</span></span>
@@ -1744,11 +1716,10 @@ weathers.</p>
 <span><span class='co'># L$edges</span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span></span></code></pre>
 </div>
-<div id="htmlwidget-b51e3633c9582a72d988" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b51e3633c9582a72d988">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       overlap = \"false\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Goal:\nEmployee\nSkill\nDevelopment\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"2\" [label = \"Labor\nExpended\non\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"3\" [label = \"Perceived\nThreat\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"4\" [label = \"Resistence\nby Middle\nManagers\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"5\" [label = \"TQM\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"6\" [label = \"TQM\nTraining\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n\"6\"->\"5\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"6\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"3\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"3\"->\"4\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"5\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"5\"->\"1\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"2\"->\"6\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8b2783435340480a9e0d" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8b2783435340480a9e0d">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       overlap = \"false\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Goal:\nEmployee\nSkill\nDevelopment\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"2\" [label = \"Labor\nExpended\non\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"3\" [label = \"Perceived\nThreat\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"4\" [label = \"Resistence\nby Middle\nManagers\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"5\" [label = \"TQM\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"6\" [label = \"TQM\nTraining\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n\"6\"->\"5\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"6\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"3\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"3\"->\"4\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"5\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"5\"->\"1\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"2\"->\"6\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>Notice we now have several feedback loops. Two balancing, one
-reinforcing.</p>
+<p>Notice we now have several feedback loops. Two balancing, one reinforcing.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
@@ -1765,7 +1736,7 @@ reinforcing.</p>
 [1] &quot;Balancing&quot;
 
 [[1]]$loop
-# A tibble: 3 x 3
+# A tibble: 3 × 3
   from                         to                           polarity
   &lt;chr&gt;                        &lt;chr&gt;                           &lt;dbl&gt;
 1 TQM Training                 TQM Activities                      1
@@ -1784,7 +1755,7 @@ reinforcing.</p>
 [1] &quot;Reinforcing&quot;
 
 [[2]]$loop
-# A tibble: 2 x 3
+# A tibble: 2 × 3
   from           to             polarity
   &lt;chr&gt;          &lt;chr&gt;             &lt;dbl&gt;
 1 TQM Training   TQM Activities        1
@@ -1802,7 +1773,7 @@ reinforcing.</p>
 [1] &quot;Balancing&quot;
 
 [[3]]$loop
-# A tibble: 3 x 3
+# A tibble: 3 × 3
   from                          to                            polarity
   &lt;chr&gt;                         &lt;chr&gt;                            &lt;dbl&gt;
 1 TQM Activities                Perceived Threat                     1
@@ -1820,7 +1791,7 @@ attr(,&quot;class&quot;)
 <span></span>
 <span><span class='va'>nodes</span><span class='op'>$</span><span class='va'>nodes</span></span></code></pre>
 </div>
-<pre><code># A tibble: 6 x 3
+<pre><code># A tibble: 6 × 3
   node                             group      score
   &lt;chr&gt;                            &lt;chr&gt;      &lt;dbl&gt;
 1 Goal: Employee Skill Development &lt;default&gt; -0.604
@@ -1830,27 +1801,16 @@ attr(,&quot;class&quot;)
 5 TQM Activities                   &lt;default&gt; -0.404
 6 TQM Training                     &lt;default&gt;  1.39 </code></pre>
 </div>
-<p>Notice by adding the realistic consideration of labor expended on
-activities (plus the psychological affects of middle management
-resisting) it will balance the activities. Since the activities are
-already being balanced by middle management, this further balances the
-training themselves, because like all things, the system is
-connected.</p>
+<p>Notice by adding the realistic consideration of labor expended on activities (plus the psychological affects of middle management resisting) it will balance the activities. Since the activities are already being balanced by middle management, this further balances the training themselves, because like all things, the system is connected.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>nodes</span><span class='op'>$</span><span class='va'>plt</span></span></code></pre>
 </div>
 <p><img src="systems-thinking-in-r_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
 </div>
-<p>This system is toxic. The goal is never attained, activities go down,
-but there is an interesting desire within the system to decrease labor
-and increase training. However, through resistance the main efforts of
-the system are not accomplished.</p>
+<p>This system is toxic. The goal is never attained, activities go down, but there is an interesting desire within the system to decrease labor and increase training. However, through resistance the main efforts of the system are not accomplished.</p>
 <h2 id="final-scenario">Final Scenario</h2>
-<p>What if the goal itself reinforced the training (after all, good work
-does pay off with rewards)? what if the resistance from managers started
-to increase labor on the training themselves (after a while, people get
-tired)?</p>
+<p>What if the goal itself reinforced the training (after all, good work does pay off with rewards)? what if the resistance from managers started to increase labor on the training themselves (after a while, people get tired)?</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'>"causalloop"</span><span class='op'>)</span></span>
@@ -1891,11 +1851,10 @@ tired)?</p>
 <span><span class='co'># L$edges</span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span></span></code></pre>
 </div>
-<div id="htmlwidget-f20cab11bdd4cc183f7c" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f20cab11bdd4cc183f7c">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       overlap = \"false\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Goal:\nEmployee\nSkill\nDevelopment\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"2\" [label = \"Labor\nExpended\non\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"3\" [label = \"Perceived\nThreat\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"4\" [label = \"Resistence\nby Middle\nManagers\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"5\" [label = \"TQM\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"6\" [label = \"TQM\nTraining\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n\"6\"->\"5\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"6\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"3\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"3\"->\"4\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"5\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"5\"->\"1\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"2\"->\"6\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"1\"->\"6\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6bf79d402c3e9485a126" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6bf79d402c3e9485a126">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       overlap = \"false\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"Goal:\nEmployee\nSkill\nDevelopment\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"2\" [label = \"Labor\nExpended\non\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"3\" [label = \"Perceived\nThreat\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"4\" [label = \"Resistence\nby Middle\nManagers\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"5\" [label = \"TQM\nActivities\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n  \"6\" [label = \"TQM\nTraining\", shape = \"rectangle\", style = \"transparent\", color = \"transparent\", fontname = \"Arial Narrow\", fontcolor = \"black\", height = \"0.5\", width = \"0.7\", fillcolor = \"#FFFFFE\"] \n\"6\"->\"5\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"6\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"3\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"3\"->\"4\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"5\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"5\"->\"1\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"5\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"2\"->\"6\" [style = \"dotted\", color = \"red\", arrowhead = \"vee\", penwidth = \"2\"] \n\"1\"->\"6\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n\"4\"->\"2\" [style = \"solid\", color = \"ForestGreen\", arrowhead = \"vee\", penwidth = \"1\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>Now we have a reward signal from the goal back into training. Let’s
-see how this changes things.</p>
+<p>Now we have a reward signal from the goal back into training. Let’s see how this changes things.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>nodes</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_flow</span><span class='op'>(</span><span class='va'>L</span>, n <span class='op'>=</span> <span class='fl'>500</span>, normalize <span class='op'>=</span> <span class='cn'>TRUE</span>, plot<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
@@ -1903,20 +1862,12 @@ see how this changes things.</p>
 </div>
 <p><img src="systems-thinking-in-r_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
 </div>
-<p>Again this system is not constructive. The goal will diminish over
-time. The desire to decrease activities and increase training is
-outweighed by threats, labor, and resistance.</p>
-<p>This is Systems Thinking and provides a framework to redesign our
-systems w/o any need for Systems Dynamics.</p>
+<p>Again this system is not constructive. The goal will diminish over time. The desire to decrease activities and increase training is outweighed by threats, labor, and resistance.</p>
+<p>This is Systems Thinking and provides a framework to redesign our systems w/o any need for Systems Dynamics.</p>
 <h1 id="references">References</h1>
-<p>[1] <a
-href="https://thesystemsthinker.com/causal-loop-construction-the-basics/"
-class="uri">https://thesystemsthinker.com/causal-loop-construction-the-basics/</a></p>
-<p>[2] <a
-href="https://rdrr.io/github/jarrod-dalton/causalloop/man/plot.CLD.html"
-class="uri">https://rdrr.io/github/jarrod-dalton/causalloop/man/plot.CLD.html</a></p>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>[1] <a href="https://thesystemsthinker.com/causal-loop-construction-the-basics/" class="uri">https://thesystemsthinker.com/causal-loop-construction-the-basics/</a></p>
+<p>[2] <a href="https://rdrr.io/github/jarrod-dalton/causalloop/man/plot.CLD.html" class="uri">https://rdrr.io/github/jarrod-dalton/causalloop/man/plot.CLD.html</a></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
