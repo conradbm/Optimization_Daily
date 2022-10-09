@@ -1,7 +1,7 @@
 name: "Optimization_Daily"
 title: "Optimization Daily"
 description: |
-  Optimization Daily
+  Optimization Daily, a place for all things optimization.
 output_dir: "_site"
 navbar:
   right:
